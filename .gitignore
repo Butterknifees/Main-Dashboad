@@ -1,0 +1,15 @@
+# Data files
+*.db
+*.csv
+*.xlsx
+*.json
+!dashboard_data.json
+!simulator_data.json
+large_cap_historical.json
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

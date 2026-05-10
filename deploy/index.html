@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisaab | Powered by Play Theory</title>
+    <link rel="stylesheet" href="hisaab_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-orb" id="orb-1"></div>
+        <div class="glow-orb" id="orb-2"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by">powered by Play Theory</div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="fade-in">Uncover the Truth <br><span class="highlight">Hidden in Your Portfolio</span></h1>
+                <p class="subtitle fade-in-delay">Institutional-grade analytics for the modern investor. Upload your data and see the full picture of your stocks, ETFs, and mutual funds.</p>
+                <div class="cta-group fade-in-delay-2">
+                    <button class="btn btn-primary" onclick="location.href='simulator.html'">Portfolio Simulator</button>
+                    <button class="btn btn-secondary" onclick="location.href='diversification.html'">Diversification Lab</button>
+                    <button class="btn btn-secondary" onclick="location.href='demo.html'">See Demo</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="grid">
+                <div class="card glass">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <h3>Holistic View</h3>
+                    <p>Unified tracking across Stocks, ETFs, and Mutual Funds. No more fragmented spreadsheets.</p>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3>Risk & Return</h3>
+                    <p>Deep dive into true XIRR and daily volatility. Understand the risk behind every percentage point of gain.</p>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    </div>
+                    <h3>Sectoral Shift</h3>
+                    <p>Visualize how your portfolio weightings change over time. Stay aligned with your investment thesis.</p>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+                    </div>
+                    <h3>Weakness Detection</h3>
+                    <p>Automatically identify laggards dragging down your overall performance. Optimize with precision.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hisaab by Play Theory. Precision Financial Analytics.</p>
+    </footer>
+
+    <script>
+        // Simple scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Mouse move parallax for glow orbs
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            const orb1 = document.getElementById('orb-1');
+            const orb2 = document.getElementById('orb-2');
+            
+            orb1.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+            orb2.style.transform = `translate(${x * -50}px, ${y * -50}px)`;
+        });
+    </script>
+</body>
+</html>
