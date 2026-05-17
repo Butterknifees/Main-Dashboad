@@ -2,6 +2,7 @@
 *.db
 *.csv
 *.xlsx
+!*.xlsx
 *.json
 !dashboard_data.json
 !simulator_data.json

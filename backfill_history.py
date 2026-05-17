@@ -96,8 +96,23 @@ def parse_and_store(text, conn):
     conn.commit()
     return updated_count
 
-def backfill(days=365):
+def backfill(days=None):
     conn = init_db()
+    cursor = conn.cursor()
+    
+    # Auto-detect days needed if not provided
+    if days is None:
+        cursor.execute("SELECT MAX(date) FROM nav_history")
+        latest_date_str = cursor.fetchone()[0]
+        if latest_date_str:
+            latest_date = datetime.strptime(latest_date_str, "%Y-%m-%d")
+            # Fetch from latest_date up to today
+            days = (datetime.now() - latest_date).days + 1
+            print(f"Auto-detected: Fetching last {days} days to sync with latest record ({latest_date_str}).")
+        else:
+            days = 365 # Default for empty DB
+            print(f"Empty database: Fetching default {days} days.")
+
     today = datetime.now()
     
     for i in range(days):
@@ -131,4 +146,5 @@ def backfill(days=365):
     print("\nBackfill operation complete.")
 
 if __name__ == "__main__":
-    backfill(365)
+    # Calling backfill() without arguments will auto-detect the gap
+    backfill()

@@ -47,59 +47,83 @@ def load_transactions():
                 'source': 'MF_DB'
             })
     # 2. MF Excel
-    df_mf = pd.read_excel(BASE_PATH + 'Mutual_Funds_Order_History_01-04-2025_04-05-2026.xlsx', header=11).dropna(how='all')
-    for _, row in df_mf.iterrows():
-        if pd.isna(row['Scheme Name']): continue
-        name = str(row['Scheme Name']).strip()
-        amt_str = str(row['Amount']).replace(',', '')
-        all_tx.append({
-            'date': pd.to_datetime(row['Date']),
-            'id': name,
-            'name': name,
-            'qty': float(row['Units']),
-            'price': float(amt_str) / float(row['Units']),
-            'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
-            'source': 'MF_DB'
-        })
+    mf_files = [
+        'Mutual_Funds_Order_History_01-04-2025_04-05-2026.xlsx',
+        'Mutual_Funds_Order_History_01-04-2026_17-05-2026.xlsx'
+    ]
+    for mf_file in mf_files:
+        full_path = BASE_PATH + mf_file
+        if not os.path.exists(full_path): continue
+        df_mf = pd.read_excel(full_path, header=11).dropna(how='all')
+        for _, row in df_mf.iterrows():
+            if pd.isna(row['Scheme Name']): continue
+            name = str(row['Scheme Name']).strip()
+            amt_str = str(row['Amount']).replace(',', '')
+            all_tx.append({
+                'date': pd.to_datetime(row['Date']),
+                'id': name,
+                'name': name,
+                'qty': float(row['Units']),
+                'price': float(amt_str) / float(row['Units']),
+                'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
+                'source': 'MF_DB'
+            })
     # 3. Stocks/ETFs Excel
-    df_stk = pd.read_excel(BASE_PATH + 'Stocks_Order_History_3181700510_01-04-2025_03-05-2026.xlsx', header=5)
-    for _, row in df_stk.iterrows():
-        if pd.isna(row['Stock name']) or row['Order status'] != 'Executed': continue
-        isin = str(row['ISIN']).strip()
-        all_tx.append({
-            'date': pd.to_datetime(row['Execution date and time'], dayfirst=True),
-            'id': isin,
-            'name': row['Stock name'],
-            'qty': float(row['Quantity']),
-            'price': float(row['Value']) / float(row['Quantity']),
-            'type': row['Type'].lower(),
-            'source': 'YF'
-        })
+    stk_files = [
+        'Stocks_Order_History_3181700510_01-04-2025_03-05-2026.xlsx',
+        'Stocks_Order_History_3181700510_01-04-2026_16-05-2026.xlsx'
+    ]
+    for stk_file in stk_files:
+        full_path = BASE_PATH + stk_file
+        if not os.path.exists(full_path): continue
+        df_stk = pd.read_excel(full_path, header=5)
+        for _, row in df_stk.iterrows():
+            if pd.isna(row['Stock name']) or row['Order status'] != 'Executed': continue
+            isin = str(row['ISIN']).strip()
+            all_tx.append({
+                'date': pd.to_datetime(row['Execution date and time'], dayfirst=True),
+                'id': isin,
+                'name': row['Stock name'],
+                'qty': float(row['Quantity']),
+                'price': float(row['Value']) / float(row['Quantity']),
+                'type': row['Type'].lower(),
+                'source': 'YF'
+            })
     return all_tx
 
 def get_latest_holdings_prices():
     prices = {}
-    stk_h_file = BASE_PATH + 'Stocks_Holdings_Statement_3181700510_03-05-2026.xlsx'
+    # Prioritize the most recent holdings statement if multiple exist
+    stk_h_files = [
+        'Stocks_Holdings_Statement_3181700510_03-05-2026.xlsx'
+        # Add newer statement files here if provided
+    ]
+    mf_h_files = [
+        'Mutual_Funds_3181700510_04-05-2026_04-05-2026.xlsx'
+        # Add newer statement files here if provided
+    ]
+    
+    for stk_h_file in [BASE_PATH + f for f in stk_h_files]:
+        if os.path.exists(stk_h_file):
+            df_stk_all = pd.read_excel(stk_h_file, header=None)
+            header_idx = -1
+            for i, row in df_stk_all.iterrows():
+                if 'ISIN' in [str(v).strip() for v in row.values]:
+                    header_idx = i
+                    break
+            if header_idx != -1:
+                df_stk = pd.read_excel(stk_h_file, header=header_idx)
+                df_stk.columns = [str(c).strip() for c in df_stk.columns]
+                for _, row in df_stk.iterrows():
+                    isin = str(row.get('ISIN')).strip()
+                    if isin == 'nan' or isin == '': continue
+                    if 'Closing price' in row:
+                        prices[isin] = float(row['Closing price'])
+                    elif 'Closing value' in row and 'Quantity' in row:
+                        prices[isin] = float(row['Closing value']) / float(row['Quantity'])
+    
+    # Check MF holdings file
     mf_h_file = BASE_PATH + 'Mutual_Funds_3181700510_04-05-2026_04-05-2026.xlsx'
-    
-    if os.path.exists(stk_h_file):
-        df_stk_all = pd.read_excel(stk_h_file, header=None)
-        header_idx = -1
-        for i, row in df_stk_all.iterrows():
-            if 'ISIN' in [str(v).strip() for v in row.values]:
-                header_idx = i
-                break
-        if header_idx != -1:
-            df_stk = pd.read_excel(stk_h_file, header=header_idx)
-            df_stk.columns = [str(c).strip() for c in df_stk.columns]
-            for _, row in df_stk.iterrows():
-                isin = str(row.get('ISIN')).strip()
-                if isin == 'nan' or isin == '': continue
-                if 'Closing price' in row:
-                    prices[isin] = float(row['Closing price'])
-                elif 'Closing value' in row and 'Quantity' in row:
-                    prices[isin] = float(row['Closing value']) / float(row['Quantity'])
-    
     if os.path.exists(mf_h_file):
         df_mf_all = pd.read_excel(mf_h_file, header=None)
         header_idx = -1
