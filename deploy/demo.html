@@ -15,6 +15,34 @@
             max-width: 1400px;
             margin: 0 auto;
         }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem 3%;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .metric-value {
+                font-size: 1.5rem;
+            }
+            .chart-wrapper {
+                padding: 1rem;
+                height: 350px;
+            }
+            .assets-table th, .assets-table td {
+                padding: 0.8rem 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -202,16 +230,40 @@
                     type: 'line',
                     data: {
                         labels: data.history.dates,
-                        datasets: [{
-                            label: 'NAV Index',
-                            data: data.history.nav,
-                            borderColor: '#9D50BB',
-                            backgroundColor: 'rgba(157, 80, 187, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0,
-                            borderWidth: 2
-                        }]
+                        datasets: [
+                            {
+                                label: 'Portfolio (Indexed)',
+                                data: data.history.nav,
+                                borderColor: '#9D50BB',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 0,
+                                borderWidth: 3
+                            },
+                            {
+                                label: 'Model Portfolio (Custom)',
+                                data: data.history.model_nav,
+                                borderColor: '#F59E0B',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 0,
+                                borderWidth: 2,
+                                borderDash: [2, 2]
+                            },
+                            {
+                                label: 'Nifty 50 (Benchmark)',
+                                data: data.history.benchmark,
+                                borderColor: '#00C853',
+                                backgroundColor: 'transparent',
+                                fill: false,
+                                tension: 0.4,
+                                pointRadius: 0,
+                                borderWidth: 2,
+                                borderDash: [5, 5]
+                            }
+                        ]
                     },
                     options: {
                         responsive: true,
@@ -226,7 +278,12 @@
                             },
                             x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 6 } }
                         },
-                        plugins: { legend: { display: false } }
+                        plugins: { 
+                            legend: { 
+                                display: true,
+                                labels: { color: '#94A3B8', font: { family: 'Inter' } }
+                            } 
+                        }
                     }
                 });
 

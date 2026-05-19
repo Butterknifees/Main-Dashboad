@@ -18,6 +18,33 @@
             max-width: 1600px;
             margin: 0 auto;
         }
+
+        @media (max-width: 1024px) {
+            .simulator-layout {
+                grid-template-columns: 1fr;
+            }
+            .builder-panel {
+                position: relative;
+                top: 0;
+            }
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+            .chart-container {
+                padding: 1rem;
+                height: 350px;
+            }
+            .builder-panel {
+                padding: 1.5rem 1rem;
+            }
+        }
+
         .builder-panel {
             padding: 2rem;
             height: fit-content;

@@ -251,12 +251,69 @@ footer {
     to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 768px) {
-    .cta-group {
-        flex-direction: column;
+/* Mobile Responsiveness Improvements */
+@media (max-width: 1024px) {
+    header {
+        padding: 1.5rem 5%;
+    }
+    
+    .hero {
+        min-height: 60vh;
+        padding-top: 2rem;
     }
     
     h1 {
-        font-size: 3rem;
+        font-size: clamp(2rem, 10vw, 3.5rem);
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 5%;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .hero {
+        min-height: auto;
+        padding: 4rem 0;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.8rem 1.5rem;
+    }
+
+    .features {
+        padding: 4rem 0;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
     }
 }

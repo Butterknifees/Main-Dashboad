@@ -456,7 +456,13 @@ def main():
     
     with open('Gemini/personal finance accounting/dashboard_data.json', 'w') as f:
         json.dump(dashboard_data, f, indent=4)
-    print(f"Dashboard data successfully stabilized and exported.")
+    
+    # Also update the deploy folder if it exists
+    deploy_path = 'Gemini/personal finance accounting/deploy/dashboard_data.json'
+    with open(deploy_path, 'w') as f:
+        json.dump(dashboard_data, f, indent=4)
+    
+    print(f"Dashboard data successfully stabilized and exported to root and deploy/.")
 
     print("\n" + "="*50)
     print("PORTFOLIO PERFORMANCE & VOLATILITY REPORT")

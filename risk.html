@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risk Intelligence | Hisaab</title>
+    <link rel="stylesheet" href="hisaab_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .risk-container {
+            padding: 4rem 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .concept-section {
+            margin-bottom: 5rem;
+        }
+        .concept-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+        }
+        .concept-card {
+            padding: 2.5rem;
+            border-radius: 24px;
+            line-height: 1.8;
+        }
+        .math-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent-purple);
+            font-size: 0.9rem;
+        }
+        .distribution-viz {
+            width: 100%;
+            height: 200px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 4px;
+        }
+        .bar {
+            background: var(--accent-blue);
+            width: 15px;
+            border-radius: 4px 4px 0 0;
+            opacity: 0.3;
+        }
+        .bar.highlight-sd {
+            background: var(--accent-purple);
+            opacity: 0.8;
+        }
+        .label-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .risk-tag {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            background: rgba(157, 80, 187, 0.2);
+            border: 1px solid var(--accent-purple);
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 768px) {
+            .risk-container { padding: 2rem 5%; }
+            .concept-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-orb" id="orb-1"></div>
+        <div class="glow-orb" id="orb-2"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by">Risk Management Framework</div>
+        </nav>
+    </header>
+
+    <main class="risk-container">
+        <section class="hero" style="min-height: auto; margin-bottom: 4rem;">
+            <div class="hero-content">
+                <h1 class="fade-in">Demystifying <span class="highlight">Financial Risk</span></h1>
+                <p class="subtitle fade-in-delay">Risk is not just the chance of losing money; it is the range of possible outcomes. Understanding the math is the first step to mastering it.</p>
+            </div>
+        </section>
+
+        <!-- 1. Standard Deviation & Volatility -->
+        <section class="concept-section fade-in-delay-2">
+            <div class="risk-tag">CORE METRIC</div>
+            <h2>Standard Deviation & Volatility</h2>
+            <div class="concept-card glass">
+                <p>Standard Deviation (σ) measures how much your portfolio's returns "wander" away from its average (mean) return. In finance, we call this <strong>Volatility</strong>.</p>
+                <div class="math-box">
+                    Higher Volatility = Wider Range of Outcomes = More Uncertainty
+                </div>
+                <p>If your portfolio has an average daily return of 0.1% and a standard deviation of 1.0%, the "width" of your daily expectations is determined by this 1.0% buffer.</p>
+            </div>
+        </section>
+
+        <!-- 2. Normal Distribution -->
+        <section class="concept-section">
+            <div class="risk-tag">PROBABILITY</div>
+            <h2>The Bell Curve (Normal Distribution)</h2>
+            <div class="concept-card glass">
+                <p>We assume market returns follow a "Normal Distribution." This creates a mathematical framework for probability:</p>
+                
+                <div class="distribution-viz">
+                    <!-- Simple CSS Bell Curve Representation -->
+                    <div class="bar" style="height: 10%;"></div>
+                    <div class="bar" style="height: 25%;"></div>
+                    <div class="bar highlight-sd" style="height: 50%;"></div>
+                    <div class="bar highlight-sd" style="height: 80%;"></div>
+                    <div class="bar highlight-sd" style="height: 100%;"></div>
+                    <div class="bar highlight-sd" style="height: 80%;"></div>
+                    <div class="bar highlight-sd" style="height: 50%;"></div>
+                    <div class="bar" style="height: 25%;"></div>
+                    <div class="bar" style="height: 10%;"></div>
+                </div>
+
+                <div class="label-group">
+                    <div>
+                        <h4 style="color: var(--accent-purple);">The 68% Rule</h4>
+                        <p>There is a <strong>68% chance</strong> that your return will fall within 1 Standard Deviation of the mean.</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--accent-purple);">The 95% Rule</h4>
+                        <p>There is a <strong>95% chance</strong> that your return will fall within 2 Standard Deviations.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 1.5rem;"><em>Why it matters:</em> A high Standard Deviation means the "sides" of the mean are further apart, increasing the likelihood of extreme gains or extreme losses.</p>
+            </div>
+        </section>
+
+        <!-- 3. Annualization -->
+        <section class="concept-section">
+            <div class="risk-tag">SCALING</div>
+            <h2>Annualized Risk</h2>
+            <div class="concept-card glass">
+                <p>Volatility doesn't scale linearly with time; it scales with the <strong>square root of time</strong>. To convert daily risk to annual risk, we multiply by the square root of trading days (usually 252).</p>
+                <div class="math-box">
+                    Annual Volatility = Daily Volatility × √252
+                </div>
+                <p>This is why your dashboard shows an Annualized Volatility of ~13-15% even if your daily moves are only ~0.8%.</p>
+            </div>
+        </section>
+
+        <!-- 4. Advanced Risk Concepts -->
+        <section class="concept-section">
+            <div class="risk-tag">INSTITUTIONAL GRADE</div>
+            <h2>Downside & Tail Risk</h2>
+            <div class="concept-card glass">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: #ff4444;">Value at Risk (VaR)</h3>
+                    <p>VaR answers the question: "What is my worst-case loss with 95% confidence?" If your 1-day 95% VaR is 2%, it means there is only a 5% chance you will lose more than 2% in a single day.</p>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <h3>Downside Deviation</h3>
+                    <p>Standard deviation treats extreme "gains" as risk. <strong>Downside Deviation</strong> only looks at returns that fall below your target (or zero), focusing purely on the volatility that hurts your portfolio.</p>
+                </div>
+
+                <div>
+                    <h3>Maximum Drawdown</h3>
+                    <p>The largest "peak-to-trough" decline your portfolio has ever suffered. This measures your portfolio's resilience during market crashes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="hero" style="min-height: auto; padding: 4rem 0;">
+            <button class="btn btn-primary" onclick="location.href='demo.html'">Back to Live Analytics</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hisaab by Play Theory. Education in Precision.</p>
+    </footer>
+
+    <script>
+        // Parallax script
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+            document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
+        });
+    </script>
+</body>
+</html>
