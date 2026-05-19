@@ -157,7 +157,10 @@
             <div id="asset-list">
                 <!-- Asset Rows here -->
             </div>
-            <button class="add-asset-btn" onclick="addAssetRow()">+ Add Asset from Nifty 500</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                <button class="add-asset-btn" style="margin-top:0" onclick="addAssetRow('stock')">+ Stock</button>
+                <button class="add-asset-btn" style="margin-top:0" onclick="addAssetRow('mf')">+ Fund</button>
+            </div>
             
             <div class="weight-total">
                 <span>Total Weight:</span>
@@ -212,14 +215,14 @@
                 simulatorData = await response.json();
                 
                 // Add initial rows
-                addAssetRow("RELIANCE.NS");
-                addAssetRow("HDFCBANK.NS");
+                addAssetRow('mf', 'Large Cap'); // Default Large Cap
+                addAssetRow('mf', 'Mid Cap');   // Default Mid Cap
                 
                 // Set default weights
                 const inputs = document.querySelectorAll('.weight-input');
                 if(inputs.length >= 2) {
-                    inputs[0].value = 60;
-                    inputs[1].value = 40;
+                    inputs[0].value = 70;
+                    inputs[1].value = 30;
                 }
                 
                 updateTotalWeight();
@@ -232,24 +235,70 @@
             }
         }
 
-        function addAssetRow(selectedTicker = "") {
+        function addAssetRow(type = 'stock', category = 'Large Cap') {
             const container = document.getElementById('asset-list');
             const row = document.createElement('div');
             row.className = 'asset-row';
+            row.style.flexDirection = 'column';
+            row.style.alignItems = 'stretch';
+            row.style.background = 'rgba(255,255,255,0.03)';
+            row.style.padding = '0.8rem';
+            row.style.borderRadius = '8px';
+            row.style.border = '1px solid rgba(255,255,255,0.05)';
             
-            let options = Object.keys(simulatorData.assets).sort().map(ticker => 
-                `<option value="${ticker}" ${ticker === selectedTicker ? 'selected' : ''}>${ticker}</option>`
-            ).join('');
-            
-            row.innerHTML = `
-                <select class="asset-select" onchange="runSimulation()">
-                    ${options}
-                </select>
-                <input type="number" class="weight-input" value="0" min="0" max="100" onchange="updateTotalWeight(); runSimulation();">
-                <span class="remove-btn" onclick="this.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
-            `;
-            container.appendChild(row);
+            if (type === 'mf') {
+                const categoryOptions = Object.keys(simulatorData.categories).map(cat => 
+                    `<option value="${cat}" ${cat === category ? 'selected' : ''}>${cat}</option>`
+                ).join('');
+                
+                row.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.7rem; color: #94A3B8; text-transform: uppercase;">Mutual Fund</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
+                    </div>
+                    <select class="category-select" style="width: 100%; margin-bottom: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.4rem; border-radius: 4px;" onchange="updateFundList(this)">
+                        ${categoryOptions}
+                    </select>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
+                            <!-- Populated by updateFundList -->
+                        </select>
+                        <input type="number" class="weight-input" value="0" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                    </div>
+                `;
+                container.appendChild(row);
+                updateFundList(row.querySelector('.category-select'));
+            } else {
+                // Stock logic
+                const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
+                const stockOptions = stockTickers.map(t => `<option value="${t}">${t}</option>`).join('');
+                
+                row.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="font-size: 0.7rem; color: #94A3B8; text-transform: uppercase;">Individual Stock</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
+                            ${stockOptions}
+                        </select>
+                        <input type="number" class="weight-input" value="0" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                    </div>
+                `;
+                container.appendChild(row);
+            }
             updateTotalWeight();
+        }
+
+        function updateFundList(catSelect) {
+            const category = catSelect.value;
+            const fundSelect = catSelect.parentElement.querySelector('.asset-select');
+            const funds = simulatorData.categories[category];
+            
+            fundSelect.innerHTML = funds.map(f => 
+                `<option value="${f.code}">${f.name}</option>`
+            ).join('');
+            runSimulation();
         }
 
         function updateTotalWeight() {

@@ -3,10 +3,14 @@ import json
 import os
 import numpy as np
 
+import sqlite3
+
 def prepare_simulator_data():
     base_path = "Gemini/personal finance accounting/"
     universe_file = base_path + "nifty_universe_historical_data.csv"
     etf_file = base_path + "etf_historical_data.csv"
+    grouped_funds_file = base_path + "grouped_funds.json"
+    db_file = base_path + "nav_data.db"
     output_file = base_path + "simulator_data.json"
 
     print("Loading Nifty Universe data...")
@@ -14,56 +18,82 @@ def prepare_simulator_data():
     
     print("Loading ETF (Benchmark) data...")
     df_etf = pd.read_csv(etf_file)
-    
-    # 1. Clean up columns: Keep only _Close
-    # For universe, columns are Ticker_Close
-    # For ETF, look for NIFTYBEES.NS_Close
-    
-    # Get NiftyBees
-    benchmark_col = [c for c in df_etf.columns if 'NIFTYBEES' in c and 'Close' in c]
-    if not benchmark_col:
-        print("Error: Could not find NIFTYBEES in ETF file.")
+
+    print("Loading Filtered Mutual Funds...")
+    if os.path.exists(grouped_funds_file):
+        with open(grouped_funds_file, 'r') as f:
+            grouped_funds = json.load(f)
+    else:
+        print("Error: grouped_funds.json not found. Run group_funds.py first.")
         return
-    benchmark_col = benchmark_col[0]
-    
-    # Standardize dates
-    df_univ['Date'] = pd.to_datetime(df_univ['Date'])
+
+    all_scheme_codes = []
+    for cat in grouped_funds:
+        for fund in grouped_funds[cat]:
+            all_scheme_codes.append(fund['code'])
+
+    # 1. Standardize dates from ETF file as the primary timeline
     df_etf['Date'] = pd.to_datetime(df_etf['Date'])
+    df_univ['Date'] = pd.to_datetime(df_univ['Date'])
     
-    # Merge on Date to align everything
+    # Get NiftyBees for benchmark
+    benchmark_col = [c for c in df_etf.columns if 'NIFTYBEES' in c and 'Close' in c][0]
+    
     merged = pd.merge(df_univ, df_etf[['Date', benchmark_col]], on='Date', how='inner')
     merged = merged.sort_values('Date')
+    dates_str = merged['Date'].dt.strftime('%Y-%m-%d').tolist()
     
-    # 2. Forward fill any gaps and fill remaining NaNs with 0 for valid JSON
-    merged = merged.ffill().bfill().fillna(0)
+    # 2. Fetch Mutual Fund NAVs from DB for aligned dates
+    print(f"Fetching NAVs for {len(all_scheme_codes)} schemes...")
+    conn = sqlite3.connect(db_file)
+    mf_data = {}
     
+    # Optimization: Chunk the scheme codes for the SQL query
+    chunk_size = 500
+    for i in range(0, len(all_scheme_codes), chunk_size):
+        chunk = all_scheme_codes[i:i+chunk_size]
+        placeholders = ','.join(['?'] * len(chunk))
+        query = f"SELECT scheme_code, date, nav FROM nav_history WHERE scheme_code IN ({placeholders})"
+        df_mf = pd.read_sql_query(query, conn, params=chunk)
+        
+        for code, group in df_mf.groupby('scheme_code'):
+            # Reindex to match the timeline
+            group['date'] = pd.to_datetime(group['date'])
+            group = group.set_index('date').reindex(merged['Date']).ffill().bfill()
+            mf_data[code] = group['nav'].tolist()
+    conn.close()
+
     # 3. Construct clean JSON structure
-    dates = merged['Date'].dt.strftime('%Y-%m-%d').tolist()
     benchmark = merged[benchmark_col].tolist()
     
-    # Extract asset names (remove _Close suffix)
     assets = {}
+    # Add Stocks
     for col in merged.columns:
         if col.endswith('_Close') and col != benchmark_col:
             ticker = col.replace('_Close', '')
             assets[ticker] = merged[col].tolist()
+    
+    # Add Mutual Funds
+    for code, navs in mf_data.items():
+        assets[code] = navs
             
-    # Final sanitization of all numbers for JSON safety
+    # Final sanitization
     def safe_json_list(arr):
-        return [round(float(v), 2) if np.isfinite(v) else 0 for v in arr]
+        return [round(float(v), 4) if np.isfinite(v) else 0 for v in arr]
 
     result = {
-        "dates": dates,
+        "dates": dates_str,
         "benchmark": safe_json_list(benchmark),
-        "assets": {ticker: safe_json_list(prices) for ticker, prices in assets.items()}
+        "assets": {id: safe_json_list(prices) for id, prices in assets.items()},
+        "categories": grouped_funds # Pass through the grouping for UI
     }
     
     print(f"Saving optimized data to {output_file}...")
     with open(output_file, 'w') as f:
         json.dump(result, f)
         
-    print(f"Total Assets Processed: {len(assets)}")
-    print(f"Date Points: {len(dates)}")
+    print(f"Total Assets (Stocks + MFs): {len(assets)}")
+    print(f"Date Points: {len(dates_str)}")
 
 if __name__ == "__main__":
     prepare_simulator_data()
