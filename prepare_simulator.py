@@ -41,6 +41,10 @@ def prepare_simulator_data():
     
     merged = pd.merge(df_univ, df_etf[['Date', benchmark_col]], on='Date', how='inner')
     merged = merged.sort_values('Date')
+    
+    # Filter out rows where benchmark is 0 or NaN to prevent division by zero in simulator
+    merged = merged[merged[benchmark_col] > 0]
+    
     dates_str = merged['Date'].dt.strftime('%Y-%m-%d').tolist()
     
     # 2. Fetch Mutual Fund NAVs from DB for aligned dates
