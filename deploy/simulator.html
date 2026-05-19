@@ -53,29 +53,76 @@
         }
         .asset-row {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
             animation: slideIn 0.3s ease-out;
+            position: relative;
         }
-        .asset-select {
-            flex: 1;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
+        .asset-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .asset-type-tag {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+        .asset-select, .category-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 0.5rem;
+            padding: 0.6rem;
             border-radius: 8px;
             outline: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: border-color 0.2s;
+        }
+        .asset-select:focus, .category-select:focus {
+            border-color: var(--accent-blue);
+        }
+        .weight-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 90px;
         }
         .weight-input {
-            width: 70px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--glass-border);
+            width: 100%;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
             color: var(--accent-blue);
-            padding: 0.5rem;
+            padding: 0.6rem 1.8rem 0.6rem 0.6rem;
             border-radius: 8px;
-            text-align: center;
+            text-align: right;
             font-weight: 700;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .weight-input:focus {
+            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
+        }
+        .weight-input-suffix {
+            position: absolute;
+            right: 0.6rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            pointer-events: none;
+            font-size: 0.9rem;
         }
         .remove-btn {
             color: #ff4444;
@@ -237,12 +284,6 @@
             const container = document.getElementById('asset-list');
             const row = document.createElement('div');
             row.className = 'asset-row';
-            row.style.flexDirection = 'column';
-            row.style.alignItems = 'stretch';
-            row.style.background = 'rgba(255,255,255,0.03)';
-            row.style.padding = '0.8rem';
-            row.style.borderRadius = '8px';
-            row.style.border = '1px solid rgba(255,255,255,0.05)';
             
             if (type === 'mf') {
                 const categoryOptions = Object.keys(simulatorData.categories).map(cat => 
@@ -250,18 +291,21 @@
                 ).join('');
                 
                 row.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="font-size: 0.7rem; color: #94A3B8; text-transform: uppercase;">Mutual Fund</span>
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Mutual Fund</span>
                         <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
                     </div>
-                    <select class="category-select" style="width: 100%; margin-bottom: 0.5rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.4rem; border-radius: 4px;" onchange="updateFundList(this)">
+                    <select class="category-select" onchange="updateFundList(this)">
                         ${categoryOptions}
                     </select>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
+                    <div style="display: flex; gap: 0.8rem; align-items: center;">
+                        <select class="asset-select" onchange="runSimulation()">
                             <!-- Populated by updateFundList -->
                         </select>
-                        <input type="number" class="weight-input" value="${weight}" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight(); runSimulation();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
                     </div>
                 `;
                 container.appendChild(row);
@@ -272,15 +316,18 @@
                 const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
                 
                 row.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span style="font-size: 0.7rem; color: #94A3B8; text-transform: uppercase;">Individual Stock</span>
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Individual Stock</span>
                         <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
                     </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
+                    <div style="display: flex; gap: 0.8rem; align-items: center;">
+                        <select class="asset-select" onchange="runSimulation()">
                             ${stockOptions}
                         </select>
-                        <input type="number" class="weight-input" value="${weight}" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight(); runSimulation();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
                     </div>
                 `;
                 container.appendChild(row);
