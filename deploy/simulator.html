@@ -214,16 +214,14 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 simulatorData = await response.json();
                 
-                // Add initial rows
-                addAssetRow('mf', 'Large Cap'); // Default Large Cap
-                addAssetRow('mf', 'Mid Cap');   // Default Mid Cap
-                
-                // Set default weights
-                const inputs = document.querySelectorAll('.weight-input');
-                if(inputs.length >= 2) {
-                    inputs[0].value = 70;
-                    inputs[1].value = 30;
-                }
+                // Set Default Model Portfolio
+                // 30% Nifty 50, 20% Midcap, 10% Smallcap, 30% Arbitrage, 7% Gold, 3% Silver
+                addAssetRow('stock', null, 'NIFTYBEES.NS', 30);
+                addAssetRow('stock', null, 'MIDCAPIETF.NS', 20);
+                addAssetRow('mf', 'Small Cap', '147946', 10); // Bandhan Small Cap
+                addAssetRow('mf', 'Hybrid/Arbitrage', '119771', 30); // Kotak Arbitrage
+                addAssetRow('stock', null, 'HDFCGOLD.NS', 7);
+                addAssetRow('stock', null, 'SILVERIETF.NS', 3);
                 
                 updateTotalWeight();
                 runSimulation();
@@ -235,7 +233,7 @@
             }
         }
 
-        function addAssetRow(type = 'stock', category = 'Large Cap') {
+        function addAssetRow(type = 'stock', category = 'Large Cap', selectedId = "", weight = 0) {
             const container = document.getElementById('asset-list');
             const row = document.createElement('div');
             row.className = 'asset-row';
@@ -263,15 +261,15 @@
                         <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
                             <!-- Populated by updateFundList -->
                         </select>
-                        <input type="number" class="weight-input" value="0" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                        <input type="number" class="weight-input" value="${weight}" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
                     </div>
                 `;
                 container.appendChild(row);
-                updateFundList(row.querySelector('.category-select'));
+                updateFundList(row.querySelector('.category-select'), selectedId);
             } else {
                 // Stock logic
                 const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
-                const stockOptions = stockTickers.map(t => `<option value="${t}">${t}</option>`).join('');
+                const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
                 
                 row.innerHTML = `
                     <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
@@ -282,7 +280,7 @@
                         <select class="asset-select" style="flex: 1;" onchange="runSimulation()">
                             ${stockOptions}
                         </select>
-                        <input type="number" class="weight-input" value="0" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
+                        <input type="number" class="weight-input" value="${weight}" min="0" max="100" style="width: 60px;" onchange="updateTotalWeight(); runSimulation();">
                     </div>
                 `;
                 container.appendChild(row);
@@ -290,13 +288,13 @@
             updateTotalWeight();
         }
 
-        function updateFundList(catSelect) {
+        function updateFundList(catSelect, selectedId = "") {
             const category = catSelect.value;
             const fundSelect = catSelect.parentElement.querySelector('.asset-select');
             const funds = simulatorData.categories[category];
             
             fundSelect.innerHTML = funds.map(f => 
-                `<option value="${f.code}">${f.name}</option>`
+                `<option value="${f.code}" ${f.code === selectedId ? 'selected' : ''}>${f.name}</option>`
             ).join('');
             runSimulation();
         }
