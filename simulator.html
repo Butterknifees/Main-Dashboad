@@ -8,40 +8,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
     <style>
+        :root {
+            --accent-blue: #00D2FF;
+            --text-secondary: #94A3B8;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
         .simulator-layout {
             display: grid;
-            grid-template-columns: 350px 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 2rem;
             padding: 2rem 5%;
             max-width: 1600px;
             margin: 0 auto;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .simulator-layout {
                 grid-template-columns: 1fr;
             }
             .builder-panel {
-                position: relative;
-                top: 0;
-            }
-            .chart-container {
-                height: 400px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .metrics-summary {
-                grid-template-columns: 1fr 1fr;
-            }
-            .chart-container {
-                padding: 1rem;
-                height: 350px;
-            }
-            .builder-panel {
-                padding: 1.5rem 1rem;
+                position: static;
             }
         }
 
@@ -50,7 +40,19 @@
             height: fit-content;
             position: sticky;
             top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
         }
+
+        /* Custom Scrollbar for Builder Panel */
+        .builder-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+        .builder-panel::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
         .asset-row {
             display: flex;
             flex-direction: column;
@@ -63,127 +65,48 @@
             animation: slideIn 0.3s ease-out;
             position: relative;
         }
-        .asset-row-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .asset-type-tag {
-            font-size: 0.65rem;
-            color: #94A3B8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
+        
         .asset-select, .category-select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: #1a1f2e;
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 0.6rem;
+            padding: 0.7rem;
             border-radius: 8px;
             outline: none;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: border-color 0.2s;
+            font-size: 0.85rem;
         }
-        .asset-select:focus, .category-select:focus {
-            border-color: var(--accent-blue);
-        }
-        .weight-input-wrapper {
-            position: relative;
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 25, 0.9);
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            width: 90px;
+            z-index: 1000;
         }
-        .weight-input {
-            width: 100%;
-            background: rgba(0, 210, 255, 0.05);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            color: var(--accent-blue);
-            padding: 0.6rem 1.8rem 0.6rem 0.6rem;
-            border-radius: 8px;
-            text-align: right;
-            font-weight: 700;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.2s;
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 210, 255, 0.1);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
         }
-        .weight-input:focus {
-            background: rgba(0, 210, 255, 0.1);
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
-        }
-        .weight-input-suffix {
-            position: absolute;
-            right: 0.6rem;
-            color: var(--accent-blue);
-            font-weight: 700;
-            pointer-events: none;
-            font-size: 0.9rem;
-        }
-        .remove-btn {
-            color: #ff4444;
-            cursor: pointer;
-            font-weight: 800;
-        }
-        .add-asset-btn {
-            width: 100%;
-            margin-top: 1rem;
-            background: var(--glass-bg);
-            border: 1px dashed var(--accent-blue);
-            color: var(--accent-blue);
-            padding: 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .add-asset-btn:hover {
-            background: rgba(0, 210, 255, 0.1);
-        }
-        .weight-total {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            font-weight: 800;
-        }
-        .metrics-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .metric-mini-card {
-            padding: 1.2rem;
-            border-radius: 12px;
-        }
-        .m-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--accent-blue);
-        }
-        .m-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            margin-bottom: 0.3rem;
-        }
-        .chart-container {
-            height: 500px;
-            padding: 2rem;
-            border-radius: 24px;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Simulator Data...</p>
+    </div>
+
     <div class="glow-container">
         <div class="glow-orb" id="orb-1"></div>
         <div class="glow-orb" id="orb-2"></div>
@@ -243,9 +166,11 @@
                 </div>
             </div>
 
-            <div class="chart-container glass">
+            <div class="chart-container glass" style="position: relative;">
                 <h2 style="margin-bottom: 1rem;">Backtest Performance (1 Year)</h2>
-                <canvas id="simChart"></canvas>
+                <div style="height: calc(100% - 40px); width: 100%;">
+                    <canvas id="simChart"></canvas>
+                </div>
             </div>
         </section>
     </main>
@@ -261,12 +186,13 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 simulatorData = await response.json();
                 
+                document.getElementById('loading').style.display = 'none';
+
                 // Set Default Model Portfolio
-                // 30% Nifty 50, 20% Midcap, 10% Smallcap, 30% Arbitrage, 7% Gold, 3% Silver
                 addAssetRow('stock', null, 'NIFTYBEES.NS', 30);
                 addAssetRow('stock', null, 'MIDCAPIETF.NS', 20);
-                addAssetRow('mf', 'Small Cap', '147946', 10); // Bandhan Small Cap
-                addAssetRow('mf', 'Hybrid/Arbitrage', '119771', 30); // Kotak Arbitrage
+                addAssetRow('mf', 'Small Cap', '147946', 10);
+                addAssetRow('mf', 'Hybrid/Arbitrage', '119771', 30);
                 addAssetRow('stock', null, 'HDFCGOLD.NS', 7);
                 addAssetRow('stock', null, 'SILVERIETF.NS', 3);
                 
@@ -274,6 +200,7 @@
                 runSimulation();
             } catch (e) {
                 console.error("Failed to load simulator data:", e);
+                document.getElementById('loading').innerHTML = `<p style="color:#ff4444">Error: ${e.message}</p>`;
                 const errDiv = document.getElementById('error-msg');
                 errDiv.style.display = 'block';
                 errDiv.textContent = `Error: ${e.message}. Try reloading or check server.`;
@@ -281,6 +208,7 @@
         }
 
         function addAssetRow(type = 'stock', category = 'Large Cap', selectedId = "", weight = 0) {
+            if (!simulatorData) return;
             const container = document.getElementById('asset-list');
             const row = document.createElement('div');
             row.className = 'asset-row';
@@ -298,8 +226,8 @@
                     <select class="category-select" onchange="updateFundList(this)">
                         ${categoryOptions}
                     </select>
-                    <div style="display: flex; gap: 0.8rem; align-items: center;">
-                        <select class="asset-select" onchange="runSimulation()">
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" onchange="runSimulation()" style="flex: 1;">
                             <!-- Populated by updateFundList -->
                         </select>
                         <div class="weight-input-wrapper">
@@ -311,7 +239,6 @@
                 container.appendChild(row);
                 updateFundList(row.querySelector('.category-select'), selectedId);
             } else {
-                // Stock logic
                 const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
                 const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
                 
@@ -320,8 +247,8 @@
                         <span class="asset-type-tag">Individual Stock</span>
                         <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight(); runSimulation();">×</span>
                     </div>
-                    <div style="display: flex; gap: 0.8rem; align-items: center;">
-                        <select class="asset-select" onchange="runSimulation()">
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" onchange="runSimulation()" style="flex: 1;">
                             ${stockOptions}
                         </select>
                         <div class="weight-input-wrapper">
@@ -340,9 +267,11 @@
             const fundSelect = catSelect.parentElement.querySelector('.asset-select');
             const funds = simulatorData.categories[category];
             
-            fundSelect.innerHTML = funds.map(f => 
-                `<option value="${f.code}" ${f.code === selectedId ? 'selected' : ''}>${f.name}</option>`
-            ).join('');
+            if (funds) {
+                fundSelect.innerHTML = funds.map(f => 
+                    `<option value="${f.code}" ${f.code === selectedId ? 'selected' : ''}>${f.name}</option>`
+                ).join('');
+            }
             runSimulation();
         }
 
@@ -351,88 +280,96 @@
             document.querySelectorAll('.weight-input').forEach(input => {
                 total += parseFloat(input.value) || 0;
             });
-            document.getElementById('total-weight-display').textContent = total + '%';
-            document.getElementById('weight-error').style.display = total === 100 ? 'none' : 'block';
+            document.getElementById('total-weight-display').textContent = Math.round(total) + '%';
+            document.getElementById('weight-error').style.display = Math.abs(total - 100) < 0.1 ? 'none' : 'block';
             return total;
         }
 
         function runSimulation() {
             if (!simulatorData) return;
             
-            const rows = document.querySelectorAll('.asset-row');
-            const portfolio = [];
-            let totalWeight = 0;
-            
-            rows.forEach(row => {
-                const ticker = row.querySelector('.asset-select').value;
-                const weight = parseFloat(row.querySelector('.weight-input').value) / 100 || 0;
-                portfolio.push({ ticker, weight });
-                totalWeight += weight;
-            });
-
-            if (portfolio.length === 0) return;
-
-            const n = simulatorData.dates.length;
-            const portReturns = new Array(n - 1).fill(0);
-            const benchReturns = new Array(n - 1).fill(0);
-            
-            const portNAV = [100];
-            const benchNAV = [100];
-
-            for (let i = 1; i < n; i++) {
-                // Calculate portfolio daily return
-                let dailyRet = 0;
-                portfolio.forEach(asset => {
-                    const prices = simulatorData.assets[asset.ticker];
-                    const r = (prices[i] / prices[i-1]) - 1;
-                    dailyRet += asset.weight * r;
+            try {
+                const rows = document.querySelectorAll('.asset-row');
+                const portfolio = [];
+                let totalWeight = 0;
+                
+                rows.forEach(row => {
+                    const select = row.querySelector('.asset-select');
+                    if (!select) return;
+                    const ticker = select.value;
+                    const weight = parseFloat(row.querySelector('.weight-input').value) / 100 || 0;
+                    if (weight > 0) {
+                        portfolio.push({ ticker, weight });
+                        totalWeight += weight;
+                    }
                 });
-                
-                // If total weight is not 100%, treat remainder as cash (0% return)
-                // (Optional: can scale weights to sum to 1)
-                
-                portReturns[i-1] = dailyRet;
-                portNAV.push(portNAV[i-1] * (1 + dailyRet));
 
-                // Benchmark daily return
-                const bR = (simulatorData.benchmark[i] / simulatorData.benchmark[i-1]) - 1;
-                benchReturns[i-1] = bR;
-                benchNAV.push(benchNAV[i-1] * (1 + bR));
+                if (portfolio.length === 0) return;
+
+                const n = simulatorData.dates.length;
+                const portReturns = new Array(n - 1).fill(0);
+                const benchReturns = new Array(n - 1).fill(0);
+                
+                const portNAV = [100];
+                const benchNAV = [100];
+
+                for (let i = 1; i < n; i++) {
+                    let dailyRet = 0;
+                    portfolio.forEach(asset => {
+                        const prices = simulatorData.assets[asset.ticker];
+                        if (prices) {
+                            const p1 = prices[i];
+                            const p0 = prices[i-1];
+                            if (p1 > 0 && p0 > 0) {
+                                dailyRet += asset.weight * ((p1 / p0) - 1);
+                            }
+                        }
+                    });
+                    
+                    portReturns[i-1] = dailyRet;
+                    portNAV.push(portNAV[i-1] * (1 + dailyRet));
+
+                    const b1 = simulatorData.benchmark[i];
+                    const b0 = simulatorData.benchmark[i-1];
+                    const bR = (b1 > 0 && b0 > 0) ? (b1 / b0) - 1 : 0;
+                    benchReturns[i-1] = bR;
+                    benchNAV.push(benchNAV[i-1] * (1 + bR));
+                }
+
+                // Stats
+                const annFactor = 252;
+                const totalRet = (portNAV[n-1] / portNAV[0]) - 1;
+                const annRet = Math.pow(1 + totalRet, annFactor / (n-1)) - 1;
+                
+                const meanRet = portReturns.reduce((a, b) => a + b, 0) / (n - 1);
+                const variance = portReturns.reduce((a, b) => a + Math.pow(b - meanRet, 2), 0) / (n - 2);
+                const annVol = Math.sqrt(variance * annFactor);
+                
+                const meanBench = benchReturns.reduce((a, b) => a + b, 0) / (n - 1);
+                const cov = portReturns.reduce((a, b, i) => a + (b - meanRet) * (benchReturns[i] - meanBench), 0) / (n - 2);
+                const varBench = benchReturns.reduce((a, b) => a + Math.pow(b - meanBench, 2), 0) / (n - 2);
+                const beta = varBench !== 0 ? cov / varBench : 0;
+
+                const sharpe = annVol !== 0 ? (annRet - RISK_FREE_RATE) / annVol : 0;
+
+                // IR
+                const activeReturns = portReturns.map((r, i) => r - benchReturns[i]);
+                const trackingError = Math.sqrt(activeReturns.reduce((a, b) => a + Math.pow(b - (activeReturns.reduce((s,x)=>s+x,0)/activeReturns.length), 2), 0) / (n - 2)) * Math.sqrt(annFactor);
+                const benchAnnRet = Math.pow(benchNAV[n-1]/benchNAV[0], annFactor/(n-1)) - 1;
+                const ir = trackingError !== 0 ? (annRet - benchAnnRet) / trackingError : 0;
+
+                document.getElementById('res-return').textContent = (annRet * 100).toFixed(2) + '%';
+                document.getElementById('res-vol').textContent = (annVol * 100).toFixed(2) + '%';
+                document.getElementById('res-beta').textContent = beta.toFixed(2);
+                document.getElementById('res-sharpe').textContent = sharpe.toFixed(2);
+                document.getElementById('res-ir').textContent = ir.toFixed(2);
+
+                updateChart(simulatorData.dates, portNAV, benchNAV);
+            } catch (err) {
+                console.error("Simulation error:", err);
             }
-
-            // Statistics
-            const annFactor = 252;
-            const totalRet = (portNAV[portNAV.length-1] / portNAV[0]) - 1;
-            const annRet = Math.pow(1 + totalRet, annFactor / (n-1)) - 1;
-            
-            const meanRet = portReturns.reduce((a, b) => a + b, 0) / portReturns.length;
-            const variance = portReturns.reduce((a, b) => a + Math.pow(b - meanRet, 2), 0) / (portReturns.length - 1);
-            const annVol = Math.sqrt(variance * annFactor);
-            
-            // Beta Calculation
-            const meanBench = benchReturns.reduce((a, b) => a + b, 0) / benchReturns.length;
-            const cov = portReturns.reduce((a, b, i) => a + (b - meanRet) * (benchReturns[i] - meanBench), 0) / (portReturns.length - 1);
-            const varBench = benchReturns.reduce((a, b) => a + Math.pow(b - meanBench, 2), 0) / (benchReturns.length - 1);
-            const beta = cov / varBench;
-
-            // Sharpe
-            const sharpe = (annRet - RISK_FREE_RATE) / annVol;
-
-            // Information Ratio
-            const activeReturns = portReturns.map((r, i) => r - benchReturns[i]);
-            const trackingError = Math.sqrt(activeReturns.reduce((a, b) => a + Math.pow(b - (totalRet - ((benchNAV[benchNAV.length-1]/benchNAV[0])-1))/portReturns.length, 2), 0) / (activeReturns.length - 1)) * Math.sqrt(annFactor);
-            const activeAnnRet = annRet - (Math.pow(benchNAV[benchNAV.length-1]/benchNAV[0], annFactor/(n-1)) - 1);
-            const ir = activeAnnRet / trackingError;
-
-            // Update UI
-            document.getElementById('res-return').textContent = (annRet * 100).toFixed(2) + '%';
-            document.getElementById('res-vol').textContent = (annVol * 100).toFixed(2) + '%';
-            document.getElementById('res-beta').textContent = beta.toFixed(2);
-            document.getElementById('res-sharpe').textContent = sharpe.toFixed(2);
-            document.getElementById('res-ir').textContent = isFinite(ir) ? ir.toFixed(2) : "0.00";
-
-            updateChart(simulatorData.dates, portNAV, benchNAV);
         }
+
 
         function updateChart(labels, portData, benchData) {
             const ctx = document.getElementById('simChart').getContext('2d');

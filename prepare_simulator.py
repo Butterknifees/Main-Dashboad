@@ -42,10 +42,18 @@ def prepare_simulator_data():
     # Keep all ETF columns, not just the benchmark
     merged = pd.merge(df_univ, df_etf, on='Date', how='inner')
     merged = merged.sort_values('Date')
+    
+    # 2. DATA CLEANING: Replace zeros with NaN and forward fill
+    # This is critical because a 0 price causes -100% return, and then Infinity next day
+    merged = merged.replace(0, np.nan)
+    
+    # Filter out rows where benchmark is STILL NaN (if it was NaN everywhere)
+    # But usually we just want to ensure it has a valid starting point
+    merged = merged.ffill().bfill()
 
-    # Filter out rows where benchmark is 0 or NaN to prevent division by zero in simulator
-    merged = merged[merged[benchmark_col] > 0]
-
+    # Final check: remove any remaining rows where benchmark is missing
+    merged = merged[merged[benchmark_col].notna()]
+    
     dates_str = merged['Date'].dt.strftime('%Y-%m-%d').tolist()
 
     # 2. Fetch Mutual Fund NAVs from DB for aligned dates

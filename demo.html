@@ -9,7 +9,83 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        .btn-export {
+            background: var(--accent-purple);
+            box-shadow: 0 0 20px rgba(157, 80, 187, 0.4);
+            margin-left: 1rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.75rem;
+        }
+        .btn-export:hover {
+            box-shadow: 0 0 30px rgba(157, 80, 187, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        #report-template {
+            display: none;
+            background: white;
+            color: #1a1f2e;
+            padding: 20mm; /* Standard A4 padding */
+            font-family: 'Inter', sans-serif;
+            width: 210mm; /* Explicit A4 width */
+            box-sizing: border-box;
+        }
+        .report-header {
+            border-bottom: 2px solid #00D2FF;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .report-title { font-size: 24px; font-weight: 800; color: #0B0F19; }
+        .report-date { color: #64748b; font-size: 12px; }
+        .report-section { 
+            margin-bottom: 30px; 
+            clear: both;
+        }
+        .page-break {
+            page-break-before: always;
+            height: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .report-section h3 { 
+            font-size: 16px; 
+            margin-bottom: 15px; 
+            color: #00D2FF; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            border-left: 4px solid #00D2FF;
+            padding-left: 12px;
+        }
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .report-metric {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .report-metric-label { font-size: 10px; color: #64748b; text-transform: uppercase; }
+        .report-metric-value { font-size: 18px; font-weight: 700; color: #0B0F19; }
+        
+        .report-chart-container {
+            height: 250px; /* Reduced to fit better */
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .report-table th { background: #f1f5f9; text-align: left; padding: 10px; font-size: 11px; color: #475569; }
+        .report-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
+
         .dashboard-container {
             padding: 2rem 5%;
             max-width: 1400px;
@@ -104,6 +180,101 @@
     </style>
 </head>
 <body>
+    <!-- PDF Template (Hidden) -->
+    <div id="report-template">
+        <div class="report-header">
+            <div>
+                <div class="report-title">HISAAB PORTFOLIO REPORT</div>
+                <div class="report-date" id="rep-date">Generated on: --</div>
+            </div>
+            <div style="font-family: 'JetBrains Mono'; font-weight: 800;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+        </div>
+
+        <div class="report-section">
+            <h3>Executive Summary</h3>
+            <div class="report-grid">
+                <div class="report-metric">
+                    <div class="report-metric-label">Annualized Return (XIRR)</div>
+                    <div class="report-metric-value" id="rep-xirr">--%</div>
+                </div>
+                <div class="report-metric">
+                    <div class="report-metric-label">Current Net Value</div>
+                    <div class="report-metric-value" id="rep-total">₹0</div>
+                </div>
+                <div class="report-metric">
+                    <div class="report-metric-label">Annual Volatility</div>
+                    <div class="report-metric-value" id="rep-vol">--%</div>
+                </div>
+            </div>
+            <p id="rep-period" style="font-size: 13px; color: #64748b;"></p>
+        </div>
+
+        <div class="report-section">
+            <h3>Performance Analysis</h3>
+            <div class="report-chart-container" style="height: 220px;">
+                <p style="font-size: 10px; margin-bottom: 5px;">Portfolio Value Growth (₹)</p>
+                <canvas id="repValueChart"></canvas>
+            </div>
+            <div class="report-chart-container" style="height: 280px;">
+                <p style="font-size: 10px; margin-bottom: 5px;">Indexed NAV Performance vs Model Portfolio</p>
+                <canvas id="repNavChart"></canvas>
+            </div>
+            
+            <table class="report-table" style="margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th>Comparison Metric</th>
+                        <th>My Portfolio</th>
+                        <th>Model Portfolio</th>
+                    </tr>
+                </thead>
+                <tbody id="rep-comp-body"></tbody>
+            </table>
+        </div>
+
+        <div class="page-break"></div>
+
+        <div class="report-section" style="margin-top: 20mm;">
+            <h3>Category Evolution & Allocation</h3>
+            <div class="report-chart-container" style="height: 280px;">
+                <p style="font-size: 10px; margin-bottom: 5px;">Historical Category Concentration (%)</p>
+                <canvas id="repConcChart"></canvas>
+            </div>
+            <div style="display: flex; gap: 20px; align-items: start; margin-top: 20px;">
+                <div class="report-chart-container" style="flex: 1; height: 250px;">
+                    <canvas id="repAllocChart"></canvas>
+                </div>
+                <div style="flex: 1.2;">
+                    <table class="report-table" id="rep-cat-table">
+                        <thead>
+                            <tr>
+                                <th>Current Category</th>
+                                <th>Weight</th>
+                                <th>Allocation (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <h3>Holdings Detail</h3>
+            <table class="report-table" id="rep-holdings-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Asset Name</th>
+                        <th style="width: 25%;">Category</th>
+                        <th style="width: 15%;">Weight</th>
+                        <th style="width: 20%;">Current Value</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
     <div class="glow-container">
         <div class="glow-orb" id="orb-1"></div>
         <div class="glow-orb" id="orb-2"></div>
@@ -112,7 +283,10 @@
     <header>
         <nav>
             <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
-            <div class="powered-by">Live Portfolio Analytics</div>
+            <div class="powered-by">
+                Live Portfolio Analytics
+                <button class="btn btn-secondary btn-export" onclick="generatePDF()">Export Summary PDF</button>
+            </div>
         </nav>
     </header>
 
@@ -144,9 +318,31 @@
                 <h2>Portfolio Value Growth</h2>
                 <canvas id="valueChart"></canvas>
             </div>
+            
+            <div class="chart-wrapper glass">
+                <h2>Historical Category Concentration (%)</h2>
+                <canvas id="concentrationChart"></canvas>
+            </div>
+
             <div class="chart-wrapper glass">
                 <h2>Portfolio NAV (Indexed to 100)</h2>
                 <canvas id="navChart"></canvas>
+            </div>
+
+            <div class="chart-wrapper glass" style="height: auto;">
+                <h2>Deep Comparison: My Portfolio vs Model</h2>
+                <table class="assets-table" style="margin-top: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>My Portfolio</th>
+                            <th>Model Portfolio</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -174,13 +370,16 @@
     </footer>
 
     <script>
+        let dashboardData = null;
+
         async function loadDashboard() {
             try {
                 const response = await fetch('dashboard_data.json?v=' + new Date().getTime());
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
+                dashboardData = await response.json();
+                const data = dashboardData;
 
                 // Set Metrics
                 document.getElementById('analysis-period').textContent = `Period: ${data.metrics.period}`;
@@ -211,7 +410,7 @@
                         interaction: { intersect: false, mode: 'index' },
                         scales: {
                             y: { 
-                                beginAtZero: false, /* Zoom in on performance */
+                                beginAtZero: false,
                                 grace: '10%',
                                 grid: { color: 'rgba(255,255,255,0.05)' }, 
                                 ticks: { 
@@ -251,17 +450,6 @@
                                 pointRadius: 0,
                                 borderWidth: 2,
                                 borderDash: [2, 2]
-                            },
-                            {
-                                label: 'Nifty 50 (Benchmark)',
-                                data: data.history.benchmark,
-                                borderColor: '#00C853',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 2,
-                                borderDash: [5, 5]
                             }
                         ]
                     },
@@ -287,6 +475,64 @@
                     }
                 });
 
+                // Concentration Chart (Stacked Area)
+                const catLabels = Array.from(new Set(data.history.allocation.flatMap(d => Object.keys(d))));
+                const catColors = ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'];
+                
+                const concentrationDatasets = catLabels.map((cat, i) => ({
+                    label: cat,
+                    data: data.history.allocation.map(d => d[cat] || 0),
+                    backgroundColor: catColors[i % catColors.length] + '88',
+                    borderColor: catColors[i % catColors.length],
+                    fill: true,
+                    pointRadius: 0,
+                    tension: 0.3
+                }));
+
+                new Chart(document.getElementById('concentrationChart'), {
+                    type: 'line',
+                    data: {
+                        labels: data.history.dates,
+                        datasets: concentrationDatasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: 'index' },
+                        scales: {
+                            y: { 
+                                stacked: true,
+                                max: 100,
+                                grid: { color: 'rgba(255,255,255,0.05)' },
+                                ticks: { color: '#94A3B8', callback: v => v + '%' }
+                            },
+                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 6 } }
+                        },
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#94A3B8' } }
+                        }
+                    }
+                });
+
+                // Comparison Table
+                const compBody = document.getElementById('comparison-body');
+                const comp = data.metrics.comparison;
+                const metrics = [
+                    { label: 'Annualized Return', key: 'return', suffix: '%' },
+                    { label: 'Annual Volatility', key: 'volatility', suffix: '%' },
+                    { label: 'Max Drawdown', key: 'max_drawdown', suffix: '%' },
+                    { label: 'Average Daily Return (Ann.)', key: 'avg_return', suffix: '%' }
+                ];
+
+                metrics.forEach(m => {
+                    const row = `<tr>
+                        <td style="color: var(--text-secondary)">${m.label}</td>
+                        <td style="color: var(--accent-blue); font-weight: 700;">${comp.portfolio[m.key]}${m.suffix}</td>
+                        <td style="color: #F59E0B; font-weight: 600;">${comp.model[m.key]}${m.suffix}</td>
+                    </tr>`;
+                    compBody.innerHTML += row;
+                });
+
                 // Assets Table
                 const tbody = document.getElementById('assets-body');
                 const totalVal = data.metrics.final_value;
@@ -294,7 +540,10 @@
                     const row = document.createElement('tr');
                     const weight = ((asset.value / totalVal) * 100).toFixed(2);
                     row.innerHTML = `
-                        <td>${asset.name}</td>
+                        <td>
+                            <div style="font-weight: 600;">${asset.name}</div>
+                            <div style="font-size: 0.7rem; color: var(--text-secondary);">${asset.category || 'Other'}</div>
+                        </td>
                         <td style="color: var(--accent-blue); font-weight: 600;">₹${asset.value.toLocaleString()}</td>
                         <td style="color: var(--text-secondary);">${weight}%</td>
                     `;
@@ -310,8 +559,202 @@
                           'ERROR: Browsers block data loading from local files for security.' : 
                           'ERROR: ' + error.message}
                         <br>Details: Ensure the server is running and dashboard_data.json exists.
-                        <br>Link: <a href="http://localhost:8000/demo.html" style="color: var(--accent-blue);">http://localhost:8000/demo.html</a>
                     </span>`;
+            }
+        }
+
+        async function generatePDF() {
+            if (!dashboardData) return;
+            
+            const btn = document.querySelector('.btn-export');
+            const originalText = btn.textContent;
+            btn.textContent = 'Generating...';
+            btn.disabled = true;
+
+            const template = document.getElementById('report-template');
+            template.style.display = 'block';
+
+            // Fill Data
+            document.getElementById('rep-date').textContent = `Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
+            document.getElementById('rep-xirr').textContent = `${dashboardData.metrics.xirr}%`;
+            document.getElementById('rep-total').textContent = `₹${dashboardData.metrics.final_value.toLocaleString()}`;
+            document.getElementById('rep-vol').textContent = `${dashboardData.metrics.annualized_volatility}%`;
+            document.getElementById('rep-period').textContent = `Analysis Period: ${dashboardData.metrics.period}`;
+
+            // Comparison Table
+            const repCompBody = document.getElementById('rep-comp-body');
+            repCompBody.innerHTML = '';
+            const comp = dashboardData.metrics.comparison;
+            const compMetrics = [
+                { label: 'Annualized Return', key: 'return', suffix: '%' },
+                { label: 'Annual Volatility', key: 'volatility', suffix: '%' },
+                { label: 'Max Drawdown', key: 'max_drawdown', suffix: '%' },
+                { label: 'Average Daily Return (Ann.)', key: 'avg_return', suffix: '%' }
+            ];
+            compMetrics.forEach(m => {
+                const row = `<tr>
+                    <td>${m.label}</td>
+                    <td style="font-weight:700;">${comp.portfolio[m.key]}${m.suffix}</td>
+                    <td style="color:#F59E0B;">${comp.model[m.key]}${m.suffix}</td>
+                </tr>`;
+                repCompBody.innerHTML += row;
+            });
+
+            // Category Calculation
+            const catMap = {};
+            dashboardData.assets.forEach(a => {
+                const cat = a.category || 'Other';
+                catMap[cat] = (catMap[cat] || 0) + a.value;
+            });
+
+            // Summary Table
+            const catTable = document.getElementById('rep-cat-table').querySelector('tbody');
+            catTable.innerHTML = '';
+            Object.entries(catMap).sort((a,b) => b[1] - a[1]).forEach(([cat, val]) => {
+                const row = `<tr>
+                    <td><strong>${cat}</strong></td>
+                    <td>${((val/dashboardData.metrics.final_value)*100).toFixed(1)}%</td>
+                    <td>₹${val.toLocaleString()}</td>
+                </tr>`;
+                catTable.innerHTML += row;
+            });
+
+            // Holdings Table
+            const holdTable = document.getElementById('rep-holdings-table').querySelector('tbody');
+            holdTable.innerHTML = '';
+            dashboardData.assets.sort((a,b) => b.value - a.value).forEach(a => {
+                const row = `<tr>
+                    <td>${a.name}</td>
+                    <td>${a.category || 'Other'}</td>
+                    <td>${((a.value/dashboardData.metrics.final_value)*100).toFixed(1)}%</td>
+                    <td>₹${a.value.toLocaleString()}</td>
+                </tr>`;
+                holdTable.innerHTML += row;
+            });
+
+            // Report Charts
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    x: { ticks: { maxTicksLimit: 6, font: { size: 10 } } },
+                    y: { ticks: { font: { size: 10 } } }
+                }
+            };
+
+            // 1. Value Chart
+            new Chart(document.getElementById('repValueChart'), {
+                type: 'line',
+                data: {
+                    labels: dashboardData.history.dates,
+                    datasets: [{
+                        data: dashboardData.history.total_value,
+                        borderColor: '#00D2FF',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: false
+                    }]
+                },
+                options: chartOptions
+            });
+
+            // 2. NAV Chart
+            new Chart(document.getElementById('repNavChart'), {
+                type: 'line',
+                data: {
+                    labels: dashboardData.history.dates,
+                    datasets: [
+                        { label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 },
+                        { label: 'Model', data: dashboardData.history.model_nav, borderColor: '#F59E0B', borderWidth: 1, borderDash: [2,2], pointRadius: 0 }
+                    ]
+                },
+                options: { 
+                    ...chartOptions, 
+                    plugins: { 
+                        legend: { 
+                            display: true, 
+                            position: 'bottom', 
+                            labels: { boxWidth: 10, font: { size: 10 } } 
+                        } 
+                    } 
+                }
+            });
+
+            // 3. Category Concentration Chart (Stacked Area)
+            const catLabels = Array.from(new Set(dashboardData.history.allocation.flatMap(d => Object.keys(d))));
+            const catColors = ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'];
+            
+            new Chart(document.getElementById('repConcChart'), {
+                type: 'line',
+                data: {
+                    labels: dashboardData.history.dates,
+                    datasets: catLabels.map((cat, i) => ({
+                        label: cat,
+                        data: dashboardData.history.allocation.map(d => d[cat] || 0),
+                        backgroundColor: catColors[i % catColors.length] + '88',
+                        borderColor: catColors[i % catColors.length],
+                        fill: true,
+                        pointRadius: 0,
+                        tension: 0.3
+                    }))
+                },
+                options: {
+                    ...chartOptions,
+                    scales: {
+                        y: { stacked: true, max: 100, ticks: { font: { size: 9 }, callback: v => v + '%' } },
+                        x: { ticks: { maxTicksLimit: 8, font: { size: 9 } } }
+                    },
+                    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 9 } } } }
+                }
+            });
+
+            // 4. Allocation Chart
+            new Chart(document.getElementById('repAllocChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(catMap),
+                    datasets: [{
+                        data: Object.values(catMap),
+                        backgroundColor: ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    animation: false,
+                    plugins: { 
+                        legend: { 
+                            display: true, 
+                            position: 'right', 
+                            labels: { boxWidth: 10, font: { size: 10 } } 
+                        } 
+                    } 
+                }
+            });
+
+            // Wait for charts to render
+            await new Promise(r => setTimeout(r, 800));
+
+            const opt = {
+                margin: 10,
+                filename: `Hisaab_Portfolio_Report_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            try {
+                const element = document.getElementById('report-template');
+                await html2pdf().set(opt).from(element).save();
+            } catch (err) {
+                console.error('PDF generation error:', err);
+            } finally {
+                template.style.display = 'none';
+                btn.textContent = originalText;
+                btn.disabled = false;
             }
         }
 
