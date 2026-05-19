@@ -38,20 +38,21 @@ def prepare_simulator_data():
     
     # Get NiftyBees for benchmark
     benchmark_col = [c for c in df_etf.columns if 'NIFTYBEES' in c and 'Close' in c][0]
-    
-    merged = pd.merge(df_univ, df_etf[['Date', benchmark_col]], on='Date', how='inner')
+    # Merge on Date to align everything
+    # Keep all ETF columns, not just the benchmark
+    merged = pd.merge(df_univ, df_etf, on='Date', how='inner')
     merged = merged.sort_values('Date')
-    
+
     # Filter out rows where benchmark is 0 or NaN to prevent division by zero in simulator
     merged = merged[merged[benchmark_col] > 0]
-    
+
     dates_str = merged['Date'].dt.strftime('%Y-%m-%d').tolist()
-    
+
     # 2. Fetch Mutual Fund NAVs from DB for aligned dates
     print(f"Fetching NAVs for {len(all_scheme_codes)} schemes...")
     conn = sqlite3.connect(db_file)
     mf_data = {}
-    
+
     # Optimization: Chunk the scheme codes for the SQL query
     chunk_size = 500
     for i in range(0, len(all_scheme_codes), chunk_size):
@@ -59,7 +60,7 @@ def prepare_simulator_data():
         placeholders = ','.join(['?'] * len(chunk))
         query = f"SELECT scheme_code, date, nav FROM nav_history WHERE scheme_code IN ({placeholders})"
         df_mf = pd.read_sql_query(query, conn, params=chunk)
-        
+
         for code, group in df_mf.groupby('scheme_code'):
             # Reindex to match the timeline
             group['date'] = pd.to_datetime(group['date'])
@@ -69,15 +70,16 @@ def prepare_simulator_data():
 
     # 3. Construct clean JSON structure
     benchmark = merged[benchmark_col].tolist()
-    
+
     assets = {}
-    # Add Stocks
+    # Add Stocks and ETFs
     for col in merged.columns:
-        if col.endswith('_Close') and col != benchmark_col:
+        if col.endswith('_Close'):
             ticker = col.replace('_Close', '')
             assets[ticker] = merged[col].tolist()
-    
+
     # Add Mutual Funds
+
     for code, navs in mf_data.items():
         assets[code] = navs
             
