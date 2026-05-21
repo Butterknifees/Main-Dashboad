@@ -23,26 +23,17 @@
             transform: translateY(-2px);
         }
         
-        /* --- PROFESSIONAL PDF REPORT STYLES (MM BASED FOR A4) --- */
+        /* --- INSTITUTIONAL FLOW PDF REPORT STYLES --- */
         #report-template {
             display: none;
-            background: #F1F5F9;
+            background: white;
             color: #0F172A;
-            padding: 0;
+            padding: 15mm 20mm;
             font-family: 'Inter', sans-serif;
             width: 210mm;
-        }
-        .report-page {
-            width: 210mm;
-            height: 296.5mm; /* Surgical A4 height minus tiny margin to avoid split */
-            padding: 15mm 20mm;
             box-sizing: border-box;
-            background: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
+        
         .report-header-top {
             display: flex;
             justify-content: space-between;
@@ -71,7 +62,7 @@
             grid-template-columns: repeat(6, 1fr);
             border: 1px solid #E2E8F0;
             background: #F8FAFC;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .ticker-item {
             padding: 8px 4px;
@@ -82,7 +73,10 @@
         .ticker-label { font-size: 7.5px; color: #64748B; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
         .ticker-value { font-size: 11px; font-weight: 800; color: #0F172A; }
 
-        .report-section { margin-bottom: 20px; }
+        .report-section { 
+            margin-bottom: 20px; 
+            page-break-inside: avoid; /* Keep sections together */
+        }
         .report-section-title {
             background: #F1F5F9;
             padding: 6px 12px;
@@ -101,6 +95,7 @@
             border-radius: 4px;
             margin-bottom: 15px;
             background: white;
+            page-break-inside: avoid;
         }
         .diagram-label {
             font-size: 10px;
@@ -111,7 +106,7 @@
             justify-content: space-between;
         }
         .diagram-canvas-container {
-            height: 180px; /* Reduced for Page 1 */
+            height: 180px;
             width: 100%;
         }
 
@@ -126,14 +121,11 @@
             text-transform: uppercase;
         }
         .report-table td { padding: 8px; border-bottom: 1px solid #F1F5F9; }
-
+        
         .footer-branding {
-            position: absolute;
-            bottom: 10mm;
-            left: 20mm;
-            right: 20mm;
             border-top: 1px solid #E2E8F0;
-            padding-top: 8px;
+            margin-top: 20px;
+            padding-top: 10px;
             display: flex;
             justify-content: space-between;
             font-size: 8px;
@@ -155,110 +147,92 @@
     </style>
 </head>
 <body>
+    <!-- PDF Template (Institutional Flow) -->
     <div id="report-template">
-        <!-- PAGE 1 -->
-        <div class="report-page" id="page-1">
-            <div class="report-header-top">
-                <div>
-                    <h1>PORTFOLIO ANALYSIS REPORT</h1>
-                    <div class="report-header-sub">Proprietary Investment Research | Hisaab Engine</div>
-                </div>
-                <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+        <div class="report-header-top">
+            <div>
+                <h1>PORTFOLIO ANALYSIS REPORT</h1>
+                <div class="report-header-sub">Proprietary Research | Hisaab quantitative Engine</div>
             </div>
+            <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+        </div>
 
-            <div class="stats-ticker">
-                <div class="ticker-item">
-                    <div class="ticker-label">Portfolio Value</div>
-                    <div class="ticker-value" id="rep-total">--</div>
-                </div>
-                <div class="ticker-item">
-                    <div class="ticker-label">Ann. NAV Growth</div>
-                    <div class="ticker-value" id="rep-nav-growth" style="color: #00D2FF;">--</div>
-                </div>
-                <div class="ticker-item">
-                    <div class="ticker-label">Ann. Volatility</div>
-                    <div class="ticker-value" id="rep-vol">--</div>
-                </div>
-                <div class="ticker-item">
-                    <div class="ticker-label">Max Drawdown</div>
-                    <div class="ticker-value" id="rep-mdd">--</div>
-                </div>
-                <div class="ticker-item">
-                    <div class="ticker-label">Sharpe Ratio</div>
-                    <div class="ticker-value" id="rep-sharpe">--</div>
-                </div>
-                <div class="ticker-item">
-                    <div class="ticker-label">Analysis Period</div>
-                    <div class="ticker-value" id="rep-period-short" style="font-size: 9px;">--</div>
-                </div>
+        <div class="stats-ticker">
+            <div class="ticker-item">
+                <div class="ticker-label">Net Asset Value</div>
+                <div class="ticker-value" id="rep-total">--</div>
             </div>
-
-            <div class="report-section">
-                <div class="report-section-title">Institutional Performance Diagnostics</div>
-                <div class="diagram-box">
-                    <div class="diagram-label"><span>Capital Appreciation (₹ Market Value)</span></div>
-                    <div class="diagram-canvas-container"><canvas id="repValueChart"></canvas></div>
-                </div>
-                <div class="diagram-box">
-                    <div class="diagram-label"><span>Relative Alpha Strategy (Indexed to 100)</span></div>
-                    <div class="diagram-canvas-container"><canvas id="repNavChart"></canvas></div>
-                </div>
-                <table class="report-table">
-                    <thead><tr><th>Comparison Metric</th><th style="text-align: right;">Portfolio</th><th style="text-align: right;">Model Strategy</th><th style="text-align: right;">Alpha</th></tr></thead>
-                    <tbody id="rep-comp-body"></tbody>
-                </table>
+            <div class="ticker-item">
+                <div class="ticker-label">Ann. NAV Growth</div>
+                <div class="ticker-value" id="rep-nav-growth" style="color: #00D2FF;">--</div>
             </div>
-
-            <div class="footer-branding">
-                <span>© 2026 Hisaab by Play Theory | Page 1 of 2</span>
-                <span class="rep-date-label">--</span>
+            <div class="ticker-item">
+                <div class="ticker-label">Ann. Volatility</div>
+                <div class="ticker-value" id="rep-vol">--</div>
+            </div>
+            <div class="ticker-item">
+                <div class="ticker-label">Max Drawdown</div>
+                <div class="ticker-value" id="rep-mdd">--</div>
+            </div>
+            <div class="ticker-item">
+                <div class="ticker-label">Sharpe Ratio</div>
+                <div class="ticker-value" id="rep-sharpe">--</div>
+            </div>
+            <div class="ticker-item">
+                <div class="ticker-label">Period</div>
+                <div class="ticker-value" id="rep-period-short" style="font-size: 9px;">--</div>
             </div>
         </div>
 
-        <!-- PAGE 2 -->
-        <div class="report-page" id="page-2">
-            <div class="report-header-top">
-                <div>
-                    <h1>RISK & CONCENTRATION ANALYSIS</h1>
-                    <div class="report-header-sub">Categorical Allocation & Asset Inventory</div>
-                </div>
-                <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
-            </div>
-
-            <div class="report-section">
-                <div class="report-section-title">Categorical Allocation Evolution</div>
+        <div class="report-section">
+            <div class="report-section-title">Performance Diagnostics</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="diagram-box">
-                    <div class="diagram-canvas-container" style="height: 220px;"><canvas id="repConcChart"></canvas></div>
+                    <div class="diagram-label"><span>Capital Growth (₹)</span></div>
+                    <div class="diagram-canvas-container" style="height: 160px;"><canvas id="repValueChart"></canvas></div>
+                </div>
+                <div class="diagram-box">
+                    <div class="diagram-label"><span>Strategy Benchmarking</span></div>
+                    <div class="diagram-canvas-container" style="height: 160px;"><canvas id="repNavChart"></canvas></div>
                 </div>
             </div>
+            <table class="report-table">
+                <thead><tr><th>Comparison Metric</th><th style="text-align: right;">Portfolio</th><th style="text-align: right;">Model Strategy</th><th style="text-align: right;">Alpha</th></tr></thead>
+                <tbody id="rep-comp-body"></tbody>
+            </table>
+        </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px; margin-bottom: 15px;">
+        <div class="report-section">
+            <div class="report-section-title">Risk & Concentration Evolution</div>
+            <div class="diagram-box">
+                <div class="diagram-label"><span>Historical Asset Allocation Trajectory (%)</span></div>
+                <div class="diagram-canvas-container" style="height: 200px;"><canvas id="repConcChart"></canvas></div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px;">
                 <div class="diagram-box">
                     <div class="diagram-label">Current Concentration Map</div>
                     <div class="diagram-canvas-container" style="height: 160px;"><canvas id="repAllocChart"></canvas></div>
                 </div>
-                <div class="diagram-box">
+                <div class="diagram-box" style="padding: 0; border: none;">
                     <table class="report-table" id="rep-cat-table">
-                        <thead><tr><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Value</th></tr></thead>
+                        <thead><tr><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Market Value</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
+        </div>
 
-            <div class="report-section" style="flex-grow: 1; overflow: hidden; margin-bottom: 40px;">
-                <div class="report-section-title">Detailed Asset Inventory</div>
-                <div style="height: 100%; overflow: hidden;">
-                    <table class="report-table" id="rep-holdings-table">
-                        <thead><tr><th>Security Name</th><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Value (₹)</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="report-section">
+            <div class="report-section-title">Detailed Asset Security Inventory</div>
+            <table class="report-table" id="rep-holdings-table">
+                <thead><tr><th style="width: 45%;">Security Name</th><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Value (₹)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
-            <div class="footer-branding">
-                <span>© 2026 Hisaab by Play Theory | Page 2 of 2</span>
-                <span class="rep-date-label">--</span>
-            </div>
+        <div class="footer-branding">
+            <span>© 2026 Hisaab by Play Theory | Generated on <span class="rep-date-label">--</span></span>
+            <span>Investment Intelligence Report</span>
         </div>
     </div>
 
@@ -312,7 +286,7 @@
                 document.getElementById('val-vol').textContent = `${data.metrics.annualized_volatility}%`;
                 document.getElementById('val-daily-vol').textContent = `${data.metrics.daily_volatility}%`;
 
-                new Chart(document.getElementById('valueChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } } });
+                new Chart(document.getElementById('valueChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } } });
                 new Chart(document.getElementById('navChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Portfolio', data: data.history.nav, borderColor: '#9D50BB', borderWidth: 3, pointRadius: 0 }, { label: 'Model', data: data.history.model_nav, borderColor: '#F59E0B', borderDash: [2, 2], pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94A3B8' } } } } });
                 const catLabels = Array.from(new Set(data.history.allocation.flatMap(d => Object.keys(d))));
                 new Chart(document.getElementById('concentrationChart'), { type: 'line', data: { labels: data.history.dates, datasets: catLabels.map(cat => ({ label: cat, data: data.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + '88', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, tension: 0.3 })) }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true, max: 100, ticks: { color: '#94A3B8' } } }, plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8' } } } } });
@@ -331,7 +305,7 @@
         async function generatePDF() {
             if (!dashboardData) return;
             const btn = document.querySelector('.btn-export');
-            btn.textContent = 'Generating Institutional Report...'; btn.disabled = true;
+            btn.textContent = 'Generating Research Report...'; btn.disabled = true;
             const template = document.getElementById('report-template');
             template.style.display = 'block';
 
@@ -340,7 +314,6 @@
             document.querySelectorAll('.rep-date-label').forEach(el => el.textContent = dateStr);
             document.getElementById('rep-period-short').textContent = dashboardData.metrics.period;
 
-            // Stats
             const nDays = dashboardData.history.dates.length;
             const portNavGrowth = ((dashboardData.history.nav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
             const modelNavGrowth = ((dashboardData.history.model_nav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
@@ -351,11 +324,10 @@
             document.getElementById('rep-mdd').textContent = comp.portfolio.max_drawdown + '%';
             document.getElementById('rep-sharpe').textContent = ((portNavGrowth - 5.5) / comp.portfolio.volatility).toFixed(2);
 
-            const repCompBody = document.getElementById('rep-comp-body');
-            repCompBody.innerHTML = `
-                <tr><td>Annualized NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:${portNavGrowth >= modelNavGrowth ? '#00C853' : '#EF4444'}">${(portNavGrowth - modelNavGrowth).toFixed(2)}%</td></tr>
-                <tr><td>Annual Risk (Volatility)</td><td style="text-align:right; font-weight:700;">${comp.portfolio.volatility}%</td><td style="text-align:right;">${comp.model.volatility}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.volatility <= comp.model.volatility ? '#00C853' : '#EF4444'}">${(comp.model.volatility - comp.portfolio.volatility).toFixed(2)}%</td></tr>
-                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${comp.portfolio.max_drawdown}%</td><td style="text-align:right;">${comp.model.max_drawdown}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.max_drawdown >= comp.model.max_drawdown ? '#00C853' : '#EF4444'}">${(comp.portfolio.max_drawdown - comp.model.max_drawdown).toFixed(2)}%</td></tr>
+            document.getElementById('rep-comp-body').innerHTML = `
+                <tr><td>Annualized NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:${portNavGrowth >= modelNavGrowth ? '#00C853' : '#EF4444'}">${(portNavGrowth - modelNavGrowth).toFixed(2)}%</td></tr>
+                <tr><td>Annual Risk (Volatility)</td><td style="text-align:right; font-weight:700;">${comp.portfolio.volatility}%</td><td style="text-align:right; color:#64748B;">${comp.model.volatility}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.volatility <= comp.model.volatility ? '#00C853' : '#EF4444'}">${(comp.model.volatility - comp.portfolio.volatility).toFixed(2)}%</td></tr>
+                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${comp.portfolio.max_drawdown}%</td><td style="text-align:right; color:#64748B;">${comp.model.max_drawdown}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.max_drawdown >= comp.model.max_drawdown ? '#00C853' : '#EF4444'}">${(comp.portfolio.max_drawdown - comp.model.max_drawdown).toFixed(2)}%</td></tr>
             `;
 
             const catMap = {};
@@ -367,20 +339,12 @@
             const holdTable = document.getElementById('rep-holdings-table').querySelector('tbody'); holdTable.innerHTML = '';
             dashboardData.assets.sort((a,b) => b.value - a.value).forEach(a => { holdTable.innerHTML += `<tr><td><strong>${a.name}</strong></td><td>${a.category}</td><td style="text-align:right;">${((a.value/dashboardData.metrics.final_value)*100).toFixed(1)}%</td><td style="text-align:right;">₹${a.value.toLocaleString()}</td></tr>`; });
 
-            const pdfChartOptions = {
-                responsive: true, maintainAspectRatio: false, animation: false,
-                scales: { 
-                    x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' }, color: '#334155' } },
-                    y: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' }, color: '#334155' } }
-                }
-            };
-
-            new Chart(document.getElementById('repValueChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ data: dashboardData.history.total_value, borderColor: '#00D2FF', borderWidth: 2, pointRadius: 0, fill: false }] }, options: { ...pdfChartOptions, plugins: { legend: { display: false } } } });
+            const pdfChartOptions = { responsive: true, maintainAspectRatio: false, animation: false, scales: { x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' }, color: '#334155' } }, y: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' }, color: '#334155' } } } };
+            new Chart(document.getElementById('repValueChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ data: dashboardData.history.total_value, borderColor: '#00D2FF', borderWidth: 1.5, pointRadius: 0, fill: false }] }, options: { ...pdfChartOptions, plugins: { legend: { display: false } } } });
             new Chart(document.getElementById('repNavChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 }, { label: 'Model', data: dashboardData.history.model_nav, borderColor: '#64748B', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0 }] }, options: { ...pdfChartOptions, plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, font: { size: 8, weight: 'bold' }, color: '#334155' } } } } });
-            
             const catLabelsOrdered = sortedCats.map(x => x[0]);
-            new Chart(document.getElementById('repConcChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: catLabelsOrdered.map(cat => ({ label: cat, data: dashboardData.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + 'BB', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, borderWidth: 1 })) }, options: { ...pdfChartOptions, scales: { ...pdfChartOptions.scales, y: { stacked: true, max: 100 } }, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 7, weight: 'bold' }, color: '#334155' } } } } });
-            new Chart(document.getElementById('repAllocChart'), { type: 'doughnut', data: { labels: catLabelsOrdered, datasets: [{ data: sortedCats.map(x => x[1]), backgroundColor: catLabelsOrdered.map(cat => CATEGORY_COLORS[cat] || '#6366F1'), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 7, weight: 'bold' }, color: '#334155' } } }, cutout: '65%' } });
+            new Chart(document.getElementById('repConcChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: catLabelsOrdered.map(cat => ({ label: cat, data: dashboardData.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + 'BB', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, borderWidth: 1 })) }, options: { ...pdfChartOptions, scales: { ...pdfChartOptions.scales, y: { stacked: true, max: 100 } }, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 8 } } } } } });
+            new Chart(document.getElementById('repAllocChart'), { type: 'doughnut', data: { labels: catLabelsOrdered, datasets: [{ data: sortedCats.map(x => x[1]), backgroundColor: catLabelsOrdered.map(cat => CATEGORY_COLORS[cat] || '#6366F1'), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 8 }, color: '#334155' } } }, cutout: '65%' } });
 
             await new Promise(r => setTimeout(r, 1500));
             const opt = { 
@@ -388,16 +352,10 @@
                 filename: `Hisaab_Research_Report.pdf`, 
                 image: { type: 'jpeg', quality: 1.0 }, 
                 html2canvas: { scale: 3, useCORS: true, letterRendering: true }, 
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } 
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'] }
             };
-
-            try {
-                const element = document.getElementById('report-template');
-                await html2pdf().set(opt).from(element).save();
-            } finally {
-                template.style.display = 'none';
-                btn.textContent = 'Export Summary PDF'; btn.disabled = false;
-            }
+            try { await html2pdf().set(opt).from(template).save(); } finally { template.style.display = 'none'; btn.textContent = 'Export Summary PDF'; btn.disabled = false; }
         }
 
         loadDashboard();
