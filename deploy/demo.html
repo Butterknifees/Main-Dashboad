@@ -7,320 +7,786 @@
     <link rel="stylesheet" href="hisaab_styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        .dashboard-container {
-            padding: 2rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
+        .btn-export { background: var(--accent-purple); box-shadow: 0 0 20px rgba(157, 80, 187, 0.4); margin-left: 1rem; padding: 0.5rem 1.2rem; font-size: 0.75rem; }
+        .btn-export:hover { box-shadow: 0 0 30px rgba(157, 80, 187, 0.6); transform: translateY(-2px); }
+        
+        /* --- INSTITUTIONAL FLOW PDF REPORT STYLES --- */
+        #report-template {
+            display: none;
+            background: white;
+            color: #0F172A;
+            padding: 15mm 20mm;
+            font-family: 'Inter', sans-serif;
+            width: 210mm;
+            box-sizing: border-box;
         }
-
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 1rem 3%;
-            }
-            .metrics-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
-            .metric-value {
-                font-size: 1.5rem;
-            }
-            .chart-wrapper {
-                padding: 1rem;
-                height: 350px;
-            }
-            .assets-table th, .assets-table td {
-                padding: 0.8rem 0.5rem;
-                font-size: 0.85rem;
-            }
+        
+        .report-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 3px solid #00D2FF;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
         }
-
-        @media (max-width: 480px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        .metric-card {
-            padding: 1.5rem;
-            border-radius: 16px;
-            text-align: left;
-        }
-        .metric-value {
-            font-size: 2rem;
+        .report-header-top h1 {
+            font-size: 24px;
             font-weight: 800;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
+            margin: 0;
+            color: #0F172A;
+            letter-spacing: -0.5px;
         }
-        .metric-label {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
+        .report-header-sub {
+            font-size: 9px;
+            color: #64748B;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-ticker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            margin-bottom: 15px;
+        }
+        .ticker-item {
+            padding: 8px 4px;
+            border-right: 1px solid #E2E8F0;
+            text-align: center;
+        }
+        .ticker-item:last-child { border-right: none; }
+        .ticker-label { font-size: 7.5px; color: #64748B; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
+        .ticker-value { font-size: 11px; font-weight: 800; color: #0F172A; }
+
+        .report-section { 
+            margin-bottom: 20px; 
+            page-break-inside: avoid; /* Keep sections together */
+        }
+        .report-section-title {
+            background: #F1F5F9;
+            padding: 6px 12px;
+            font-size: 10.5px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border-left: 4px solid #00D2FF;
+            margin-bottom: 12px;
+            color: #334155;
         }
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr; /* Stacked */
-            gap: 2rem;
-            margin-bottom: 3rem;
+
+        .diagram-box {
+            border: 1px solid #E2E8F0;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background: white;
+            page-break-inside: avoid;
         }
-        .chart-wrapper {
-            padding: 2rem;
-            border-radius: 24px;
-            height: 400px; /* Fixed height for better aspect ratio when stacked */
+        .diagram-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
         }
-        .assets-table {
+        .diagram-canvas-container {
+            height: 180px;
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
         }
-        .assets-table th, .assets-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .assets-table th {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
+
+        .report-table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+        .report-table th { 
+            background: #F8FAFC; 
+            text-align: left; 
+            padding: 8px; 
+            border-bottom: 1.5px solid #E2E8F0;
+            color: #475569;
+            font-weight: 700;
             text-transform: uppercase;
         }
-        h2 {
-            margin-bottom: 1.5rem;
-            font-weight: 600;
+        .report-table td { padding: 8px; border-bottom: 1px solid #F1F5F9; }
+        
+        .footer-branding {
+            border-top: 1px solid #E2E8F0;
+            margin-top: 20px;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8px;
+            color: #94A3B8;
         }
-        @media (max-width: 1024px) {
-            .charts-section {
-                grid-template-columns: 1fr;
-            }
+
+        /* --- SIMULATOR MODAL --- */
+        #simulator-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 25, 0.9);
+            z-index: 2000;
+            backdrop-filter: blur(10px);
         }
+        .modal-content {
+            background: #1a1f2e;
+            width: 90%; max-width: 600px;
+            margin: 50px auto;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .asset-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        }
+        .asset-row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .asset-type-tag {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+        .asset-select, .category-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: border-color 0.2s;
+        }
+        .asset-select:focus, .category-select:focus {
+            border-color: var(--accent-blue);
+        }
+        .weight-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 90px;
+        }
+        .weight-input {
+            width: 100%;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            color: var(--accent-blue);
+            padding: 0.6rem 1.8rem 0.6rem 0.6rem;
+            border-radius: 8px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .weight-input:focus {
+            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
+        }
+        .weight-input-suffix {
+            position: absolute;
+            right: 0.6rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+        .remove-btn {
+            color: #ff4444;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.2rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .remove-btn:hover {
+            color: #ff6666;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- DASHBOARD UI --- */
+        .dashboard-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .metric-card { padding: 1.5rem; border-radius: 16px; text-align: left; }
+        .metric-value { font-size: 2rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.5rem; }
+        .metric-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .charts-section { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
+        .chart-wrapper { padding: 2rem; border-radius: 24px; height: 400px; }
+        .assets-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        .assets-table th, .assets-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        .assets-table th { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; }
+        h2 { margin-bottom: 1.5rem; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="glow-container">
-        <div class="glow-orb" id="orb-1"></div>
-        <div class="glow-orb" id="orb-2"></div>
+    <!-- Simulator Modal -->
+    <div id="simulator-modal">
+        <div class="modal-content glass">
+            <h2 style="margin-bottom: 1.5rem; display: flex; justify-content: space-between;">
+                Edit Model Strategy
+                <span onclick="closeModal()" style="cursor:pointer; color: #94A3B8;">&times;</span>
+            </h2>
+            <div id="asset-list"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                <button class="add-asset-btn" onclick="addAssetRow('stock')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Stock</button>
+                <button class="add-asset-btn" onclick="addAssetRow('mf')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Fund</button>
+            </div>
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-weight: 800;">
+                <span>Total Weight:</span>
+                <span id="modal-total-weight">0%</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="applyModelChanges()">Update Dashboard & Report</button>
+        </div>
     </div>
 
-    <header>
-        <nav>
-            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
-            <div class="powered-by">Live Portfolio Analytics</div>
-        </nav>
-    </header>
+    <!-- PDF Template -->
+    <div id="report-template">
+        <div class="report-header-top">
+            <div><h1>PORTFOLIO ANALYSIS REPORT</h1><div class="report-header-sub">Proprietary Research | Hisaab quantitative Engine</div></div>
+            <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+        </div>
+        <div class="stats-ticker">
+            <div class="ticker-item"><div class="ticker-label">Net Asset Value</div><div class="ticker-value" id="rep-total">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Period NAV Growth</div><div class="ticker-value" id="rep-nav-growth" style="color: #00D2FF;">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Ann. Volatility</div><div class="ticker-value" id="rep-vol">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Max Drawdown</div><div class="ticker-value" id="rep-mdd">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Sharpe Ratio</div><div class="ticker-value" id="rep-sharpe">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Period</div><div class="ticker-value" id="rep-period-short" style="font-size: 9px;">--</div></div>
+        </div>
+        <div class="report-section">
+            <div class="report-section-title">Performance Diagnostics</div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="diagram-box"><div class="diagram-label"><span>Capital Growth (₹)</span></div><div class="diagram-canvas-container" style="height: 160px;"><canvas id="repValueChart"></canvas></div></div>
+                <div class="diagram-box"><div class="diagram-label"><span>Strategy Benchmarking</span></div><div class="diagram-canvas-container" style="height: 160px;"><canvas id="repNavChart"></canvas></div></div>
+            </div>
+            <table class="report-table">
+                <thead><tr><th>Comparison Metric</th><th style="text-align: right;">Portfolio</th><th style="text-align: right;">Model Strategy</th><th style="text-align: right;">Nifty 50 TRI</th></tr></thead>
+                <tbody id="rep-comp-body"></tbody>
+            </table>
+        </div>
+        <div class="report-section">
+            <div class="report-section-title">Risk & Concentration Evolution</div>
+            <div class="diagram-box"><div class="diagram-label"><span>Historical Asset Allocation Trajectory (%)</span></div><div class="diagram-canvas-container" style="height: 200px;"><canvas id="repConcChart"></canvas></div></div>
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 15px;">
+                <div class="diagram-box"><div class="diagram-label">Current Concentration Map</div><div class="diagram-canvas-container" style="height: 160px;"><canvas id="repAllocChart"></canvas></div></div>
+                <div class="diagram-box" style="padding: 0; border: none;"><table class="report-table" id="rep-cat-table"><thead><tr><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Market Value</th></tr></thead><tbody></tbody></table></div>
+            </div>
+        </div>
+        <div class="report-section">
+            <div class="report-section-title">Detailed Asset Security Inventory</div>
+            <table class="report-table" id="rep-holdings-table">
+                <thead><tr><th style="width: 45%;">Security Name</th><th>Category</th><th style="text-align: right;">Weight</th><th style="text-align: right;">Value (₹)</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="footer-branding"><span>© 2026 Hisaab by Play Theory | Generated on <span class="rep-date-label">--</span></span><span>Investment Intelligence Report</span></div>
+    </div>
+
+    <div class="glow-container"><div class="glow-orb" id="orb-1"></div><div class="glow-orb" id="orb-2"></div></div>
+    <header><nav><div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div><div class="powered-by">Live Portfolio Analytics <button class="btn btn-secondary btn-export" onclick="generatePDF()">Export Summary PDF</button></div></nav></header>
 
     <main class="dashboard-container">
         <h1 class="fade-in">Portfolio <span class="highlight">Intelligence</span></h1>
         <p class="subtitle fade-in" id="analysis-period">Loading analysis data...</p>
 
         <div class="metrics-grid fade-in-delay">
-            <div class="metric-card glass">
-                <div class="metric-value" id="val-xirr">--%</div>
-                <div class="metric-label">Annualized IRR (XIRR)</div>
-            </div>
-            <div class="metric-card glass">
-                <div class="metric-value" id="val-total">₹0</div>
-                <div class="metric-label">Current Net Value</div>
-            </div>
-            <div class="metric-card glass">
-                <div class="metric-value" id="val-vol">--%</div>
-                <div class="metric-label">Annual Volatility</div>
-            </div>
-            <div class="metric-card glass">
-                <div class="metric-value" id="val-daily-vol">--%</div>
-                <div class="metric-label">Daily Std Dev</div>
-            </div>
+            <div class="metric-card glass"><div class="metric-value" id="val-xirr">--%</div><div class="metric-label">Annualized IRR (XIRR)</div></div>
+            <div class="metric-card glass"><div class="metric-value" id="val-total">₹0</div><div class="metric-label">Current Net Value</div></div>
+            <div class="metric-card glass"><div class="metric-value" id="val-vol">--%</div><div class="metric-label">Annual Volatility</div></div>
+            <div class="metric-card glass"><div class="metric-value" id="val-daily-vol">--%</div><div class="metric-label">Daily Std Dev</div></div>
         </div>
 
         <div class="charts-section fade-in-delay-2">
+            <div class="chart-wrapper glass"><h2>Portfolio Value Growth</h2><canvas id="valueChart"></canvas></div>
+            <div class="chart-wrapper glass"><h2>Historical Category Concentration (%)</h2><canvas id="concentrationChart"></canvas></div>
             <div class="chart-wrapper glass">
-                <h2>Portfolio Value Growth</h2>
-                <canvas id="valueChart"></canvas>
-            </div>
-            <div class="chart-wrapper glass">
-                <h2>Portfolio NAV (Indexed to 100)</h2>
+                <h2 style="display: flex; justify-content: space-between;">
+                    Portfolio NAV (Indexed to 100)
+                    <button class="btn btn-secondary" onclick="openModal()" style="font-size: 0.6rem; padding: 4px 10px; background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid #F59E0B;">Edit Model Strategy</button>
+                </h2>
                 <canvas id="navChart"></canvas>
+            </div>
+            <div class="chart-wrapper glass" style="height: auto;">
+                <h2>Deep Comparison: My Portfolio vs Model</h2>
+                <table class="assets-table"><thead><tr><th>Metric</th><th>My Portfolio</th><th>Model Portfolio</th><th>Nifty 50 TRI</th></tr></thead><tbody id="comparison-body"></tbody></table>
             </div>
         </div>
 
         <section class="assets-section fade-in-delay-2">
-            <div class="chart-wrapper glass" style="min-height: auto;">
-                <h2>Current Holdings</h2>
-                <table class="assets-table">
-                    <thead>
-                        <tr>
-                            <th>Asset Name</th>
-                            <th>Current Value</th>
-                            <th>Weight</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assets-body">
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
-            </div>
+            <div class="chart-wrapper glass" style="min-height: auto;"><h2>Current Holdings</h2><table class="assets-table"><thead><tr><th>Asset Name</th><th>Current Value</th><th>Weight</th></tr></thead><tbody id="assets-body"></tbody></table></div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Hisaab by Play Theory. Real-time quantitative engine.</p>
-    </footer>
+    <footer><p>&copy; 2026 Hisaab by Play Theory. Real-time quantitative engine.</p></footer>
 
     <script>
+        let dashboardData = null;
+        let simulatorData = null;
+        let navChart = null;
+        let dynamicModelNav = null;
+        let triMap = {};
+        let nifty50TriNav = null;
+        
+        const CATEGORY_COLORS = {
+            'Large Cap': '#00D2FF', 'Mid Cap': '#9D50BB', 'Small Cap': '#00C853',
+            'Thematic': '#F59E0B', 'Sectoral/Thematic': '#F59E0B', 'Hybrid/Arbitrage': '#EF4444', 
+            'Arbitrage': '#EF4444', 'Gold': '#F59E0B', 'Index/Other': '#6366F1', 'Other': '#94A3B8'
+        };
+
+        // Default Model Strategy (Initial)
+        let currentModelConfig = [
+            { id: "NIFTYBEES.NS", weight: 30 }, // Nifty 50
+            { id: "MIDCAPIETF.NS", weight: 20 }, // Midcap
+            { id: "147946", weight: 10 },       // Smallcap
+            { id: "119771", weight: 30 },       // Arbitrage
+            { id: "HDFCGOLD.NS", weight: 7 },  // Gold
+            { id: "SILVERIETF.NS", weight: 3 }   // Silver
+        ];
+
         async function loadDashboard() {
             try {
                 const response = await fetch('dashboard_data.json?v=' + new Date().getTime());
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                dashboardData = await response.json();
+                const simResp = await fetch('simulator_data.json?v=' + new Date().getTime());
+                simulatorData = await simResp.json();
+                
+                try {
+                    const triResp = await fetch('benchmark_tri_history.csv?v=' + new Date().getTime());
+                    const triText = await triResp.text();
+                    parseTriHistory(triText);
+                } catch (e) {
+                    console.error("Failed to load benchmark_tri_history.csv:", e);
                 }
-                const data = await response.json();
+                
+                renderDashboard();
+            } catch (error) { console.error(error); }
+        }
 
-                // Set Metrics
-                document.getElementById('analysis-period').textContent = `Period: ${data.metrics.period}`;
-                document.getElementById('val-xirr').textContent = `${data.metrics.xirr}%`;
-                document.getElementById('val-total').textContent = `₹${data.metrics.final_value.toLocaleString()}`;
-                document.getElementById('val-vol').textContent = `${data.metrics.annualized_volatility}%`;
-                document.getElementById('val-daily-vol').textContent = `${data.metrics.daily_volatility}%`;
-
-                // Value Growth Chart
-                new Chart(document.getElementById('valueChart'), {
-                    type: 'line',
-                    data: {
-                        labels: data.history.dates,
-                        datasets: [{
-                            label: 'Total Value (₹)',
-                            data: data.history.total_value,
-                            borderColor: '#00D2FF',
-                            backgroundColor: 'rgba(0, 210, 255, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0,
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { intersect: false, mode: 'index' },
-                        scales: {
-                            y: { 
-                                beginAtZero: false, /* Zoom in on performance */
-                                grace: '10%',
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { 
-                                    color: '#94A3B8',
-                                    callback: function(value) { return '₹' + (value / 1000) + 'k'; }
-                                } 
-                            },
-                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 12 } }
-                        },
-                        plugins: { legend: { display: false } }
+        function parseTriHistory(text) {
+            triMap = {};
+            const lines = text.trim().split('\n');
+            if (lines.length === 0) return;
+            const headers = lines[0].split(',');
+            const nifty50Idx = headers.indexOf('NIFTY 50');
+            if (nifty50Idx === -1) {
+                console.error("NIFTY 50 column not found in benchmark_tri_history.csv");
+                return;
+            }
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length > nifty50Idx) {
+                    const date = values[0].trim();
+                    const val = parseFloat(values[nifty50Idx]);
+                    if (!isNaN(val)) {
+                        triMap[date] = val;
                     }
-                });
-
-                // NAV Growth Chart
-                new Chart(document.getElementById('navChart'), {
-                    type: 'line',
-                    data: {
-                        labels: data.history.dates,
-                        datasets: [
-                            {
-                                label: 'Portfolio (Indexed)',
-                                data: data.history.nav,
-                                borderColor: '#9D50BB',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 3
-                            },
-                            {
-                                label: 'Model Portfolio (Custom)',
-                                data: data.history.model_nav,
-                                borderColor: '#F59E0B',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 2,
-                                borderDash: [2, 2]
-                            },
-                            {
-                                label: 'Nifty 50 (Benchmark)',
-                                data: data.history.benchmark,
-                                borderColor: '#00C853',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 2,
-                                borderDash: [5, 5]
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { intersect: false, mode: 'index' },
-                        scales: {
-                            y: { 
-                                beginAtZero: false,
-                                grace: '5%',
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { color: '#94A3B8' } 
-                            },
-                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 6 } }
-                        },
-                        plugins: { 
-                            legend: { 
-                                display: true,
-                                labels: { color: '#94A3B8', font: { family: 'Inter' } }
-                            } 
-                        }
-                    }
-                });
-
-                // Assets Table
-                const tbody = document.getElementById('assets-body');
-                const totalVal = data.metrics.final_value;
-                data.assets.sort((a, b) => b.value - a.value).forEach(asset => {
-                    const row = document.createElement('tr');
-                    const weight = ((asset.value / totalVal) * 100).toFixed(2);
-                    row.innerHTML = `
-                        <td>${asset.name}</td>
-                        <td style="color: var(--accent-blue); font-weight: 600;">₹${asset.value.toLocaleString()}</td>
-                        <td style="color: var(--text-secondary);">${weight}%</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                const isFileProtocol = window.location.protocol === 'file:';
-                document.getElementById('analysis-period').innerHTML = 
-                    `<span style="color: #ff4444;">
-                        ${isFileProtocol ? 
-                          'ERROR: Browsers block data loading from local files for security.' : 
-                          'ERROR: ' + error.message}
-                        <br>Details: Ensure the server is running and dashboard_data.json exists.
-                        <br>Link: <a href="http://localhost:8000/demo.html" style="color: var(--accent-blue);">http://localhost:8000/demo.html</a>
-                    </span>`;
+                }
             }
         }
 
-        loadDashboard();
+        function getTriOnDate(date) {
+            if (triMap[date]) return triMap[date];
+            // Fallback to the latest available date before this date
+            const sortedDates = Object.keys(triMap).sort();
+            let lastVal = 0;
+            for (const d of sortedDates) {
+                if (d <= date) {
+                    lastVal = triMap[d];
+                } else {
+                    break;
+                }
+            }
+            return lastVal;
+        }
 
-        // Parallax script
+        function calculateNiftyTriNav() {
+            if (!dashboardData || Object.keys(triMap).length === 0) {
+                nifty50TriNav = (dashboardData ? dashboardData.history.dates.map(() => 100) : []);
+                return;
+            }
+            const dates = dashboardData.history.dates;
+            nifty50TriNav = [];
+            const startVal = getTriOnDate(dates[0]);
+            
+            for (let i = 0; i < dates.length; i++) {
+                const val = getTriOnDate(dates[i]);
+                if (startVal > 0) {
+                    nifty50TriNav.push(100 * (val / startVal));
+                } else {
+                    nifty50TriNav.push(100);
+                }
+            }
+        }
+
+        function calculateVolatility(nav) {
+            if (!nav || nav.length < 2) return 0;
+            const returns = [];
+            for (let i = 1; i < nav.length; i++) {
+                if (nav[i-1] > 0) {
+                    const r = (nav[i] / nav[i-1]) - 1;
+                    if (Math.abs(r) > 1e-6) {
+                        returns.push(r);
+                    }
+                }
+            }
+            if (returns.length === 0) return 0;
+            const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+            const variance = returns.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / returns.length;
+            const dailyStdDev = Math.sqrt(variance);
+            const annStdDev = dailyStdDev * Math.sqrt(252) * 100;
+            return annStdDev;
+        }
+
+        function renderDashboard() {
+            const data = dashboardData;
+            document.getElementById('analysis-period').textContent = `Period: ${data.metrics.period}`;
+            document.getElementById('val-xirr').textContent = `${data.metrics.xirr}%`;
+            document.getElementById('val-total').textContent = `₹${data.metrics.final_value.toLocaleString()}`;
+            document.getElementById('val-vol').textContent = `${data.metrics.annualized_volatility}%`;
+            document.getElementById('val-daily-vol').textContent = `${data.metrics.daily_volatility}%`;
+
+            new Chart(document.getElementById('valueChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } } });
+            
+            // Initial Model Calculation
+            calculateNiftyTriNav();
+            calculateDynamicModel();
+            updateNavChart();
+            updateComparisonTable();
+
+            const catLabels = Array.from(new Set(data.history.allocation.flatMap(d => Object.keys(d))));
+            new Chart(document.getElementById('concentrationChart'), { type: 'line', data: { labels: data.history.dates, datasets: catLabels.map(cat => ({ label: cat, data: data.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + '88', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, tension: 0.3 })) }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true, max: 100, ticks: { color: '#94A3B8' } } }, plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8' } } } } });
+
+            const tbody = document.getElementById('assets-body'); tbody.innerHTML = '';
+            data.assets.sort((a, b) => b.value - a.value).forEach(asset => {
+                tbody.innerHTML += `<tr><td><div style="font-weight:600;">${asset.name}</div><div style="font-size:0.7rem; color:var(--text-secondary);">${asset.category}</div></td><td style="color:var(--accent-blue); font-weight:600;">₹${asset.value.toLocaleString()}</td><td style="color:var(--text-secondary);">${((asset.value/data.metrics.final_value)*100).toFixed(2)}%</td></tr>`;
+            });
+        }
+
+        function calculateDynamicModel() {
+            if (!simulatorData || !dashboardData) return;
+            const dates = dashboardData.history.dates;
+            dynamicModelNav = [100];
+            
+            // Align start prices
+            const startPrices = {};
+            currentModelConfig.forEach(c => startPrices[c.id] = getPriceOnDate(c.id, dates[0]));
+
+            for (let i = 1; i < dates.length; i++) {
+                let dailyRet = 0;
+                currentModelConfig.forEach(c => {
+                    const p1 = getPriceOnDate(c.id, dates[i]);
+                    const p0 = getPriceOnDate(c.id, dates[i-1]);
+                    if (p0 > 0) dailyRet += (c.weight / 100) * ((p1 / p0) - 1);
+                });
+                dynamicModelNav.push(dynamicModelNav[i-1] * (1 + dailyRet));
+            }
+        }
+
+        function getPriceOnDate(id, date) {
+            let idx = simulatorData.dates.indexOf(date);
+            if (idx === -1) {
+                // Fallback to the latest available date before this date
+                for (let i = simulatorData.dates.length - 1; i >= 0; i--) {
+                    if (simulatorData.dates[i] < date) {
+                        idx = i;
+                        break;
+                    }
+                }
+            }
+            if (idx === -1) return 0;
+            
+            if (simulatorData.assets[id]) {
+                let price = simulatorData.assets[id][idx];
+                if (price > 0) return price;
+                // If price is 0, search backwards for a non-zero price
+                for (let i = idx - 1; i >= 0; i--) {
+                    if (simulatorData.assets[id][i] > 0) {
+                        return simulatorData.assets[id][i];
+                    }
+                }
+            } else {
+                let price = simulatorData.benchmark[idx] || 0;
+                if (price > 0) return price;
+                for (let i = idx - 1; i >= 0; i--) {
+                    if (simulatorData.benchmark[i] > 0) {
+                        return simulatorData.benchmark[i];
+                    }
+                }
+            }
+            return 0;
+        }
+
+        function updateNavChart() {
+            const ctx = document.getElementById('navChart');
+            if (navChart) navChart.destroy();
+            navChart = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: dashboardData.history.dates, 
+                    datasets: [
+                        { label: 'My Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 3, pointRadius: 0 },
+                        { label: 'Model Strategy', data: dynamicModelNav, borderColor: '#F59E0B', borderDash: [2, 2], pointRadius: 0 },
+                        { label: 'Nifty 50 TRI', data: nifty50TriNav, borderColor: '#00D2FF', borderDash: [4, 4], pointRadius: 0 }
+                    ] 
+                }, 
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94A3B8' } } } } 
+            });
+        }
+
+        function updateComparisonTable() {
+            const n = dashboardData.history.dates.length;
+            const portGrowth = (dashboardData.history.nav[n-1] - 100);
+            const modelGrowth = (dynamicModelNav[n-1] - 100);
+            const triGrowth = (nifty50TriNav[n-1] - 100);
+            
+            const portVol = calculateVolatility(dashboardData.history.nav);
+            const modelVol = calculateVolatility(dynamicModelNav);
+            const triVol = calculateVolatility(nifty50TriNav);
+            
+            const portMDD = calculateMDD(dashboardData.history.nav);
+            const modelMDD = calculateMDD(dynamicModelNav);
+            const triMDD = calculateMDD(nifty50TriNav);
+            
+            const compBody = document.getElementById('comparison-body');
+            compBody.innerHTML = `
+                <tr><td style="color: var(--text-secondary)">Period NAV Growth</td><td style="color: var(--accent-blue); font-weight: 700;">${portGrowth.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelGrowth.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triGrowth.toFixed(2)}%</td></tr>
+                <tr><td style="color: var(--text-secondary)">Annualized Std Dev (Volatility)</td><td style="color: var(--accent-blue); font-weight: 700;">${portVol.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelVol.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triVol.toFixed(2)}%</td></tr>
+                <tr><td style="color: var(--text-secondary)">Max Drawdown</td><td style="color: var(--accent-blue); font-weight: 700;">${portMDD.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelMDD.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triMDD.toFixed(2)}%</td></tr>
+            `;
+        }
+
+        function calculateMDD(nav) {
+            let max = nav[0], mdd = 0;
+            nav.forEach(v => { if(v > max) max = v; let dd = (v - max) / max; if(dd < mdd) mdd = dd; });
+            return mdd * 100;
+        }
+
+        function detectAssetTypeAndCategory(id) {
+            if (id.endsWith('.NS')) {
+                return { type: 'stock', category: null };
+            }
+            for (const cat in simulatorData.categories) {
+                if (simulatorData.categories[cat].some(f => String(f.code) === String(id))) {
+                    return { type: 'mf', category: cat };
+                }
+            }
+            return { type: 'stock', category: null };
+        }
+
+        function openModal() {
+            document.getElementById('simulator-modal').style.display = 'block';
+            const list = document.getElementById('asset-list'); list.innerHTML = '';
+            currentModelConfig.forEach(c => {
+                const detected = detectAssetTypeAndCategory(c.id);
+                addAssetRow(detected.type, detected.category, c.id, c.weight);
+            });
+            updateTotalWeight();
+        }
+
+        function closeModal() { document.getElementById('simulator-modal').style.display = 'none'; }
+
+        function addAssetRow(type = 'stock', category = 'Large Cap', selectedId = "", weight = 0) {
+            if (!simulatorData) return;
+            const container = document.getElementById('asset-list');
+            const row = document.createElement('div');
+            row.className = 'asset-row';
+            row.dataset.type = type;
+            
+            if (type === 'mf') {
+                const categoryOptions = Object.keys(simulatorData.categories).map(cat => 
+                    `<option value="${cat}" ${cat === category ? 'selected' : ''}>${cat}</option>`
+                ).join('');
+                
+                row.innerHTML = `
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Mutual Fund</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
+                    </div>
+                    <select class="category-select" onchange="updateFundList(this)">
+                        ${categoryOptions}
+                    </select>
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;">
+                            <!-- Populated by updateFundList -->
+                        </select>
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+                updateFundList(row.querySelector('.category-select'), selectedId);
+            } else {
+                const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
+                const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
+                
+                row.innerHTML = `
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Individual Stock</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;">
+                            ${stockOptions}
+                        </select>
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
+            updateTotalWeight();
+        }
+
+        function updateFundList(catSelect, selectedId = "") {
+            const category = catSelect.value;
+            const fundSelect = catSelect.parentElement.querySelector('.asset-select');
+            const funds = simulatorData.categories[category];
+            
+            if (funds) {
+                fundSelect.innerHTML = funds.map(f => 
+                    `<option value="${f.code}" ${String(f.code) === String(selectedId) ? 'selected' : ''}>${f.name}</option>`
+                ).join('');
+            }
+        }
+
+        function updateTotalWeight() {
+            let total = 0;
+            document.querySelectorAll('.weight-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById('modal-total-weight').textContent = total + '%';
+            const weightVal = document.getElementById('modal-total-weight');
+            if (Math.abs(total - 100) < 0.1) {
+                weightVal.style.color = '#00D2FF';
+            } else {
+                weightVal.style.color = '#ff4444';
+            }
+            return total;
+        }
+
+        function applyModelChanges() {
+            let total = 0;
+            document.querySelectorAll('.weight-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            if (Math.abs(total - 100) > 0.1) {
+                alert("Total weight must be exactly 100% (currently " + Math.round(total) + "%).");
+                return;
+            }
+            
+            const newConfig = [];
+            document.querySelectorAll('.asset-row').forEach(row => {
+                const select = row.querySelector('.asset-select');
+                if (!select) return;
+                const id = select.value;
+                const weight = parseFloat(row.querySelector('.weight-input').value) || 0;
+                if (weight > 0) {
+                    newConfig.push({ id, weight });
+                }
+            });
+            
+            currentModelConfig = newConfig;
+            calculateDynamicModel();
+            updateNavChart();
+            updateComparisonTable();
+            closeModal();
+        }
+
+        async function generatePDF() {
+            if (!dashboardData) return;
+            const btn = document.querySelector('.btn-export');
+            btn.textContent = 'Preparing...'; btn.disabled = true;
+            const template = document.getElementById('report-template');
+            template.style.display = 'block';
+
+            const dateStr = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+            document.querySelectorAll('.rep-date-label').forEach(el => el.textContent = dateStr);
+            document.getElementById('rep-period-short').textContent = dashboardData.metrics.period;
+
+            const nDays = dashboardData.history.dates.length;
+            const startDate = new Date(dashboardData.history.dates[0]);
+            const endDate = new Date(dashboardData.history.dates[nDays-1]);
+            const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+            const portAnnGrowth = ((dashboardData.history.nav[nDays-1] / 100) ** (1 / years) - 1) * 100;
+
+            const portNavGrowth = (dashboardData.history.nav[nDays-1] - 100);
+            const modelNavGrowth = (dynamicModelNav[nDays-1] - 100);
+            const triNavGrowth = (nifty50TriNav[nDays-1] - 100);
+
+            const portVol = calculateVolatility(dashboardData.history.nav);
+            const modelVol = calculateVolatility(dynamicModelNav);
+            const triVol = calculateVolatility(nifty50TriNav);
+
+            const portMDD = calculateMDD(dashboardData.history.nav);
+            const modelMDD = calculateMDD(dynamicModelNav);
+            const triMDD = calculateMDD(nifty50TriNav);
+
+            document.getElementById('rep-nav-growth').textContent = portNavGrowth.toFixed(2) + '%';
+            document.getElementById('rep-total').textContent = '₹' + (dashboardData.metrics.final_value / 100000).toFixed(2) + ' L';
+            document.getElementById('rep-vol').textContent = portVol.toFixed(2) + '%';
+            document.getElementById('rep-mdd').textContent = portMDD.toFixed(2) + '%';
+            document.getElementById('rep-sharpe').textContent = ((portAnnGrowth - 5.5) / portVol).toFixed(2);
+
+            document.getElementById('rep-comp-body').innerHTML = `
+                <tr><td>Period NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triNavGrowth.toFixed(2)}%</td></tr>
+                <tr><td>Annualized Standard Deviation</td><td style="text-align:right; font-weight:700;">${portVol.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelVol.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triVol.toFixed(2)}%</td></tr>
+                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${portMDD.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelMDD.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triMDD.toFixed(2)}%</td></tr>
+            `;
+
+            const catMap = {}; dashboardData.assets.forEach(a => catMap[a.category] = (catMap[a.category] || 0) + a.value);
+            const sortedCats = Object.entries(catMap).sort((a,b) => b[1]-a[1]);
+            const catTable = document.getElementById('rep-cat-table').querySelector('tbody'); catTable.innerHTML = '';
+            sortedCats.forEach(([cat, val]) => { catTable.innerHTML += `<tr><td><strong>${cat}</strong></td><td style="text-align:right;">${((val/dashboardData.metrics.final_value)*100).toFixed(1)}%</td><td style="text-align:right;">₹${(val/1000).toFixed(1)}k</td></tr>`; });
+
+            const holdTable = document.getElementById('rep-holdings-table').querySelector('tbody'); holdTable.innerHTML = '';
+            dashboardData.assets.sort((a,b) => b.value - a.value).forEach(a => { holdTable.innerHTML += `<tr><td><strong>${a.name}</strong></td><td>${a.category}</td><td style="text-align:right;">${((a.value/dashboardData.metrics.final_value)*100).toFixed(1)}%</td><td style="text-align:right;">₹${a.value.toLocaleString()}</td></tr>`; });
+
+            const pdfChartOptions = { responsive: true, maintainAspectRatio: false, animation: false, scales: { x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' } } }, y: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' } } } } };
+            new Chart(document.getElementById('repValueChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ data: dashboardData.history.total_value, borderColor: '#00D2FF', borderWidth: 1.5, pointRadius: 0, fill: false }] }, options: { ...pdfChartOptions, plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('repNavChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 }, { label: 'Model', data: dynamicModelNav, borderColor: '#64748B', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0 }, { label: 'Nifty 50 TRI', data: nifty50TriNav, borderColor: '#00D2FF', borderWidth: 1.5, borderDash: [2,2], pointRadius: 0 }] }, options: { ...pdfChartOptions, plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, font: { size: 8, weight: 'bold' } } } } } });
+            const catLabelsOrdered = sortedCats.map(x => x[0]);
+            new Chart(document.getElementById('repConcChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: catLabelsOrdered.map(cat => ({ label: cat, data: dashboardData.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + 'BB', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, borderWidth: 1 })) }, options: { ...pdfChartOptions, scales: { ...pdfChartOptions.scales, y: { stacked: true, max: 100 } }, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 8 } } } } } });
+            new Chart(document.getElementById('repAllocChart'), { type: 'doughnut', data: { labels: catLabelsOrdered, datasets: [{ data: sortedCats.map(x => x[1]), backgroundColor: catLabelsOrdered.map(cat => CATEGORY_COLORS[cat] || '#6366F1'), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 7 } } } }, cutout: '65%' } });
+
+            await new Promise(r => setTimeout(r, 1500));
+            const opt = { margin: 0, filename: `Hisaab_Research_Report.pdf`, image: { type: 'jpeg', quality: 1.0 }, html2canvas: { scale: 3, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['css', 'legacy'] } };
+            try { await html2pdf().set(opt).from(template).save(); } finally { template.style.display = 'none'; btn.textContent = 'Export Summary PDF'; btn.disabled = false; }
+        }
+
+        loadDashboard();
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
+            const x = e.clientX / window.innerWidth; const y = e.clientY / window.innerHeight;
             document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
             document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
         });

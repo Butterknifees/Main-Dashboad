@@ -15,24 +15,113 @@
         .btn-export:hover { box-shadow: 0 0 30px rgba(157, 80, 187, 0.6); transform: translateY(-2px); }
         
         /* --- INSTITUTIONAL FLOW PDF REPORT STYLES --- */
-        #report-template { display: none; background: white; color: #0F172A; padding: 15mm 20mm; font-family: 'Inter', sans-serif; width: 210mm; box-sizing: border-box; }
-        .report-header-top { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #00D2FF; padding-bottom: 8px; margin-bottom: 12px; }
-        .report-header-top h1 { font-size: 24px; font-weight: 800; margin: 0; color: #0F172A; letter-spacing: -0.5px; }
-        .report-header-sub { font-size: 9px; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stats-ticker { display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid #E2E8F0; background: #F8FAFC; margin-bottom: 15px; }
-        .ticker-item { padding: 8px 4px; border-right: 1px solid #E2E8F0; text-align: center; }
+        #report-template {
+            display: none;
+            background: white;
+            color: #0F172A;
+            padding: 15mm 20mm;
+            font-family: 'Inter', sans-serif;
+            width: 210mm;
+            box-sizing: border-box;
+        }
+        
+        .report-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 3px solid #00D2FF;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .report-header-top h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            color: #0F172A;
+            letter-spacing: -0.5px;
+        }
+        .report-header-sub {
+            font-size: 9px;
+            color: #64748B;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stats-ticker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            margin-bottom: 15px;
+        }
+        .ticker-item {
+            padding: 8px 4px;
+            border-right: 1px solid #E2E8F0;
+            text-align: center;
+        }
         .ticker-item:last-child { border-right: none; }
         .ticker-label { font-size: 7.5px; color: #64748B; font-weight: 700; text-transform: uppercase; margin-bottom: 3px; }
         .ticker-value { font-size: 11px; font-weight: 800; color: #0F172A; }
-        .report-section { margin-bottom: 20px; page-break-inside: avoid; }
-        .report-section-title { background: #F1F5F9; padding: 6px 12px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; border-left: 4px solid #00D2FF; margin-bottom: 12px; color: #334155; }
-        .diagram-box { border: 1px solid #E2E8F0; padding: 12px; border-radius: 4px; margin-bottom: 15px; background: white; page-break-inside: avoid; }
-        .diagram-label { font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 8px; display: flex; justify-content: space-between; }
-        .diagram-canvas-container { height: 180px; width: 100%; }
+
+        .report-section { 
+            margin-bottom: 20px; 
+            page-break-inside: avoid; /* Keep sections together */
+        }
+        .report-section-title {
+            background: #F1F5F9;
+            padding: 6px 12px;
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 4px solid #00D2FF;
+            margin-bottom: 12px;
+            color: #334155;
+        }
+
+        .diagram-box {
+            border: 1px solid #E2E8F0;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background: white;
+            page-break-inside: avoid;
+        }
+        .diagram-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .diagram-canvas-container {
+            height: 180px;
+            width: 100%;
+        }
+
         .report-table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
-        .report-table th { background: #F8FAFC; text-align: left; padding: 8px; border-bottom: 1.5px solid #E2E8F0; color: #475569; font-weight: 700; text-transform: uppercase; }
+        .report-table th { 
+            background: #F8FAFC; 
+            text-align: left; 
+            padding: 8px; 
+            border-bottom: 1.5px solid #E2E8F0;
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
         .report-table td { padding: 8px; border-bottom: 1px solid #F1F5F9; }
-        .footer-branding { border-top: 1px solid #E2E8F0; margin-top: 20px; padding-top: 10px; display: flex; justify-content: space-between; font-size: 8px; color: #94A3B8; }
+        
+        .footer-branding {
+            border-top: 1px solid #E2E8F0;
+            margin-top: 20px;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8px;
+            color: #94A3B8;
+        }
 
         /* --- SIMULATOR MODAL --- */
         #simulator-modal {
@@ -54,15 +143,93 @@
             overflow-y: auto;
         }
         .asset-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 40px;
-            gap: 10px;
-            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        }
+        .asset-row-header {
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        .asset-select { background: #0F172A; border: 1px solid rgba(255,255,255,0.1); color: white; padding: 8px; border-radius: 8px; width: 100%; }
-        .weight-input { background: #0F172A; border: 1px solid rgba(0, 210, 255, 0.3); color: #00D2FF; padding: 8px; border-radius: 8px; width: 80px; text-align: right; }
-        .remove-btn { color: #ff4444; cursor: pointer; text-align: center; font-weight: bold; }
+        .asset-type-tag {
+            font-size: 0.65rem;
+            color: #94A3B8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+        }
+        .asset-select, .category-select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: border-color 0.2s;
+        }
+        .asset-select:focus, .category-select:focus {
+            border-color: var(--accent-blue);
+        }
+        .weight-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 90px;
+        }
+        .weight-input {
+            width: 100%;
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            color: var(--accent-blue);
+            padding: 0.6rem 1.8rem 0.6rem 0.6rem;
+            border-radius: 8px;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .weight-input:focus {
+            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
+        }
+        .weight-input-suffix {
+            position: absolute;
+            right: 0.6rem;
+            color: var(--accent-blue);
+            font-weight: 700;
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+        .remove-btn {
+            color: #ff4444;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.2rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .remove-btn:hover {
+            color: #ff6666;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* --- DASHBOARD UI --- */
         .dashboard-container { padding: 2rem 5%; max-width: 1400px; margin: 0 auto; }
@@ -87,8 +254,9 @@
                 <span onclick="closeModal()" style="cursor:pointer; color: #94A3B8;">&times;</span>
             </h2>
             <div id="asset-list"></div>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="add-asset-btn" onclick="addAssetRow()" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px; flex: 1;">+ Add Asset</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                <button class="add-asset-btn" onclick="addAssetRow('stock')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Stock</button>
+                <button class="add-asset-btn" onclick="addAssetRow('mf')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Fund</button>
             </div>
             <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-weight: 800;">
                 <span>Total Weight:</span>
@@ -106,7 +274,7 @@
         </div>
         <div class="stats-ticker">
             <div class="ticker-item"><div class="ticker-label">Net Asset Value</div><div class="ticker-value" id="rep-total">--</div></div>
-            <div class="ticker-item"><div class="ticker-label">Ann. NAV Growth</div><div class="ticker-value" id="rep-nav-growth" style="color: #00D2FF;">--</div></div>
+            <div class="ticker-item"><div class="ticker-label">Period NAV Growth</div><div class="ticker-value" id="rep-nav-growth" style="color: #00D2FF;">--</div></div>
             <div class="ticker-item"><div class="ticker-label">Ann. Volatility</div><div class="ticker-value" id="rep-vol">--</div></div>
             <div class="ticker-item"><div class="ticker-label">Max Drawdown</div><div class="ticker-value" id="rep-mdd">--</div></div>
             <div class="ticker-item"><div class="ticker-label">Sharpe Ratio</div><div class="ticker-value" id="rep-sharpe">--</div></div>
@@ -114,12 +282,12 @@
         </div>
         <div class="report-section">
             <div class="report-section-title">Performance Diagnostics</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="diagram-box"><div class="diagram-label"><span>Capital Growth (₹)</span></div><div class="diagram-canvas-container" style="height: 160px;"><canvas id="repValueChart"></canvas></div></div>
                 <div class="diagram-box"><div class="diagram-label"><span>Strategy Benchmarking</span></div><div class="diagram-canvas-container" style="height: 160px;"><canvas id="repNavChart"></canvas></div></div>
             </div>
             <table class="report-table">
-                <thead><tr><th>Comparison Metric</th><th style="text-align: right;">Portfolio</th><th style="text-align: right;">Model Strategy</th><th style="text-align: right;">Alpha</th></tr></thead>
+                <thead><tr><th>Comparison Metric</th><th style="text-align: right;">Portfolio</th><th style="text-align: right;">Model Strategy</th><th style="text-align: right;">Nifty 50 TRI</th></tr></thead>
                 <tbody id="rep-comp-body"></tbody>
             </table>
         </div>
@@ -167,7 +335,7 @@
             </div>
             <div class="chart-wrapper glass" style="height: auto;">
                 <h2>Deep Comparison: My Portfolio vs Model</h2>
-                <table class="assets-table"><thead><tr><th>Metric</th><th>My Portfolio</th><th>Model Portfolio</th></tr></thead><tbody id="comparison-body"></tbody></table>
+                <table class="assets-table"><thead><tr><th>Metric</th><th>My Portfolio</th><th>Model Portfolio</th><th>Nifty 50 TRI</th></tr></thead><tbody id="comparison-body"></tbody></table>
             </div>
         </div>
 
@@ -183,6 +351,8 @@
         let simulatorData = null;
         let navChart = null;
         let dynamicModelNav = null;
+        let triMap = {};
+        let nifty50TriNav = null;
         
         const CATEGORY_COLORS = {
             'Large Cap': '#00D2FF', 'Mid Cap': '#9D50BB', 'Small Cap': '#00C853',
@@ -192,12 +362,12 @@
 
         // Default Model Strategy (Initial)
         let currentModelConfig = [
-            { id: "INF204KB14I2", weight: 30 }, // Nifty 50
-            { id: "INF109KC11W8", weight: 20 }, // Midcap
+            { id: "NIFTYBEES.NS", weight: 30 }, // Nifty 50
+            { id: "MIDCAPIETF.NS", weight: 20 }, // Midcap
             { id: "147946", weight: 10 },       // Smallcap
             { id: "119771", weight: 30 },       // Arbitrage
-            { id: "INF179KC1981", weight: 7 },  // Gold
-            { id: "INF109KC1Y56", weight: 3 }   // Silver
+            { id: "HDFCGOLD.NS", weight: 7 },  // Gold
+            { id: "SILVERIETF.NS", weight: 3 }   // Silver
         ];
 
         async function loadDashboard() {
@@ -207,8 +377,91 @@
                 const simResp = await fetch('simulator_data.json?v=' + new Date().getTime());
                 simulatorData = await simResp.json();
                 
+                try {
+                    const triResp = await fetch('benchmark_tri_history.csv?v=' + new Date().getTime());
+                    const triText = await triResp.text();
+                    parseTriHistory(triText);
+                } catch (e) {
+                    console.error("Failed to load benchmark_tri_history.csv:", e);
+                }
+                
                 renderDashboard();
             } catch (error) { console.error(error); }
+        }
+
+        function parseTriHistory(text) {
+            triMap = {};
+            const lines = text.trim().split('\n');
+            if (lines.length === 0) return;
+            const headers = lines[0].split(',');
+            const nifty50Idx = headers.indexOf('NIFTY 50');
+            if (nifty50Idx === -1) {
+                console.error("NIFTY 50 column not found in benchmark_tri_history.csv");
+                return;
+            }
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length > nifty50Idx) {
+                    const date = values[0].trim();
+                    const val = parseFloat(values[nifty50Idx]);
+                    if (!isNaN(val)) {
+                        triMap[date] = val;
+                    }
+                }
+            }
+        }
+
+        function getTriOnDate(date) {
+            if (triMap[date]) return triMap[date];
+            // Fallback to the latest available date before this date
+            const sortedDates = Object.keys(triMap).sort();
+            let lastVal = 0;
+            for (const d of sortedDates) {
+                if (d <= date) {
+                    lastVal = triMap[d];
+                } else {
+                    break;
+                }
+            }
+            return lastVal;
+        }
+
+        function calculateNiftyTriNav() {
+            if (!dashboardData || Object.keys(triMap).length === 0) {
+                nifty50TriNav = (dashboardData ? dashboardData.history.dates.map(() => 100) : []);
+                return;
+            }
+            const dates = dashboardData.history.dates;
+            nifty50TriNav = [];
+            const startVal = getTriOnDate(dates[0]);
+            
+            for (let i = 0; i < dates.length; i++) {
+                const val = getTriOnDate(dates[i]);
+                if (startVal > 0) {
+                    nifty50TriNav.push(100 * (val / startVal));
+                } else {
+                    nifty50TriNav.push(100);
+                }
+            }
+        }
+
+        function calculateVolatility(nav) {
+            if (!nav || nav.length < 2) return 0;
+            const returns = [];
+            for (let i = 1; i < nav.length; i++) {
+                if (nav[i-1] > 0) {
+                    const r = (nav[i] / nav[i-1]) - 1;
+                    if (Math.abs(r) > 1e-6) {
+                        returns.push(r);
+                    }
+                }
+            }
+            if (returns.length === 0) return 0;
+            const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+            const variance = returns.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / returns.length;
+            const dailyStdDev = Math.sqrt(variance);
+            const annStdDev = dailyStdDev * Math.sqrt(252) * 100;
+            return annStdDev;
         }
 
         function renderDashboard() {
@@ -222,6 +475,7 @@
             new Chart(document.getElementById('valueChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } } });
             
             // Initial Model Calculation
+            calculateNiftyTriNav();
             calculateDynamicModel();
             updateNavChart();
             updateComparisonTable();
@@ -256,9 +510,37 @@
         }
 
         function getPriceOnDate(id, date) {
-            const idx = simulatorData.dates.indexOf(date);
+            let idx = simulatorData.dates.indexOf(date);
+            if (idx === -1) {
+                // Fallback to the latest available date before this date
+                for (let i = simulatorData.dates.length - 1; i >= 0; i--) {
+                    if (simulatorData.dates[i] < date) {
+                        idx = i;
+                        break;
+                    }
+                }
+            }
             if (idx === -1) return 0;
-            return simulatorData.assets[id] ? simulatorData.assets[id][idx] : (simulatorData.benchmark[idx] || 0);
+            
+            if (simulatorData.assets[id]) {
+                let price = simulatorData.assets[id][idx];
+                if (price > 0) return price;
+                // If price is 0, search backwards for a non-zero price
+                for (let i = idx - 1; i >= 0; i--) {
+                    if (simulatorData.assets[id][i] > 0) {
+                        return simulatorData.assets[id][i];
+                    }
+                }
+            } else {
+                let price = simulatorData.benchmark[idx] || 0;
+                if (price > 0) return price;
+                for (let i = idx - 1; i >= 0; i--) {
+                    if (simulatorData.benchmark[i] > 0) {
+                        return simulatorData.benchmark[i];
+                    }
+                }
+            }
+            return 0;
         }
 
         function updateNavChart() {
@@ -270,7 +552,8 @@
                     labels: dashboardData.history.dates, 
                     datasets: [
                         { label: 'My Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 3, pointRadius: 0 },
-                        { label: 'Model Strategy', data: dynamicModelNav, borderColor: '#F59E0B', borderDash: [2, 2], pointRadius: 0 }
+                        { label: 'Model Strategy', data: dynamicModelNav, borderColor: '#F59E0B', borderDash: [2, 2], pointRadius: 0 },
+                        { label: 'Nifty 50 TRI', data: nifty50TriNav, borderColor: '#00D2FF', borderDash: [4, 4], pointRadius: 0 }
                     ] 
                 }, 
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94A3B8' } } } } 
@@ -279,13 +562,23 @@
 
         function updateComparisonTable() {
             const n = dashboardData.history.dates.length;
-            const portGrowth = ((dashboardData.history.nav[n-1] / 100) ** (252 / n) - 1) * 100;
-            const modelGrowth = ((dynamicModelNav[n-1] / 100) ** (252 / n) - 1) * 100;
+            const portGrowth = (dashboardData.history.nav[n-1] - 100);
+            const modelGrowth = (dynamicModelNav[n-1] - 100);
+            const triGrowth = (nifty50TriNav[n-1] - 100);
+            
+            const portVol = calculateVolatility(dashboardData.history.nav);
+            const modelVol = calculateVolatility(dynamicModelNav);
+            const triVol = calculateVolatility(nifty50TriNav);
+            
+            const portMDD = calculateMDD(dashboardData.history.nav);
+            const modelMDD = calculateMDD(dynamicModelNav);
+            const triMDD = calculateMDD(nifty50TriNav);
             
             const compBody = document.getElementById('comparison-body');
             compBody.innerHTML = `
-                <tr><td style="color: var(--text-secondary)">Annualized NAV Growth</td><td style="color: var(--accent-blue); font-weight: 700;">${portGrowth.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelGrowth.toFixed(2)}%</td></tr>
-                <tr><td style="color: var(--text-secondary)">Max Drawdown</td><td style="color: var(--accent-blue); font-weight: 700;">${dashboardData.metrics.comparison.portfolio.max_drawdown}%</td><td style="color: #F59E0B; font-weight: 600;">${calculateMDD(dynamicModelNav).toFixed(2)}%</td></tr>
+                <tr><td style="color: var(--text-secondary)">Period NAV Growth</td><td style="color: var(--accent-blue); font-weight: 700;">${portGrowth.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelGrowth.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triGrowth.toFixed(2)}%</td></tr>
+                <tr><td style="color: var(--text-secondary)">Annualized Std Dev (Volatility)</td><td style="color: var(--accent-blue); font-weight: 700;">${portVol.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelVol.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triVol.toFixed(2)}%</td></tr>
+                <tr><td style="color: var(--text-secondary)">Max Drawdown</td><td style="color: var(--accent-blue); font-weight: 700;">${portMDD.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelMDD.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triMDD.toFixed(2)}%</td></tr>
             `;
         }
 
@@ -295,35 +588,134 @@
             return mdd * 100;
         }
 
+        function detectAssetTypeAndCategory(id) {
+            if (id.endsWith('.NS')) {
+                return { type: 'stock', category: null };
+            }
+            for (const cat in simulatorData.categories) {
+                if (simulatorData.categories[cat].some(f => String(f.code) === String(id))) {
+                    return { type: 'mf', category: cat };
+                }
+            }
+            return { type: 'stock', category: null };
+        }
+
         function openModal() {
             document.getElementById('simulator-modal').style.display = 'block';
             const list = document.getElementById('asset-list'); list.innerHTML = '';
-            currentModelConfig.forEach((c, i) => addAssetRow(c.id, c.weight));
+            currentModelConfig.forEach(c => {
+                const detected = detectAssetTypeAndCategory(c.id);
+                addAssetRow(detected.type, detected.category, c.id, c.weight);
+            });
             updateTotalWeight();
         }
 
         function closeModal() { document.getElementById('simulator-modal').style.display = 'none'; }
 
-        function addAssetRow(id = "", weight = 0) {
+        function addAssetRow(type = 'stock', category = 'Large Cap', selectedId = "", weight = 0) {
+            if (!simulatorData) return;
+            const container = document.getElementById('asset-list');
             const row = document.createElement('div');
             row.className = 'asset-row';
-            const options = Object.keys(simulatorData.assets).sort().map(k => `<option value="${k}" ${k === id ? 'selected' : ''}>${k}</option>`).join('');
-            row.innerHTML = `<select class="asset-select">${options}</select><input type="number" class="weight-input" value="${weight}" onchange="updateTotalWeight()">%<span class="remove-btn" onclick="this.parentElement.remove(); updateTotalWeight();">&times;</span>`;
-            document.getElementById('asset-list').appendChild(row);
+            row.dataset.type = type;
+            
+            if (type === 'mf') {
+                const categoryOptions = Object.keys(simulatorData.categories).map(cat => 
+                    `<option value="${cat}" ${cat === category ? 'selected' : ''}>${cat}</option>`
+                ).join('');
+                
+                row.innerHTML = `
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Mutual Fund</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
+                    </div>
+                    <select class="category-select" onchange="updateFundList(this)">
+                        ${categoryOptions}
+                    </select>
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;">
+                            <!-- Populated by updateFundList -->
+                        </select>
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+                updateFundList(row.querySelector('.category-select'), selectedId);
+            } else {
+                const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
+                const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
+                
+                row.innerHTML = `
+                    <div class="asset-row-header">
+                        <span class="asset-type-tag">Individual Stock</span>
+                        <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
+                        <select class="asset-select" style="flex: 1;">
+                            ${stockOptions}
+                        </select>
+                        <div class="weight-input-wrapper">
+                            <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
+                            <span class="weight-input-suffix">%</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            }
             updateTotalWeight();
+        }
+
+        function updateFundList(catSelect, selectedId = "") {
+            const category = catSelect.value;
+            const fundSelect = catSelect.parentElement.querySelector('.asset-select');
+            const funds = simulatorData.categories[category];
+            
+            if (funds) {
+                fundSelect.innerHTML = funds.map(f => 
+                    `<option value="${f.code}" ${String(f.code) === String(selectedId) ? 'selected' : ''}>${f.name}</option>`
+                ).join('');
+            }
         }
 
         function updateTotalWeight() {
             let total = 0;
-            document.querySelectorAll('.weight-input').forEach(i => total += parseFloat(i.value) || 0);
+            document.querySelectorAll('.weight-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
             document.getElementById('modal-total-weight').textContent = total + '%';
+            const weightVal = document.getElementById('modal-total-weight');
+            if (Math.abs(total - 100) < 0.1) {
+                weightVal.style.color = '#00D2FF';
+            } else {
+                weightVal.style.color = '#ff4444';
+            }
+            return total;
         }
 
         function applyModelChanges() {
+            let total = 0;
+            document.querySelectorAll('.weight-input').forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            if (Math.abs(total - 100) > 0.1) {
+                alert("Total weight must be exactly 100% (currently " + Math.round(total) + "%).");
+                return;
+            }
+            
             const newConfig = [];
             document.querySelectorAll('.asset-row').forEach(row => {
-                newConfig.push({ id: row.querySelector('.asset-select').value, weight: parseFloat(row.querySelector('.weight-input').value) || 0 });
+                const select = row.querySelector('.asset-select');
+                if (!select) return;
+                const id = select.value;
+                const weight = parseFloat(row.querySelector('.weight-input').value) || 0;
+                if (weight > 0) {
+                    newConfig.push({ id, weight });
+                }
             });
+            
             currentModelConfig = newConfig;
             calculateDynamicModel();
             updateNavChart();
@@ -343,17 +735,33 @@
             document.getElementById('rep-period-short').textContent = dashboardData.metrics.period;
 
             const nDays = dashboardData.history.dates.length;
-            const portNavGrowth = ((dashboardData.history.nav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
-            const modelNavGrowth = ((dynamicModelNav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
+            const startDate = new Date(dashboardData.history.dates[0]);
+            const endDate = new Date(dashboardData.history.dates[nDays-1]);
+            const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+            const portAnnGrowth = ((dashboardData.history.nav[nDays-1] / 100) ** (1 / years) - 1) * 100;
+
+            const portNavGrowth = (dashboardData.history.nav[nDays-1] - 100);
+            const modelNavGrowth = (dynamicModelNav[nDays-1] - 100);
+            const triNavGrowth = (nifty50TriNav[nDays-1] - 100);
+
+            const portVol = calculateVolatility(dashboardData.history.nav);
+            const modelVol = calculateVolatility(dynamicModelNav);
+            const triVol = calculateVolatility(nifty50TriNav);
+
+            const portMDD = calculateMDD(dashboardData.history.nav);
+            const modelMDD = calculateMDD(dynamicModelNav);
+            const triMDD = calculateMDD(nifty50TriNav);
+
             document.getElementById('rep-nav-growth').textContent = portNavGrowth.toFixed(2) + '%';
             document.getElementById('rep-total').textContent = '₹' + (dashboardData.metrics.final_value / 100000).toFixed(2) + ' L';
-            document.getElementById('rep-vol').textContent = dashboardData.metrics.annualized_volatility + '%';
-            document.getElementById('rep-mdd').textContent = dashboardData.metrics.comparison.portfolio.max_drawdown + '%';
-            document.getElementById('rep-sharpe').textContent = ((portNavGrowth - 5.5) / dashboardData.metrics.annualized_volatility).toFixed(2);
+            document.getElementById('rep-vol').textContent = portVol.toFixed(2) + '%';
+            document.getElementById('rep-mdd').textContent = portMDD.toFixed(2) + '%';
+            document.getElementById('rep-sharpe').textContent = ((portAnnGrowth - 5.5) / portVol).toFixed(2);
 
             document.getElementById('rep-comp-body').innerHTML = `
-                <tr><td>Annualized NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:${portNavGrowth >= modelNavGrowth ? '#00C853' : '#EF4444'}">${(portNavGrowth - modelNavGrowth).toFixed(2)}%</td></tr>
-                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${dashboardData.metrics.comparison.portfolio.max_drawdown}%</td><td style="text-align:right; color:#64748B;">${calculateMDD(dynamicModelNav).toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:${dashboardData.metrics.comparison.portfolio.max_drawdown >= calculateMDD(dynamicModelNav) ? '#00C853' : '#EF4444'}">${(dashboardData.metrics.comparison.portfolio.max_drawdown - calculateMDD(dynamicModelNav)).toFixed(2)}%</td></tr>
+                <tr><td>Period NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triNavGrowth.toFixed(2)}%</td></tr>
+                <tr><td>Annualized Standard Deviation</td><td style="text-align:right; font-weight:700;">${portVol.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelVol.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triVol.toFixed(2)}%</td></tr>
+                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${portMDD.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelMDD.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:#00D2FF;">${triMDD.toFixed(2)}%</td></tr>
             `;
 
             const catMap = {}; dashboardData.assets.forEach(a => catMap[a.category] = (catMap[a.category] || 0) + a.value);
@@ -366,7 +774,7 @@
 
             const pdfChartOptions = { responsive: true, maintainAspectRatio: false, animation: false, scales: { x: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' } } }, y: { grid: { color: '#F1F5F9' }, ticks: { font: { size: 7, weight: 'bold' } } } } };
             new Chart(document.getElementById('repValueChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ data: dashboardData.history.total_value, borderColor: '#00D2FF', borderWidth: 1.5, pointRadius: 0, fill: false }] }, options: { ...pdfChartOptions, plugins: { legend: { display: false } } } });
-            new Chart(document.getElementById('repNavChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 }, { label: 'Model', data: dynamicModelNav, borderColor: '#64748B', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0 }] }, options: { ...pdfChartOptions, plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, font: { size: 8, weight: 'bold' } } } } } });
+            new Chart(document.getElementById('repNavChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 }, { label: 'Model', data: dynamicModelNav, borderColor: '#64748B', borderWidth: 1.5, borderDash: [4,4], pointRadius: 0 }, { label: 'Nifty 50 TRI', data: nifty50TriNav, borderColor: '#00D2FF', borderWidth: 1.5, borderDash: [2,2], pointRadius: 0 }] }, options: { ...pdfChartOptions, plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, font: { size: 8, weight: 'bold' } } } } } });
             const catLabelsOrdered = sortedCats.map(x => x[0]);
             new Chart(document.getElementById('repConcChart'), { type: 'line', data: { labels: dashboardData.history.dates, datasets: catLabelsOrdered.map(cat => ({ label: cat, data: dashboardData.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + 'BB', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, borderWidth: 1 })) }, options: { ...pdfChartOptions, scales: { ...pdfChartOptions.scales, y: { stacked: true, max: 100 } }, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 8 } } } } } });
             new Chart(document.getElementById('repAllocChart'), { type: 'doughnut', data: { labels: catLabelsOrdered, datasets: [{ data: sortedCats.map(x => x[1]), backgroundColor: catLabelsOrdered.map(cat => CATEGORY_COLORS[cat] || '#6366F1'), borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 7 } } } }, cutout: '65%' } });

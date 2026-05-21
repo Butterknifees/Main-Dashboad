@@ -279,9 +279,9 @@ def main():
             assets.append(ma)
             seen.add(ma['id'])
     
-    # Forced Analysis Period: April 1, 2025 to May 19, 2026
+    # Forced Analysis Period: April 1, 2025 to May 20, 2026
     start_date = datetime(2025, 4, 1)
-    end_date = datetime(2026, 5, 19)
+    end_date = datetime(2026, 5, 20)
     
     price_map = get_prices(assets, start_date, end_date)
     if not price_map: return
