@@ -1,6 +1,7 @@
 # Data files
 *.db
 *.csv
+!benchmark_tri_history.csv
 *.xlsx
 !*.xlsx
 *.json
