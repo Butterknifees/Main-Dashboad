@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="hisaab_styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -23,255 +23,295 @@
             transform: translateY(-2px);
         }
         
+        /* --- PROFESSIONAL PDF REPORT STYLES --- */
         #report-template {
             display: none;
             background: white;
-            color: #1a1f2e;
-            padding: 20mm; /* Standard A4 padding */
+            color: #0F172A;
+            padding: 0;
             font-family: 'Inter', sans-serif;
-            width: 210mm; /* Explicit A4 width */
+            width: 210mm;
             box-sizing: border-box;
         }
-        .report-header {
-            border-bottom: 2px solid #00D2FF;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
+        .report-page {
+            width: 210mm;
+            min-height: 296mm; /* Slightly less than 297 to prevent phantom pages */
+            padding: 15mm 15mm;
+            box-sizing: border-box;
+            background: white;
+            position: relative;
+        }
+        .report-header-top {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-        .report-title { font-size: 24px; font-weight: 800; color: #0B0F19; }
-        .report-date { color: #64748b; font-size: 12px; }
-        .report-section { 
-            margin-bottom: 30px; 
-            clear: both;
-        }
-        .page-break {
-            page-break-before: always;
-            height: 0;
-            margin: 0;
-            padding: 0;
-        }
-        .report-section h3 { 
-            font-size: 16px; 
-            margin-bottom: 15px; 
-            color: #00D2FF; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            border-left: 4px solid #00D2FF;
-            padding-left: 12px;
-        }
-        .report-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-        .report-metric {
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-        }
-        .report-metric-label { font-size: 10px; color: #64748b; text-transform: uppercase; }
-        .report-metric-value { font-size: 18px; font-weight: 700; color: #0B0F19; }
-        
-        .report-chart-container {
-            height: 250px; /* Reduced to fit better */
-            width: 100%;
+            align-items: flex-end;
+            border-bottom: 2px solid #00D2FF;
+            padding-bottom: 10px;
             margin-bottom: 15px;
         }
+        .report-header-top h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+            color: #0F172A;
+            letter-spacing: -0.5px;
+        }
+        .report-header-sub {
+            font-size: 11px;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         
-        .report-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        .report-table th { background: #f1f5f9; text-align: left; padding: 10px; font-size: 11px; color: #475569; }
-        .report-table td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
+        .stats-ticker {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            margin-bottom: 20px;
+        }
+        .ticker-item {
+            padding: 10px;
+            border-right: 1px solid #E2E8F0;
+            text-align: center;
+        }
+        .ticker-item:last-child { border-right: none; }
+        .ticker-label { font-size: 9px; color: #64748B; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+        .ticker-value { font-size: 13px; font-weight: 800; color: #0F172A; }
 
+        .report-section { margin-bottom: 25px; }
+        .report-section-title {
+            background: #F1F5F9;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 4px solid #00D2FF;
+            margin-bottom: 15px;
+        }
+
+        .diagram-box {
+            border: 1px solid #E2E8F0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .diagram-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .diagram-canvas-container {
+            height: 220px;
+            width: 100%;
+        }
+
+        .report-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+        .report-table th { 
+            background: #F8FAFC; 
+            text-align: left; 
+            padding: 10px; 
+            border-bottom: 2px solid #E2E8F0;
+            color: #475569;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .report-table td { padding: 10px; border-bottom: 1px solid #F1F5F9; }
+        .report-table tr:nth-child(even) { background: #FDFDFD; }
+
+        .footer-branding {
+            position: absolute;
+            bottom: 10mm;
+            left: 15mm;
+            right: 15mm;
+            border-top: 1px solid #E2E8F0;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: #94A3B8;
+        }
+
+        /* --- DASHBOARD UI --- */
         .dashboard-container {
             padding: 2rem 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
-
-        @media (max-width: 768px) {
-            .dashboard-container {
-                padding: 1rem 3%;
-            }
-            .metrics-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
-            .metric-value {
-                font-size: 1.5rem;
-            }
-            .chart-wrapper {
-                padding: 1rem;
-                height: 350px;
-            }
-            .assets-table th, .assets-table td {
-                padding: 0.8rem 0.5rem;
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
-        .metric-card {
-            padding: 1.5rem;
-            border-radius: 16px;
-            text-align: left;
-        }
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-        }
-        .metric-label {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .charts-section {
-            display: grid;
-            grid-template-columns: 1fr; /* Stacked */
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        .chart-wrapper {
-            padding: 2rem;
-            border-radius: 24px;
-            height: 400px; /* Fixed height for better aspect ratio when stacked */
-        }
-        .assets-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 2rem;
-        }
-        .assets-table th, .assets-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .assets-table th {
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-        h2 {
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-        @media (max-width: 1024px) {
-            .charts-section {
-                grid-template-columns: 1fr;
-            }
-        }
+        .metric-card { padding: 1.5rem; border-radius: 16px; text-align: left; }
+        .metric-value { font-size: 2rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.5rem; }
+        .metric-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .charts-section { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
+        .chart-wrapper { padding: 2rem; border-radius: 24px; height: 400px; }
+        .assets-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        .assets-table th, .assets-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        .assets-table th { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; }
+        h2 { margin-bottom: 1.5rem; font-weight: 600; }
     </style>
 </head>
 <body>
-    <!-- PDF Template (Hidden) -->
+    <!-- PDF Template (Institutional Grade) -->
     <div id="report-template">
-        <div class="report-header">
-            <div>
-                <div class="report-title">HISAAB PORTFOLIO REPORT</div>
-                <div class="report-date" id="rep-date">Generated on: --</div>
+        <!-- PAGE 1: PERFORMANCE -->
+        <div class="report-page">
+            <div class="report-header-top">
+                <div>
+                    <h1>PORTFOLIO ANALYSIS REPORT</h1>
+                    <div class="report-header-sub">Proprietary Investment Research | Hisaab Engine</div>
+                </div>
+                <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
             </div>
-            <div style="font-family: 'JetBrains Mono'; font-weight: 800;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+
+            <div class="stats-ticker">
+                <div class="ticker-item">
+                    <div class="ticker-label">Net Asset Value</div>
+                    <div class="ticker-value" id="rep-total">--</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="ticker-label">Annualized NAV Growth</div>
+                    <div class="ticker-value highlight-blue" id="rep-nav-growth">--</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="ticker-label">Ann. Volatility</div>
+                    <div class="ticker-value" id="rep-vol">--</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="ticker-label">Max Drawdown</div>
+                    <div class="ticker-value" id="rep-mdd">--</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="ticker-label">Sharpe Ratio</div>
+                    <div class="ticker-value" id="rep-sharpe">--</div>
+                </div>
+                <div class="ticker-item">
+                    <div class="ticker-label">Analysis Period</div>
+                    <div class="ticker-value" id="rep-period-short" style="font-size: 10px;">--</div>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Performance Diagnostics</div>
+                
+                <div class="diagram-box">
+                    <div class="diagram-label">
+                        <span>Cumulative Portfolio Value Growth (Absolute ₹)</span>
+                        <span style="font-weight: 400; color: #94A3B8;">Full Period History</span>
+                    </div>
+                    <div class="diagram-canvas-container">
+                        <canvas id="repValueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="diagram-box">
+                    <div class="diagram-label">
+                        <span>Relative Performance Analysis (Indexed to 100)</span>
+                        <span>Vs. Custom Model Strategy</span>
+                    </div>
+                    <div class="diagram-canvas-container">
+                        <canvas id="repNavChart"></canvas>
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>Strategy Comparison</th>
+                                <th style="text-align: right;">My Portfolio</th>
+                                <th style="text-align: right;">Model Strategy</th>
+                                <th style="text-align: right;">Alpha (Diff)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rep-comp-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="footer-branding">
+                <span>© 2026 Hisaab by Play Theory | Private & Confidential</span>
+                <span class="rep-date-label">--</span>
+                <span>Page 1 of 2</span>
+            </div>
         </div>
 
-        <div class="report-section">
-            <h3>Executive Summary</h3>
-            <div class="report-grid">
-                <div class="report-metric">
-                    <div class="report-metric-label">Annualized Return (XIRR)</div>
-                    <div class="report-metric-value" id="rep-xirr">--%</div>
-                </div>
-                <div class="report-metric">
-                    <div class="report-metric-label">Current Net Value</div>
-                    <div class="report-metric-value" id="rep-total">₹0</div>
-                </div>
-                <div class="report-metric">
-                    <div class="report-metric-label">Annual Volatility</div>
-                    <div class="report-metric-value" id="rep-vol">--%</div>
-                </div>
-            </div>
-            <p id="rep-period" style="font-size: 13px; color: #64748b;"></p>
-        </div>
+        <div class="html2pdf__page-break"></div>
 
-        <div class="report-section">
-            <h3>Performance Analysis</h3>
-            <div class="report-chart-container" style="height: 220px;">
-                <p style="font-size: 10px; margin-bottom: 5px;">Portfolio Value Growth (₹)</p>
-                <canvas id="repValueChart"></canvas>
-            </div>
-            <div class="report-chart-container" style="height: 280px;">
-                <p style="font-size: 10px; margin-bottom: 5px;">Indexed NAV Performance vs Model Portfolio</p>
-                <canvas id="repNavChart"></canvas>
-            </div>
-            
-            <table class="report-table" style="margin-top: 15px;">
-                <thead>
-                    <tr>
-                        <th>Comparison Metric</th>
-                        <th>My Portfolio</th>
-                        <th>Model Portfolio</th>
-                    </tr>
-                </thead>
-                <tbody id="rep-comp-body"></tbody>
-            </table>
-        </div>
-
-        <div class="page-break"></div>
-
-        <div class="report-section" style="margin-top: 20mm;">
-            <h3>Category Evolution & Allocation</h3>
-            <div class="report-chart-container" style="height: 280px;">
-                <p style="font-size: 10px; margin-bottom: 5px;">Historical Category Concentration (%)</p>
-                <canvas id="repConcChart"></canvas>
-            </div>
-            <div style="display: flex; gap: 20px; align-items: start; margin-top: 20px;">
-                <div class="report-chart-container" style="flex: 1; height: 250px;">
-                    <canvas id="repAllocChart"></canvas>
+        <!-- PAGE 2: RISK & ALLOCATION -->
+        <div class="report-page">
+            <div class="report-header-top">
+                <div>
+                    <h1>RISK & ALLOCATION DYNAMICS</h1>
+                    <div class="report-header-sub">Concentration Risk & Inventory Analysis</div>
                 </div>
-                <div style="flex: 1.2;">
+                <div style="font-weight: 800; font-size: 18px;">PLAY THEORY<span style="color: #00D2FF;">.</span></div>
+            </div>
+
+            <div class="report-section">
+                <div class="report-section-title">Category Concentration Evolution</div>
+                <div class="diagram-box">
+                    <div class="diagram-label">
+                        <span>Historical Asset Allocation Over Time (%)</span>
+                    </div>
+                    <div class="diagram-canvas-container" style="height: 250px;">
+                        <canvas id="repConcChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; margin-bottom: 25px;">
+                <div class="diagram-box">
+                    <div class="diagram-label">Current Split</div>
+                    <div class="diagram-canvas-container" style="height: 180px;">
+                        <canvas id="repAllocChart"></canvas>
+                    </div>
+                </div>
+                <div class="diagram-box">
+                    <div class="diagram-label">Category Summary</div>
                     <table class="report-table" id="rep-cat-table">
                         <thead>
                             <tr>
-                                <th>Current Category</th>
-                                <th>Weight</th>
-                                <th>Allocation (₹)</th>
+                                <th>Category</th>
+                                <th style="text-align: right;">Weight</th>
+                                <th style="text-align: right;">Value</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        <div class="report-section">
-            <h3>Holdings Detail</h3>
-            <table class="report-table" id="rep-holdings-table">
-                <thead>
-                    <tr>
-                        <th style="width: 40%;">Asset Name</th>
-                        <th style="width: 25%;">Category</th>
-                        <th style="width: 15%;">Weight</th>
-                        <th style="width: 20%;">Current Value</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="report-section" style="page-break-inside: avoid;">
+                <div class="report-section-title">Detailed Holdings Inventory</div>
+                <table class="report-table" id="rep-holdings-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 45%;">Asset Security Name</th>
+                            <th>Asset Class</th>
+                            <th style="text-align: right;">Weight</th>
+                            <th style="text-align: right;">Market Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="footer-branding">
+                <span>© 2026 Hisaab by Play Theory | Private & Confidential</span>
+                <span class="rep-date-label">--</span>
+                <span>Page 2 of 2</span>
+            </div>
         </div>
     </div>
 
@@ -371,402 +411,191 @@
 
     <script>
         let dashboardData = null;
+        const CATEGORY_COLORS = {
+            'Large Cap': '#00D2FF',
+            'Mid Cap': '#9D50BB',
+            'Small Cap': '#00C853',
+            'Thematic': '#F59E0B',
+            'Hybrid/Arbitrage': '#EF4444',
+            'Arbitrage': '#EF4444',
+            'Gold': '#F59E0B',
+            'Index/Other': '#6366F1',
+            'Other': '#94A3B8'
+        };
 
         async function loadDashboard() {
             try {
                 const response = await fetch('dashboard_data.json?v=' + new Date().getTime());
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 dashboardData = await response.json();
                 const data = dashboardData;
 
-                // Set Metrics
                 document.getElementById('analysis-period').textContent = `Period: ${data.metrics.period}`;
                 document.getElementById('val-xirr').textContent = `${data.metrics.xirr}%`;
                 document.getElementById('val-total').textContent = `₹${data.metrics.final_value.toLocaleString()}`;
                 document.getElementById('val-vol').textContent = `${data.metrics.annualized_volatility}%`;
                 document.getElementById('val-daily-vol').textContent = `${data.metrics.daily_volatility}%`;
 
-                // Value Growth Chart
+                // 1. Value Growth
                 new Chart(document.getElementById('valueChart'), {
                     type: 'line',
                     data: {
                         labels: data.history.dates,
-                        datasets: [{
-                            label: 'Total Value (₹)',
-                            data: data.history.total_value,
-                            borderColor: '#00D2FF',
-                            backgroundColor: 'rgba(0, 210, 255, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 0,
-                            borderWidth: 2
-                        }]
+                        datasets: [{ label: 'Total Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0, borderWidth: 2 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { intersect: false, mode: 'index' },
-                        scales: {
-                            y: { 
-                                beginAtZero: false,
-                                grace: '10%',
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { 
-                                    color: '#94A3B8',
-                                    callback: function(value) { return '₹' + (value / 1000) + 'k'; }
-                                } 
-                            },
-                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 12 } }
-                        },
-                        plugins: { legend: { display: false } }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } }
                 });
 
-                // NAV Growth Chart
+                // 2. NAV Growth
                 new Chart(document.getElementById('navChart'), {
                     type: 'line',
                     data: {
                         labels: data.history.dates,
                         datasets: [
-                            {
-                                label: 'Portfolio (Indexed)',
-                                data: data.history.nav,
-                                borderColor: '#9D50BB',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 3
-                            },
-                            {
-                                label: 'Model Portfolio (Custom)',
-                                data: data.history.model_nav,
-                                borderColor: '#F59E0B',
-                                backgroundColor: 'transparent',
-                                fill: false,
-                                tension: 0.4,
-                                pointRadius: 0,
-                                borderWidth: 2,
-                                borderDash: [2, 2]
-                            }
+                            { label: 'Portfolio', data: data.history.nav, borderColor: '#9D50BB', borderWidth: 3, pointRadius: 0 },
+                            { label: 'Model', data: data.history.model_nav, borderColor: '#F59E0B', borderWidth: 2, borderDash: [2, 2], pointRadius: 0 }
                         ]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { intersect: false, mode: 'index' },
-                        scales: {
-                            y: { 
-                                beginAtZero: false,
-                                grace: '5%',
-                                grid: { color: 'rgba(255,255,255,0.05)' }, 
-                                ticks: { color: '#94A3B8' } 
-                            },
-                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 6 } }
-                        },
-                        plugins: { 
-                            legend: { 
-                                display: true,
-                                labels: { color: '#94A3B8', font: { family: 'Inter' } }
-                            } 
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94A3B8' } } } }
                 });
 
-                // Concentration Chart (Stacked Area)
+                // 3. Concentration
                 const catLabels = Array.from(new Set(data.history.allocation.flatMap(d => Object.keys(d))));
-                const catColors = ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'];
-                
-                const concentrationDatasets = catLabels.map((cat, i) => ({
-                    label: cat,
-                    data: data.history.allocation.map(d => d[cat] || 0),
-                    backgroundColor: catColors[i % catColors.length] + '88',
-                    borderColor: catColors[i % catColors.length],
-                    fill: true,
-                    pointRadius: 0,
-                    tension: 0.3
-                }));
-
                 new Chart(document.getElementById('concentrationChart'), {
                     type: 'line',
                     data: {
                         labels: data.history.dates,
-                        datasets: concentrationDatasets
+                        datasets: catLabels.map(cat => ({
+                            label: cat,
+                            data: data.history.allocation.map(d => d[cat] || 0),
+                            backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + '88',
+                            borderColor: CATEGORY_COLORS[cat] || '#6366F1',
+                            fill: true, pointRadius: 0, tension: 0.3
+                        }))
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { intersect: false, mode: 'index' },
-                        scales: {
-                            y: { 
-                                stacked: true,
-                                max: 100,
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                ticks: { color: '#94A3B8', callback: v => v + '%' }
-                            },
-                            x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 6 } }
-                        },
-                        plugins: {
-                            legend: { position: 'bottom', labels: { color: '#94A3B8' } }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true, max: 100, ticks: { color: '#94A3B8' } } }, plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8' } } } }
                 });
 
-                // Comparison Table
+                // Comparison
                 const compBody = document.getElementById('comparison-body');
                 const comp = data.metrics.comparison;
                 const metrics = [
-                    { label: 'Annualized Return', key: 'return', suffix: '%' },
-                    { label: 'Annual Volatility', key: 'volatility', suffix: '%' },
-                    { label: 'Max Drawdown', key: 'max_drawdown', suffix: '%' },
-                    { label: 'Average Daily Return (Ann.)', key: 'avg_return', suffix: '%' }
+                    { label: 'Annualized Return', key: 'return', s: '%' },
+                    { label: 'Annual Volatility', key: 'volatility', s: '%' },
+                    { label: 'Max Drawdown', key: 'max_drawdown', s: '%' },
+                    { label: 'Avg Daily Return (Ann.)', key: 'avg_return', s: '%' }
                 ];
-
                 metrics.forEach(m => {
-                    const row = `<tr>
-                        <td style="color: var(--text-secondary)">${m.label}</td>
-                        <td style="color: var(--accent-blue); font-weight: 700;">${comp.portfolio[m.key]}${m.suffix}</td>
-                        <td style="color: #F59E0B; font-weight: 600;">${comp.model[m.key]}${m.suffix}</td>
-                    </tr>`;
-                    compBody.innerHTML += row;
+                    compBody.innerHTML += `<tr><td style="color: var(--text-secondary)">${m.label}</td><td style="color: var(--accent-blue); font-weight: 700;">${comp.portfolio[m.key]}${m.s}</td><td style="color: #F59E0B; font-weight: 600;">${comp.model[m.key]}${m.s}</td></tr>`;
                 });
 
-                // Assets Table
                 const tbody = document.getElementById('assets-body');
-                const totalVal = data.metrics.final_value;
                 data.assets.sort((a, b) => b.value - a.value).forEach(asset => {
-                    const row = document.createElement('tr');
-                    const weight = ((asset.value / totalVal) * 100).toFixed(2);
-                    row.innerHTML = `
-                        <td>
-                            <div style="font-weight: 600;">${asset.name}</div>
-                            <div style="font-size: 0.7rem; color: var(--text-secondary);">${asset.category || 'Other'}</div>
-                        </td>
-                        <td style="color: var(--accent-blue); font-weight: 600;">₹${asset.value.toLocaleString()}</td>
-                        <td style="color: var(--text-secondary);">${weight}%</td>
-                    `;
-                    tbody.appendChild(row);
+                    tbody.innerHTML += `<tr><td><div style="font-weight:600;">${asset.name}</div><div style="font-size:0.7rem; color:var(--text-secondary);">${asset.category}</div></td><td style="color:var(--accent-blue); font-weight:600;">₹${asset.value.toLocaleString()}</td><td style="color:var(--text-secondary);">${((asset.value/data.metrics.final_value)*100).toFixed(2)}%</td></tr>`;
                 });
-
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                const isFileProtocol = window.location.protocol === 'file:';
-                document.getElementById('analysis-period').innerHTML = 
-                    `<span style="color: #ff4444;">
-                        ${isFileProtocol ? 
-                          'ERROR: Browsers block data loading from local files for security.' : 
-                          'ERROR: ' + error.message}
-                        <br>Details: Ensure the server is running and dashboard_data.json exists.
-                    </span>`;
-            }
+            } catch (error) { console.error(error); }
         }
 
         async function generatePDF() {
             if (!dashboardData) return;
-            
             const btn = document.querySelector('.btn-export');
-            const originalText = btn.textContent;
-            btn.textContent = 'Generating...';
-            btn.disabled = true;
+            btn.textContent = 'Preparing Report...'; btn.disabled = true;
 
             const template = document.getElementById('report-template');
             template.style.display = 'block';
 
-            // Fill Data
-            document.getElementById('rep-date').textContent = `Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`;
-            document.getElementById('rep-xirr').textContent = `${dashboardData.metrics.xirr}%`;
-            document.getElementById('rep-total').textContent = `₹${dashboardData.metrics.final_value.toLocaleString()}`;
-            document.getElementById('rep-vol').textContent = `${dashboardData.metrics.annualized_volatility}%`;
-            document.getElementById('rep-period').textContent = `Analysis Period: ${dashboardData.metrics.period}`;
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+            document.querySelectorAll('.rep-date-label').forEach(el => el.textContent = dateStr);
+            document.getElementById('rep-period-short').textContent = dashboardData.metrics.period;
 
-            // Comparison Table
-            const repCompBody = document.getElementById('rep-comp-body');
-            repCompBody.innerHTML = '';
+            // NAV Growth Annualized Calculation
+            const nDays = dashboardData.history.dates.length;
+            const portNavGrowth = ((dashboardData.history.nav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
+            const modelNavGrowth = ((dashboardData.history.model_nav[nDays-1] / 100) ** (252 / nDays) - 1) * 100;
+
+            document.getElementById('rep-nav-growth').textContent = portNavGrowth.toFixed(2) + '%';
+            document.getElementById('rep-total').textContent = '₹' + (dashboardData.metrics.final_value / 100000).toFixed(2) + ' L';
+            document.getElementById('rep-vol').textContent = dashboardData.metrics.annualized_volatility + '%';
+            
             const comp = dashboardData.metrics.comparison;
-            const compMetrics = [
-                { label: 'Annualized Return', key: 'return', suffix: '%' },
-                { label: 'Annual Volatility', key: 'volatility', suffix: '%' },
-                { label: 'Max Drawdown', key: 'max_drawdown', suffix: '%' },
-                { label: 'Average Daily Return (Ann.)', key: 'avg_return', suffix: '%' }
-            ];
-            compMetrics.forEach(m => {
-                const row = `<tr>
-                    <td>${m.label}</td>
-                    <td style="font-weight:700;">${comp.portfolio[m.key]}${m.suffix}</td>
-                    <td style="color:#F59E0B;">${comp.model[m.key]}${m.suffix}</td>
-                </tr>`;
-                repCompBody.innerHTML += row;
-            });
+            document.getElementById('rep-mdd').textContent = comp.portfolio.max_drawdown + '%';
+            document.getElementById('rep-sharpe').textContent = ((comp.portfolio.return - 5.5) / comp.portfolio.volatility).toFixed(2);
 
-            // Category Calculation
+            const repCompBody = document.getElementById('rep-comp-body');
+            repCompBody.innerHTML = `
+                <tr><td>Annualized NAV Growth</td><td style="text-align:right; font-weight:700;">${portNavGrowth.toFixed(2)}%</td><td style="text-align:right; color:#64748B;">${modelNavGrowth.toFixed(2)}%</td><td style="text-align:right; font-weight:700; color:${portNavGrowth >= modelNavGrowth ? '#00C853' : '#EF4444'}">${(portNavGrowth - modelNavGrowth).toFixed(2)}%</td></tr>
+                <tr><td>Annual Volatility (Risk)</td><td style="text-align:right; font-weight:700;">${comp.portfolio.volatility}%</td><td style="text-align:right; color:#64748B;">${comp.model.volatility}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.volatility <= comp.model.volatility ? '#00C853' : '#EF4444'}">${(comp.model.volatility - comp.portfolio.volatility).toFixed(2)}%</td></tr>
+                <tr><td>Maximum Drawdown</td><td style="text-align:right; font-weight:700;">${comp.portfolio.max_drawdown}%</td><td style="text-align:right; color:#64748B;">${comp.model.max_drawdown}%</td><td style="text-align:right; font-weight:700; color:${comp.portfolio.max_drawdown >= comp.model.max_drawdown ? '#00C853' : '#EF4444'}">${(comp.portfolio.max_drawdown - comp.model.max_drawdown).toFixed(2)}%</td></tr>
+            `;
+
             const catMap = {};
-            dashboardData.assets.forEach(a => {
-                const cat = a.category || 'Other';
-                catMap[cat] = (catMap[cat] || 0) + a.value;
-            });
-
-            // Summary Table
+            dashboardData.assets.forEach(a => catMap[a.category] = (catMap[a.category] || 0) + a.value);
+            const sortedCats = Object.entries(catMap).sort((a,b) => b[1]-a[1]);
+            
             const catTable = document.getElementById('rep-cat-table').querySelector('tbody');
             catTable.innerHTML = '';
-            Object.entries(catMap).sort((a,b) => b[1] - a[1]).forEach(([cat, val]) => {
-                const row = `<tr>
-                    <td><strong>${cat}</strong></td>
-                    <td>${((val/dashboardData.metrics.final_value)*100).toFixed(1)}%</td>
-                    <td>₹${val.toLocaleString()}</td>
-                </tr>`;
-                catTable.innerHTML += row;
+            sortedCats.forEach(([cat, val]) => {
+                catTable.innerHTML += `<tr><td><strong>${cat}</strong></td><td style="text-align:right;">${((val/dashboardData.metrics.final_value)*100).toFixed(1)}%</td><td style="text-align:right;">₹${(val/1000).toFixed(1)}k</td></tr>`;
             });
 
-            // Holdings Table
             const holdTable = document.getElementById('rep-holdings-table').querySelector('tbody');
             holdTable.innerHTML = '';
             dashboardData.assets.sort((a,b) => b.value - a.value).forEach(a => {
-                const row = `<tr>
-                    <td>${a.name}</td>
-                    <td>${a.category || 'Other'}</td>
-                    <td>${((a.value/dashboardData.metrics.final_value)*100).toFixed(1)}%</td>
-                    <td>₹${a.value.toLocaleString()}</td>
-                </tr>`;
-                holdTable.innerHTML += row;
+                holdTable.innerHTML += `<tr><td style="font-weight:600;">${a.name}</td><td>${a.category}</td><td style="text-align:right;">${((a.value/dashboardData.metrics.final_value)*100).toFixed(1)}%</td><td style="text-align:right;">₹${a.value.toLocaleString()}</td></tr>`;
             });
 
-            // Report Charts
-            const chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: false,
-                plugins: { legend: { display: false } },
+            const pdfChartOptions = {
+                responsive: true, maintainAspectRatio: false, animation: false,
                 scales: { 
-                    x: { ticks: { maxTicksLimit: 6, font: { size: 10 } } },
-                    y: { ticks: { font: { size: 10 } } }
+                    x: { title: { display: true, text: 'Time Period', font: { size: 8 } }, grid: { color: '#F1F5F9' }, ticks: { font: { size: 8 } } },
+                    y: { title: { display: true, font: { size: 8 } }, grid: { color: '#F1F5F9' }, ticks: { font: { size: 8 } } }
                 }
             };
 
-            // 1. Value Chart
             new Chart(document.getElementById('repValueChart'), {
-                type: 'line',
-                data: {
-                    labels: dashboardData.history.dates,
-                    datasets: [{
-                        data: dashboardData.history.total_value,
-                        borderColor: '#00D2FF',
-                        borderWidth: 2,
-                        pointRadius: 0,
-                        fill: false
-                    }]
-                },
-                options: chartOptions
+                type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ data: dashboardData.history.total_value, borderColor: '#00D2FF', borderWidth: 1.5, pointRadius: 0, fill: false }] },
+                options: { ...pdfChartOptions, plugins: { legend: { display: false } }, scales: { ...pdfChartOptions.scales, y: { ...pdfChartOptions.scales.y, title: { display: true, text: 'Value (₹)' } } } }
             });
 
-            // 2. NAV Chart
             new Chart(document.getElementById('repNavChart'), {
-                type: 'line',
-                data: {
-                    labels: dashboardData.history.dates,
-                    datasets: [
-                        { label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 },
-                        { label: 'Model', data: dashboardData.history.model_nav, borderColor: '#F59E0B', borderWidth: 1, borderDash: [2,2], pointRadius: 0 }
-                    ]
-                },
-                options: { 
-                    ...chartOptions, 
-                    plugins: { 
-                        legend: { 
-                            display: true, 
-                            position: 'bottom', 
-                            labels: { boxWidth: 10, font: { size: 10 } } 
-                        } 
-                    } 
-                }
+                type: 'line', data: { labels: dashboardData.history.dates, datasets: [{ label: 'Portfolio', data: dashboardData.history.nav, borderColor: '#9D50BB', borderWidth: 2, pointRadius: 0 }, { label: 'Model', data: dashboardData.history.model_nav, borderColor: '#64748B', borderWidth: 1, borderDash: [3,3], pointRadius: 0 }] },
+                options: { ...pdfChartOptions, plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, font: { size: 8 } } } } }
             });
 
-            // 3. Category Concentration Chart (Stacked Area)
-            const catLabels = Array.from(new Set(dashboardData.history.allocation.flatMap(d => Object.keys(d))));
-            const catColors = ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'];
-            
+            const catLabelsOrdered = sortedCats.map(x => x[0]);
             new Chart(document.getElementById('repConcChart'), {
                 type: 'line',
                 data: {
                     labels: dashboardData.history.dates,
-                    datasets: catLabels.map((cat, i) => ({
-                        label: cat,
-                        data: dashboardData.history.allocation.map(d => d[cat] || 0),
-                        backgroundColor: catColors[i % catColors.length] + '88',
-                        borderColor: catColors[i % catColors.length],
-                        fill: true,
-                        pointRadius: 0,
-                        tension: 0.3
+                    datasets: catLabelsOrdered.map(cat => ({
+                        label: cat, data: dashboardData.history.allocation.map(d => d[cat] || 0),
+                        backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + 'BB', borderColor: CATEGORY_COLORS[cat] || '#6366F1',
+                        fill: true, pointRadius: 0, borderWidth: 1
                     }))
                 },
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: { stacked: true, max: 100, ticks: { font: { size: 9 }, callback: v => v + '%' } },
-                        x: { ticks: { maxTicksLimit: 8, font: { size: 9 } } }
-                    },
-                    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 9 } } } }
-                }
+                options: { ...pdfChartOptions, scales: { ...pdfChartOptions.scales, y: { stacked: true, max: 100 } }, plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font: { size: 7 } } } } }
             });
 
-            // 4. Allocation Chart
             new Chart(document.getElementById('repAllocChart'), {
                 type: 'doughnut',
-                data: {
-                    labels: Object.keys(catMap),
-                    datasets: [{
-                        data: Object.values(catMap),
-                        backgroundColor: ['#00D2FF', '#9D50BB', '#00C853', '#F59E0B', '#EF4444', '#6366F1', '#8B5CF6'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    animation: false,
-                    plugins: { 
-                        legend: { 
-                            display: true, 
-                            position: 'right', 
-                            labels: { boxWidth: 10, font: { size: 10 } } 
-                        } 
-                    } 
-                }
+                data: { labels: catLabelsOrdered, datasets: [{ data: sortedCats.map(x => x[1]), backgroundColor: catLabelsOrdered.map(cat => CATEGORY_COLORS[cat] || '#6366F1'), borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false } }, cutout: '70%' }
             });
 
-            // Wait for charts to render
-            await new Promise(r => setTimeout(r, 800));
-
+            await new Promise(r => setTimeout(r, 1000));
             const opt = {
-                margin: 10,
-                filename: `Hisaab_Portfolio_Report_${new Date().toISOString().split('T')[0]}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: 0, filename: `Hisaab_Report.pdf`,
+                image: { type: 'jpeg', quality: 1.0 },
+                html2canvas: { scale: 2.5, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
 
-            try {
-                const element = document.getElementById('report-template');
-                await html2pdf().set(opt).from(element).save();
-            } catch (err) {
-                console.error('PDF generation error:', err);
-            } finally {
-                template.style.display = 'none';
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
+            try { await html2pdf().set(opt).from(template).save(); } finally { template.style.display = 'none'; btn.textContent = 'Export Summary PDF'; btn.disabled = false; }
         }
 
         loadDashboard();
-
-        // Parallax script
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
-            document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
-        });
     </script>
 </body>
 </html>

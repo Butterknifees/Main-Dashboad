@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Error Intelligence | Hisaab</title>
+    <link rel="stylesheet" href="hisaab_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .te-container {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .benchmark-group {
+            margin-bottom: 3rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        .benchmark-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+        }
+        .benchmark-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+        .fund-card {
+            padding: 1.5rem;
+            border-radius: 16px;
+        }
+        .fund-type-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .te-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .te-table th, .te-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .te-table th {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        .te-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+        .te-low { color: #00C853; }
+        .te-med { color: #F59E0B; }
+        .te-high { color: #EF4444; }
+        
+        .empty-state {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.85rem;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-orb" id="orb-1"></div>
+        <div class="glow-orb" id="orb-2"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by">Tracking Error Intelligence</div>
+        </nav>
+    </header>
+
+    <main class="te-container">
+        <h1 class="fade-in">Index <span class="highlight">Fidelity</span></h1>
+        <p class="subtitle fade-in">Annualized Tracking Error (Std Dev of Δ%) vs. Benchmark TRI</p>
+
+        <div id="te-content" class="fade-in-delay">
+            <!-- Populated by JS -->
+        </div>
+    </main>
+
+    <script>
+        async function loadTEData() {
+            try {
+                const response = await fetch('tracking_error_data.json?v=' + new Date().getTime());
+                const data = await response.json();
+                const container = document.getElementById('te-content');
+
+                Object.entries(data).forEach(([benchmark, categories]) => {
+                    const section = document.createElement('div');
+                    section.className = 'benchmark-group';
+                    
+                    section.innerHTML = `
+                        <div class="benchmark-header">
+                            <div class="benchmark-title">${benchmark}</div>
+                        </div>
+                        <div class="comparison-grid">
+                            <div class="fund-card glass">
+                                <span class="fund-type-tag">ETFs</span>
+                                ${renderTable(categories.ETF, 'ETF')}
+                            </div>
+                            <div class="fund-card glass">
+                                <span class="fund-type-tag">Index Funds (Direct)</span>
+                                ${renderTable(categories['Index Fund'], 'Index Fund')}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(section);
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderTable(funds, type) {
+            if (!funds || funds.length === 0) {
+                return `<div class="empty-state">No ${type}s found for this benchmark.</div>`;
+            }
+
+            // Sort by lowest tracking error
+            funds.sort((a, b) => a.tracking_error - b.tracking_error);
+
+            let rows = funds.map(f => {
+                const teClass = f.tracking_error < 0.1 ? 'te-low' : (f.tracking_error < 0.5 ? 'te-med' : 'te-high');
+                return `
+                    <tr>
+                        <td>
+                            <div style="font-size: 0.85rem; font-weight: 600;">${f.name}</div>
+                            <div style="font-size: 0.65rem; color: var(--text-secondary)">${f.ticker || f.code} • ${f.data_points} days</div>
+                        </td>
+                        <td class="te-value ${teClass}">${f.tracking_error.toFixed(3)}%</td>
+                        <td class="te-value" style="color: ${f.avg_difference < 0 ? '#EF4444' : '#00C853'}">
+                            ${f.avg_difference > 0 ? '+' : ''}${f.avg_difference.toFixed(3)}%
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            return `
+                <table class="te-table">
+                    <thead>
+                        <tr>
+                            <th>Fund Name</th>
+                            <th>Ann. Tracking Error</th>
+                            <th>Avg. Δ (Ann.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        loadTEData();
+
+        // Parallax script
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+            document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
+        });
+    </script>
+</body>
+</html>
