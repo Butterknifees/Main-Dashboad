@@ -1,65 +1,7 @@
 import os
-import json
 import sqlite3
-import pandas as pd
-from datetime import datetime
 
 DB_FILE = "Gemini/personal finance accounting/nav_data.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data.db"
-GROUPED_FUNDS_FILE = "Gemini/personal finance accounting/grouped_funds.json" if os.path.exists("Gemini/personal finance accounting") else "grouped_funds.json"
-BASE_PATH = "Gemini/personal finance accounting/data/" if os.path.exists("Gemini/personal finance accounting") else "data/"
-
-def get_whitelist_schemes():
-    whitelist = set()
-    
-    # 1. Load from grouped_funds.json
-    if os.path.exists(GROUPED_FUNDS_FILE):
-        with open(GROUPED_FUNDS_FILE, 'r') as f:
-            grouped = json.load(f)
-            for cat in grouped:
-                for fund in grouped[cat]:
-                    whitelist.add(str(fund['code']).strip())
-        print(f"Loaded {len(whitelist)} schemes from grouped_funds.json.")
-    else:
-        print("Warning: grouped_funds.json not found.")
-
-    # 2. Hardcoded model strategy schemes
-    model_schemes = ["119771", "147946", "118989"]
-    for code in model_schemes:
-        whitelist.add(code)
-    
-    # 3. Load scheme names/codes from transaction sheets
-    # We want to scan the Excel files to see if there are any mutual fund schemes mentioned
-    mf_files = ['Mutual_Funds_Order_History_01-04-2025_19-05-2026.xlsx']
-    for mf_file in mf_files:
-        full_path = os.path.join(BASE_PATH, mf_file)
-        if os.path.exists(full_path):
-            try:
-                df = pd.read_excel(full_path, header=11).dropna(how='all')
-                if 'Scheme Name' in df.columns:
-                    names = df['Scheme Name'].dropna().unique()
-                    print(f"Found {len(names)} mutual funds in transaction sheets.")
-                    
-                    # Connect to SQLite to find the corresponding scheme codes for these names
-                    conn = sqlite3.connect(DB_FILE)
-                    cursor = conn.cursor()
-                    for name in names:
-                        name_clean = str(name).strip()
-                        cursor.execute("SELECT scheme_code FROM schemes WHERE scheme_name = ? OR isin_growth = ?", (name_clean, name_clean))
-                        res = cursor.fetchall()
-                        if res:
-                            for row in res:
-                                whitelist.add(str(row[0]).strip())
-                        else:
-                            # Try fuzzy match
-                            cursor.execute("SELECT scheme_code FROM schemes WHERE scheme_name LIKE ?", (f"%{name_clean}%",))
-                            res = cursor.fetchall()
-                            for row in res:
-                                whitelist.add(str(row[0]).strip())
-                    conn.close()
-            except Exception as e:
-                print(f"Error scanning Excel transaction sheets: {e}")
-
-    return whitelist
 
 def prune_database():
     if not os.path.exists(DB_FILE):
@@ -69,11 +11,6 @@ def prune_database():
     initial_size = os.path.getsize(DB_FILE) / (1024 * 1024)
     print(f"Initial Database Size: {initial_size:.2f} MB")
     
-    whitelist = get_whitelist_schemes()
-    if not whitelist:
-        print("No schemes found for whitelist. Aborting prune.")
-        return
-
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     
@@ -85,38 +22,84 @@ def prune_database():
     
     print(f"Before Pruning: {total_schemes_before} schemes, {total_history_before} NAV history records.")
 
-    # Create temporary table with whitelisted codes
-    cursor.execute("CREATE TEMP TABLE whitelist_codes (scheme_code TEXT PRIMARY KEY)")
-    cursor.executemany("INSERT OR IGNORE INTO whitelist_codes VALUES (?)", [(code,) for code in whitelist])
+    # We want to identify the blacklisted schemes.
+    # Blacklist criteria:
+    # 1. Any scheme name containing "Regular" (case-insensitive)
+    # 2. Any scheme name NOT containing "Direct" or "Dir" (unless it's some special direct fund, but standard direct funds always have Direct/Dir)
+    # 3. Any scheme name containing "IDCW", "Dividend", "Payout", or "Reinvestment" (case-insensitive)
     
-    # Delete from nav_history first (foreign key dependency)
-    print("Deleting unused NAV history...")
+    print("Identifying schemes to delete...")
+    
+    # Fetch all scheme codes and names to filter in Python for safety, or run directly in SQL.
+    # SQL query to identify schemes to keep (Direct Growth plans):
+    # - Must contain "Direct" or "Dir"
+    # - Must NOT contain "Regular"
+    # - Must NOT contain "IDCW", "Dividend", "Payout", "Reinvestment"
+    # - For extra safety, we'll keep Growth funds or other funds that don't match the IDCW/Regular patterns.
+    
+    # We will delete schemes that match any of the following:
+    # - scheme_name LIKE '%Regular%'
+    # - (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%') -- deletes regular plans that don't have the word Regular but are not Direct
+    # - scheme_name LIKE '%IDCW%'
+    # - scheme_name LIKE '%Dividend%'
+    # - scheme_name LIKE '%Payout%'
+    # - scheme_name LIKE '%Reinvestment%'
+    
+    # Let's run a test select first to see how many we are deleting
+    cursor.execute("""
+        SELECT COUNT(*) FROM schemes 
+        WHERE scheme_name LIKE '%Regular%'
+           OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+           OR scheme_name LIKE '%IDCW%'
+           OR scheme_name LIKE '%Dividend%'
+           OR scheme_name LIKE '%Payout%'
+           OR scheme_name LIKE '%Reinvestment%'
+    """)
+    to_delete_count = cursor.fetchone()[0]
+    print(f"Identified {to_delete_count} schemes to delete (out of {total_schemes_before} total).")
+
+    # Delete from nav_history first (foreign key constraints)
+    print("Deleting NAV history of blacklisted schemes...")
     cursor.execute("""
         DELETE FROM nav_history 
-        WHERE scheme_code NOT IN (SELECT scheme_code FROM whitelist_codes)
+        WHERE scheme_code IN (
+            SELECT scheme_code FROM schemes 
+            WHERE scheme_name LIKE '%Regular%'
+               OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+               OR scheme_name LIKE '%IDCW%'
+               OR scheme_name LIKE '%Dividend%'
+               OR scheme_name LIKE '%Payout%'
+               OR scheme_name LIKE '%Reinvestment%'
+        )
     """)
     history_deleted = cursor.rowcount
-    
+    print(f"Deleted {history_deleted} history rows.")
+
     # Delete from schemes
-    print("Deleting unused scheme metadata...")
+    print("Deleting blacklisted scheme metadata...")
     cursor.execute("""
         DELETE FROM schemes 
-        WHERE scheme_code NOT IN (SELECT scheme_code FROM whitelist_codes)
+        WHERE scheme_name LIKE '%Regular%'
+           OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+           OR scheme_name LIKE '%IDCW%'
+           OR scheme_name LIKE '%Dividend%'
+           OR scheme_name LIKE '%Payout%'
+           OR scheme_name LIKE '%Reinvestment%'
     """)
     schemes_deleted = cursor.rowcount
+    print(f"Deleted {schemes_deleted} scheme rows.")
 
     conn.commit()
     
-    # Verify remaining
+    # Verify remaining records
     cursor.execute("SELECT count(*) FROM schemes")
     total_schemes_after = cursor.fetchone()[0]
     cursor.execute("SELECT count(*) FROM nav_history")
     total_history_after = cursor.fetchone()[0]
     
     print(f"After Pruning: {total_schemes_after} schemes, {total_history_after} NAV history records.")
-    print(f"Deleted {schemes_deleted} schemes and {history_deleted} history rows.")
-
-    # Vacuum database to shrink the file size
+    
+    # Vacuum database to reclaim space
     print("Vacuuming database (this might take a moment)...")
     cursor.execute("VACUUM")
     conn.close()

@@ -75,6 +75,16 @@ def update_all_schemes():
                 isin_g = parts[1].strip()
                 isin_d = parts[2].strip()
                 name = parts[3].strip()
+                
+                # Filter out Regular and IDCW schemes to keep the database size small and clean
+                name_lower = name.lower()
+                is_direct = "direct" in name_lower or "dir" in name_lower
+                is_regular = "regular" in name_lower
+                is_idcw = "idcw" in name_lower or "dividend" in name_lower or "payout" in name_lower or "reinvestment" in name_lower
+                
+                if is_regular or not is_direct or is_idcw:
+                    continue  # Skip regular and dividend payout/reinvestment schemes
+                
                 try:
                     nav = float(parts[4].strip())
                 except ValueError:
