@@ -33,6 +33,11 @@ def prepare_simulator_data():
             all_scheme_codes.append(fund['code'])
 
     # 1. Standardize dates from ETF file as the primary timeline
+    if 'Date' not in df_etf.columns and len(df_etf.columns) > 0:
+        df_etf = df_etf.rename(columns={df_etf.columns[0]: 'Date'})
+    if 'Date' not in df_univ.columns and len(df_univ.columns) > 0:
+        df_univ = df_univ.rename(columns={df_univ.columns[0]: 'Date'})
+        
     df_etf['Date'] = pd.to_datetime(df_etf['Date'])
     df_univ['Date'] = pd.to_datetime(df_univ['Date'])
     
