@@ -7,6 +7,8 @@
 *.json
 !dashboard_data.json
 !simulator_data.json
+!grouped_funds.json
+!benchmark_mapping.json
 large_cap_historical.json
 
 # Python
