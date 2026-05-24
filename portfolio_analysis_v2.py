@@ -169,7 +169,7 @@ def get_latest_holdings_prices():
 
 def get_prices(assets, start_date, end_date):
     price_map = {}
-    conn = sqlite3.connect(DB_FILE)
+    import requests
     ticker_to_isin = {
         "HDFCGOLD": "INF179KC1981",
         "CHEMICAL": "INF174KA1XV0",
@@ -187,23 +187,61 @@ def get_prices(assets, start_date, end_date):
         "BANKBEES": "INF204KB15I0"
     }
     
-    # Manual Name-to-Code mapping for Mutual Funds
     mf_name_map = {
         "HDFC Mid Cap Fund Direct Growth": "118989",
         "Kotak Arbitrage Fund Direct Growth": "119771",
         "INF109KC19V3": "149072"
     }
 
+    conn = None
+    if os.path.exists(DB_FILE):
+        try:
+            conn = sqlite3.connect(DB_FILE)
+        except Exception as e:
+            print(f"Warning: Failed to connect to DB {DB_FILE}: {e}")
+
     for asset in assets:
         aid = asset['id']
         search_id = mf_name_map.get(aid, aid)
         if asset['source'] == 'MF_DB':
-            query = "SELECT n.date, n.nav FROM nav_history n JOIN schemes s ON n.scheme_code = s.scheme_code WHERE s.scheme_code = ? OR s.scheme_name = ? OR s.isin_growth = ? OR s.isin_div = ?"
-            df = pd.read_sql_query(query, conn, params=(search_id, search_id, search_id, search_id))
-            for _, r in df.iterrows():
-                d = str(r['date'])[:10]
-                price_map.setdefault(d, {})[aid] = float(r['nav'])
-    conn.close()
+            fetched_from_db = False
+            if conn is not None:
+                try:
+                    query = "SELECT n.date, n.nav FROM nav_history n JOIN schemes s ON n.scheme_code = s.scheme_code WHERE s.scheme_code = ? OR s.scheme_name = ? OR s.isin_growth = ? OR s.isin_div = ?"
+                    df = pd.read_sql_query(query, conn, params=(search_id, search_id, search_id, search_id))
+                    if not df.empty:
+                        for _, r in df.iterrows():
+                            d = str(r['date'])[:10]
+                            price_map.setdefault(d, {})[aid] = float(r['nav'])
+                        fetched_from_db = True
+                except Exception as e:
+                    print(f"Warning: Database query failed for {search_id}: {e}")
+            
+            if not fetched_from_db:
+                # Fallback to free public api.mfapi.in API
+                print(f"Database entry missing for {aid} ({search_id}). Fetching history from api.mfapi.in...")
+                try:
+                    # Scheme code is expected by mfapi.in
+                    url = f"https://api.mfapi.in/mf/{search_id}"
+                    resp = requests.get(url, timeout=15)
+                    if resp.status_code == 200:
+                        res_json = resp.json()
+                        for entry in res_json.get("data", []):
+                            try:
+                                # date format is "DD-MM-YYYY"
+                                dt = datetime.strptime(entry["date"], "%d-%m-%Y")
+                                d_str = dt.strftime("%Y-%m-%d")
+                                price_map.setdefault(d_str, {})[aid] = float(entry["nav"])
+                            except Exception as ex:
+                                continue
+                        print(f"  Successfully fetched history from api.mfapi.in.")
+                    else:
+                        print(f"  Error: HTTP {resp.status_code} fetching scheme {search_id}")
+                except Exception as e:
+                    print(f"  Error: Failed to fetch scheme {search_id} from API: {e}")
+
+    if conn is not None:
+        conn.close()
     
     for csv_file in [ETF_FILE, STOCK_FILE]:
         if os.path.exists(csv_file):
