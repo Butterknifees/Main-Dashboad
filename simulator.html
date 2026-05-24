@@ -636,6 +636,27 @@
             document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
             document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
         });
+
+        // Tooltip click toggle handling
+        document.addEventListener('click', (e) => {
+            const container = e.target.closest('.tooltip-container');
+            if (!container) {
+                document.querySelectorAll('.tooltip-container.active').forEach(el => {
+                    el.classList.remove('active');
+                });
+                return;
+            }
+            
+            const isCurrentlyActive = container.classList.contains('active');
+            document.querySelectorAll('.tooltip-container.active').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            if (!isCurrentlyActive) {
+                container.classList.add('active');
+            }
+            e.stopPropagation();
+        });
     </script>
 </body>
 </html>

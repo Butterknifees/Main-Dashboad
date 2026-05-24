@@ -553,7 +553,8 @@ footer {
     line-height: 1;
 }
 
-.tooltip-container:hover .info-icon {
+.tooltip-container:hover .info-icon,
+.tooltip-container.active .info-icon {
     border-color: var(--accent-blue);
     color: var(--accent-blue);
     background: rgba(0, 210, 255, 0.1);
@@ -587,8 +588,25 @@ footer {
     -webkit-backdrop-filter: blur(10px);
 }
 
-.tooltip-container:hover .tooltip-text {
+.tooltip-container:hover .tooltip-text,
+.tooltip-container.active .tooltip-text {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(-5px);
+}
+
+@media (max-width: 768px) {
+    .tooltip-text {
+        width: 200px;
+        font-size: 0.65rem;
+        padding: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tooltip-text {
+        width: 170px;
+        font-size: 0.6rem;
+        padding: 0.5rem;
+    }
 }
