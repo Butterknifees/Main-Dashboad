@@ -133,26 +133,38 @@
             backdrop-filter: blur(10px);
         }
         .modal-content {
-            background: #1a1f2e;
+            background: rgba(11, 15, 25, 0.9);
             width: 90%; max-width: 600px;
             margin: 50px auto;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 2rem;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 2.5rem;
             max-height: 85vh;
             overflow-y: auto;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: border-color 0.3s ease;
+        }
+        .modal-content:hover {
+            border-color: var(--accent-purple);
         }
         .asset-row {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
             margin-bottom: 1.2rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
+            padding: 1.2rem;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
             animation: slideIn 0.3s ease-out;
             position: relative;
+            transition: all 0.3s ease;
+        }
+        .asset-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.12);
         }
         .asset-row-header {
             display: flex;
@@ -168,20 +180,19 @@
         }
         .asset-select, .category-select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            padding: 0.6rem;
-            border-radius: 8px;
+            padding: 0.7rem;
+            border-radius: 10px;
             outline: none;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            transition: border-color 0.2s;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
         }
         .asset-select:focus, .category-select:focus {
             border-color: var(--accent-blue);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
         }
         .weight-input-wrapper {
             position: relative;
@@ -195,7 +206,7 @@
             border: 1px solid rgba(0, 210, 255, 0.2);
             color: var(--accent-blue);
             padding: 0.6rem 1.8rem 0.6rem 0.6rem;
-            border-radius: 8px;
+            border-radius: 10px;
             text-align: right;
             font-weight: 700;
             font-size: 1rem;
@@ -206,6 +217,61 @@
             background: rgba(0, 210, 255, 0.1);
             border-color: var(--accent-blue);
             box-shadow: 0 0 0 2px rgba(0, 210, 255, 0.2);
+        }
+        
+        .add-asset-btn {
+            background: rgba(0, 210, 255, 0.05);
+            border: 1px solid rgba(0, 210, 255, 0.2) !important;
+            color: var(--accent-blue) !important;
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .add-asset-btn:hover {
+            background: var(--accent-blue);
+            color: var(--bg-color) !important;
+            border-color: var(--accent-blue) !important;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .remove-btn {
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+        .remove-btn:hover {
+            color: #ff4444;
+            transform: scale(1.2);
+        }
+        
+        .btn-edit-strategy {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #F59E0B;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .btn-edit-strategy:hover {
+            background: #F59E0B;
+            color: #1a1f2e;
+            border-color: #F59E0B;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+            transform: translateY(-1px);
         }
         .weight-input-suffix {
             position: absolute;
@@ -255,8 +321,8 @@
             </h2>
             <div id="asset-list"></div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-                <button class="add-asset-btn" onclick="addAssetRow('stock')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Stock</button>
-                <button class="add-asset-btn" onclick="addAssetRow('mf')" style="background: rgba(0,210,255,0.1); border: 1px dashed #00D2FF; color: #00D2FF; padding: 10px; border-radius: 8px;">+ Fund</button>
+                <button class="add-asset-btn" onclick="addAssetRow('stock')">+ Stock</button>
+                <button class="add-asset-btn" onclick="addAssetRow('mf')">+ Fund</button>
             </div>
             <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; font-weight: 800;">
                 <span>Total Weight:</span>
@@ -329,7 +395,7 @@
             <div class="chart-wrapper glass">
                 <h2 style="display: flex; justify-content: space-between;">
                     Portfolio NAV (Indexed to 100)
-                    <button class="btn btn-secondary" onclick="openModal()" style="font-size: 0.6rem; padding: 4px 10px; background: rgba(245, 158, 11, 0.2); color: #F59E0B; border: 1px solid #F59E0B;">Edit Model Strategy</button>
+                    <button class="btn-edit-strategy" onclick="openModal()">Edit Model Strategy</button>
                 </h2>
                 <canvas id="navChart"></canvas>
             </div>
