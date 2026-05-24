@@ -391,10 +391,28 @@
         <p class="subtitle fade-in" id="analysis-period">Loading analysis data...</p>
 
         <div class="metrics-grid fade-in-delay">
-            <div class="metric-card glass"><div class="metric-value" id="val-xirr">--%</div><div class="metric-label">Annualized IRR (XIRR)</div></div>
+            <div class="metric-card glass">
+                <div class="metric-value" id="val-xirr">--%</div>
+                <div class="metric-label tooltip-container">
+                    Annualized IRR (XIRR) <span class="info-icon">i</span>
+                    <span class="tooltip-text">Extended Internal Rate of Return (XIRR) calculates the annualized rate of return for a series of cash flows occurring at irregular intervals, factoring in the precise timing of all buys and sells.</span>
+                </div>
+            </div>
             <div class="metric-card glass"><div class="metric-value" id="val-total">₹0</div><div class="metric-label">Current Net Value</div></div>
-            <div class="metric-card glass"><div class="metric-value" id="val-vol">--%</div><div class="metric-label">Annual Volatility</div></div>
-            <div class="metric-card glass"><div class="metric-value" id="val-daily-vol">--%</div><div class="metric-label">Daily Std Dev</div></div>
+            <div class="metric-card glass">
+                <div class="metric-value" id="val-vol">--%</div>
+                <div class="metric-label tooltip-container">
+                    Annual Volatility <span class="info-icon">i</span>
+                    <span class="tooltip-text">Annualized Volatility measures the dispersion of daily returns scaled over a 252-day trading year, representing the historical price fluctuations and risk of the portfolio.</span>
+                </div>
+            </div>
+            <div class="metric-card glass">
+                <div class="metric-value" id="val-daily-vol">--%</div>
+                <div class="metric-label tooltip-container">
+                    Daily Std Dev <span class="info-icon">i</span>
+                    <span class="tooltip-text">Daily Standard Deviation measures the average deviation of daily portfolio returns from their mean. It shows the day-to-day risk and price variability.</span>
+                </div>
+            </div>
         </div>
 
         <div class="charts-section fade-in-delay-2">
@@ -650,9 +668,39 @@
             
             const compBody = document.getElementById('comparison-body');
             compBody.innerHTML = `
-                <tr><td style="color: var(--text-secondary)">Period NAV Growth</td><td style="color: var(--accent-blue); font-weight: 700;">${portGrowth.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelGrowth.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triGrowth.toFixed(2)}%</td></tr>
-                <tr><td style="color: var(--text-secondary)">Annualized Std Dev (Volatility)</td><td style="color: var(--accent-blue); font-weight: 700;">${portVol.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelVol.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triVol.toFixed(2)}%</td></tr>
-                <tr><td style="color: var(--text-secondary)">Max Drawdown</td><td style="color: var(--accent-blue); font-weight: 700;">${portMDD.toFixed(2)}%</td><td style="color: #F59E0B; font-weight: 600;">${modelMDD.toFixed(2)}%</td><td style="color: #00D2FF; font-weight: 600;">${triMDD.toFixed(2)}%</td></tr>
+                <tr>
+                    <td style="color: var(--text-secondary)">
+                        <div class="tooltip-container">
+                            Period NAV Growth <span class="info-icon">i</span>
+                            <span class="tooltip-text">Period Net Asset Value (NAV) Growth represents the cumulative percentage increase in the portfolio's indexed unit value (starting at 100) over the entire analysis timeline.</span>
+                        </div>
+                    </td>
+                    <td style="color: var(--accent-blue); font-weight: 700;">${portGrowth.toFixed(2)}%</td>
+                    <td style="color: #F59E0B; font-weight: 600;">${modelGrowth.toFixed(2)}%</td>
+                    <td style="color: #00D2FF; font-weight: 600;">${triGrowth.toFixed(2)}%</td>
+                </tr>
+                <tr>
+                    <td style="color: var(--text-secondary)">
+                        <div class="tooltip-container">
+                            Annualized Std Dev (Volatility) <span class="info-icon">i</span>
+                            <span class="tooltip-text">Annualized Volatility measures the dispersion of daily returns scaled over a 252-day trading year, representing the historical price fluctuations and risk of the portfolio.</span>
+                        </div>
+                    </td>
+                    <td style="color: var(--accent-blue); font-weight: 700;">${portVol.toFixed(2)}%</td>
+                    <td style="color: #F59E0B; font-weight: 600;">${modelVol.toFixed(2)}%</td>
+                    <td style="color: #00D2FF; font-weight: 600;">${triVol.toFixed(2)}%</td>
+                </tr>
+                <tr>
+                    <td style="color: var(--text-secondary)">
+                        <div class="tooltip-container">
+                            Max Drawdown <span class="info-icon">i</span>
+                            <span class="tooltip-text">Maximum Drawdown measures the largest peak-to-trough percentage drop in the portfolio value before a new peak is achieved, representing historical downside risk.</span>
+                        </div>
+                    </td>
+                    <td style="color: var(--accent-blue); font-weight: 700;">${portMDD.toFixed(2)}%</td>
+                    <td style="color: #F59E0B; font-weight: 600;">${modelMDD.toFixed(2)}%</td>
+                    <td style="color: #00D2FF; font-weight: 600;">${triMDD.toFixed(2)}%</td>
+                </tr>
             `;
         }
 

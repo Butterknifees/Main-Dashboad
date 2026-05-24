@@ -527,3 +527,68 @@ footer {
         font-size: 1rem;
     }
 }
+
+/* --- Premium Tooltips --- */
+.tooltip-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: help;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.tooltip-container:hover .info-icon {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    background: rgba(0, 210, 255, 0.1);
+    box-shadow: 0 0 5px rgba(0, 210, 255, 0.3);
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 240px;
+    background: rgba(11, 15, 25, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #F1F5F9;
+    text-align: left;
+    border-radius: 12px;
+    padding: 0.8rem;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: normal;
+    pointer-events: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
