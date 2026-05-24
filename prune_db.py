@@ -8,6 +8,18 @@ def prune_database():
         print(f"Error: {DB_FILE} not found.")
         return
         
+    # Create an automatic backup of the original database before pruning for safety
+    backup_file = DB_FILE.replace(".db", "_backup.db")
+    print(f"Creating a backup of the original database at {backup_file}...")
+    import shutil
+    try:
+        shutil.copy2(DB_FILE, backup_file)
+        print("Backup created successfully.")
+    except Exception as e:
+        print(f"Error creating database backup: {e}")
+        print("Aborting pruning run for safety.")
+        return
+        
     initial_size = os.path.getsize(DB_FILE) / (1024 * 1024)
     print(f"Initial Database Size: {initial_size:.2f} MB")
     
