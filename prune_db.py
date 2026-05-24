@@ -1,25 +1,68 @@
 import os
 import sqlite3
+import pandas as pd
 
 DB_FILE = "Gemini/personal finance accounting/nav_data.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data.db"
+BACKUP_FILE = "Gemini/personal finance accounting/nav_data_backup.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data_backup.db"
+BASE_PATH = "Gemini/personal finance accounting/data/" if os.path.exists("Gemini/personal finance accounting") else "data/"
+
+def restore_backup():
+    if os.path.exists(BACKUP_FILE):
+        print(f"Restoring backup from {BACKUP_FILE} to {DB_FILE}...")
+        import shutil
+        shutil.copy2(BACKUP_FILE, DB_FILE)
+        print("Backup restored successfully.")
+        return True
+    return False
+
+def get_user_transaction_schemes(cursor):
+    user_items = set()
+    
+    # 1. CSV Tradebook
+    tradebook = os.path.join(BASE_PATH, 'tradebook-IZP332-MF (1).csv')
+    if os.path.exists(tradebook):
+        try:
+            df = pd.read_csv(tradebook)
+            if 'isin' in df.columns:
+                for val in df['isin'].dropna().unique():
+                    user_items.add(str(val).strip())
+        except Exception as e:
+            print(f"Error reading tradebook: {e}")
+            
+    # 2. MF Excel
+    mf_file = os.path.join(BASE_PATH, 'Mutual_Funds_Order_History_01-04-2025_19-05-2026.xlsx')
+    if os.path.exists(mf_file):
+        try:
+            df = pd.read_excel(mf_file, header=11).dropna(how='all')
+            if 'Scheme Name' in df.columns:
+                for val in df['Scheme Name'].dropna().unique():
+                    user_items.add(str(val).strip())
+        except Exception as e:
+            print(f"Error reading MF Excel: {e}")
+            
+    # Resolve ISINs/names to scheme codes using SQLite schemes table
+    resolved_codes = set()
+    print(f"Found {len(user_items)} unique scheme identifiers/names in transaction history.")
+    for item in user_items:
+        cursor.execute("""
+            SELECT scheme_code FROM schemes 
+            WHERE scheme_name = ? OR isin_growth = ? OR isin_div = ? OR scheme_code = ?
+        """, (item, item, item, item))
+        rows = cursor.fetchall()
+        for r in rows:
+            resolved_codes.add(r[0])
+            
+    print(f"Resolved {len(resolved_codes)} scheme codes from transaction history.")
+    return resolved_codes
 
 def prune_database():
-    if not os.path.exists(DB_FILE):
-        print(f"Error: {DB_FILE} not found.")
-        return
-        
-    # Create an automatic backup of the original database before pruning for safety
-    backup_file = DB_FILE.replace(".db", "_backup.db")
-    print(f"Creating a backup of the original database at {backup_file}...")
-    import shutil
-    try:
-        shutil.copy2(DB_FILE, backup_file)
-        print("Backup created successfully.")
-    except Exception as e:
-        print(f"Error creating database backup: {e}")
-        print("Aborting pruning run for safety.")
-        return
-        
+    # Restore backup first so we start from a clean full database
+    if not restore_backup():
+        if not os.path.exists(DB_FILE):
+            print(f"Error: {DB_FILE} not found and no backup available to restore.")
+            return
+        print("No backup database found. Pruning current database.")
+    
     initial_size = os.path.getsize(DB_FILE) / (1024 * 1024)
     print(f"Initial Database Size: {initial_size:.2f} MB")
     
@@ -34,70 +77,66 @@ def prune_database():
     
     print(f"Before Pruning: {total_schemes_before} schemes, {total_history_before} NAV history records.")
 
-    # We want to identify the blacklisted schemes.
-    # Blacklist criteria:
-    # 1. Any scheme name containing "Regular" (case-insensitive)
-    # 2. Any scheme name NOT containing "Direct" or "Dir" (unless it's some special direct fund, but standard direct funds always have Direct/Dir)
-    # 3. Any scheme name containing "IDCW", "Dividend", "Payout", or "Reinvestment" (case-insensitive)
+    # Get user schemes that we MUST keep
+    user_codes = get_user_transaction_schemes(cursor)
     
-    print("Identifying schemes to delete...")
-    
-    # Fetch all scheme codes and names to filter in Python for safety, or run directly in SQL.
-    # SQL query to identify schemes to keep (Direct Growth plans):
-    # - Must contain "Direct" or "Dir"
-    # - Must NOT contain "Regular"
-    # - Must NOT contain "IDCW", "Dividend", "Payout", "Reinvestment"
-    # - For extra safety, we'll keep Growth funds or other funds that don't match the IDCW/Regular patterns.
-    
-    # We will delete schemes that match any of the following:
-    # - scheme_name LIKE '%Regular%'
-    # - (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%') -- deletes regular plans that don't have the word Regular but are not Direct
-    # - scheme_name LIKE '%IDCW%'
-    # - scheme_name LIKE '%Dividend%'
-    # - scheme_name LIKE '%Payout%'
-    # - scheme_name LIKE '%Reinvestment%'
-    
-    # Let's run a test select first to see how many we are deleting
-    cursor.execute("""
-        SELECT COUNT(*) FROM schemes 
-        WHERE scheme_name LIKE '%Regular%'
-           OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
-           OR scheme_name LIKE '%IDCW%'
-           OR scheme_name LIKE '%Dividend%'
-           OR scheme_name LIKE '%Payout%'
-           OR scheme_name LIKE '%Reinvestment%'
-    """)
-    to_delete_count = cursor.fetchone()[0]
-    print(f"Identified {to_delete_count} schemes to delete (out of {total_schemes_before} total).")
+    # Create placeholders for SQL query exclusion
+    placeholders = ",".join(["?"] * len(user_codes))
+    user_codes_list = list(user_codes)
 
-    # Delete from nav_history first (foreign key constraints)
+    # Count schemes that match blacklist but are NOT in user transaction codes
+    query_count = f"""
+        SELECT COUNT(*) FROM schemes 
+        WHERE (
+            scheme_name LIKE '%Regular%'
+            OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+            OR scheme_name LIKE '%IDCW%'
+            OR scheme_name LIKE '%Dividend%'
+            OR scheme_name LIKE '%Payout%'
+            OR scheme_name LIKE '%Reinvestment%'
+        )
+        AND scheme_code NOT IN ({placeholders})
+    """
+    cursor.execute(query_count, user_codes_list)
+    to_delete_count = cursor.fetchone()[0]
+    print(f"Identified {to_delete_count} schemes to delete (excluding user's transaction schemes).")
+
+    # Delete from nav_history first
     print("Deleting NAV history of blacklisted schemes...")
-    cursor.execute("""
+    query_del_history = f"""
         DELETE FROM nav_history 
         WHERE scheme_code IN (
             SELECT scheme_code FROM schemes 
-            WHERE scheme_name LIKE '%Regular%'
-               OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
-               OR scheme_name LIKE '%IDCW%'
-               OR scheme_name LIKE '%Dividend%'
-               OR scheme_name LIKE '%Payout%'
-               OR scheme_name LIKE '%Reinvestment%'
+            WHERE (
+                scheme_name LIKE '%Regular%'
+                OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+                OR scheme_name LIKE '%IDCW%'
+                OR scheme_name LIKE '%Dividend%'
+                OR scheme_name LIKE '%Payout%'
+                OR scheme_name LIKE '%Reinvestment%'
+            )
+            AND scheme_code NOT IN ({placeholders})
         )
-    """)
+    """
+    cursor.execute(query_del_history, user_codes_list)
     history_deleted = cursor.rowcount
     print(f"Deleted {history_deleted} history rows.")
 
     # Delete from schemes
     print("Deleting blacklisted scheme metadata...")
-    cursor.execute("""
+    query_del_schemes = f"""
         DELETE FROM schemes 
-        WHERE scheme_name LIKE '%Regular%'
-           OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
-           OR scheme_name LIKE '%IDCW%'
-           OR scheme_name LIKE '%Dividend%'
-           OR scheme_name LIKE '%Payout%'
-           OR scheme_name LIKE '%Reinvestment%'
-    """)
+        WHERE (
+            scheme_name LIKE '%Regular%'
+            OR (scheme_name NOT LIKE '%Direct%' AND scheme_name NOT LIKE '%Dir%')
+            OR scheme_name LIKE '%IDCW%'
+            OR scheme_name LIKE '%Dividend%'
+            OR scheme_name LIKE '%Payout%'
+            OR scheme_name LIKE '%Reinvestment%'
+        )
+        AND scheme_code NOT IN ({placeholders})
+    """
+    cursor.execute(query_del_schemes, user_codes_list)
     schemes_deleted = cursor.rowcount
     print(f"Deleted {schemes_deleted} scheme rows.")
 
