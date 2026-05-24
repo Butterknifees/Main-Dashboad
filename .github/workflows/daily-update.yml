@@ -93,15 +93,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Sync output files to the deploy folder
-          cp dashboard_data.json deploy/ 2>/dev/null || true
-          cp simulator_data.json deploy/ 2>/dev/null || true
-          cp benchmark_tri_history.csv deploy/ 2>/dev/null || true
-          
           # Add public-facing dashboard outputs and benchmarks
-          git add dashboard_data.json deploy/dashboard_data.json
-          git add simulator_data.json deploy/simulator_data.json
-          git add benchmark_tri_history.csv deploy/benchmark_tri_history.csv
+          git add dashboard_data.json
+          git add simulator_data.json
+          git add benchmark_tri_history.csv
           
           # Check if there are changes to commit
           if git diff --cached --quiet; then

@@ -88,11 +88,7 @@ def sync_tri_benchmarks():
     combined_df.to_csv(output_file)
     print(f"\nSuccessfully saved TRI history to {output_file}")
     
-    deploy_output = os.path.join(base_path, "deploy", "benchmark_tri_history.csv")
-    if os.path.exists(os.path.dirname(deploy_output)):
-        combined_df.to_csv(deploy_output)
-        print(f"Also saved TRI history to {deploy_output}")
-        
+
     print(f"Indices saved: {', '.join(all_benchmark_data.keys())}")
 
 if __name__ == "__main__":

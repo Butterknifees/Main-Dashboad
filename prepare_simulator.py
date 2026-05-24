@@ -111,12 +111,7 @@ def prepare_simulator_data():
     with open(output_file, 'w') as f:
         json.dump(result, f)
         
-    deploy_output = os.path.join(base_path, "deploy", "simulator_data.json")
-    if os.path.exists(os.path.dirname(deploy_output)):
-        with open(deploy_output, 'w') as f:
-            json.dump(result, f)
-        print(f"Also saved optimized data to {deploy_output}")
-        
+
     print(f"Total Assets (Stocks + MFs): {len(assets)}")
     print(f"Date Points: {len(dates_str)}")
 
