@@ -556,14 +556,26 @@
         </div>
 
         <div class="charts-section fade-in-delay-2">
-            <div class="chart-wrapper glass"><h2>Portfolio Value Growth</h2><canvas id="valueChart"></canvas></div>
-            <div class="chart-wrapper glass"><h2>Historical Category Concentration (%)</h2><canvas id="concentrationChart"></canvas></div>
+            <div class="chart-wrapper glass">
+                <h2>Portfolio Value Growth</h2>
+                <div style="flex: 1; min-height: 0; width: 100%; position: relative;">
+                    <canvas id="valueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-wrapper glass">
+                <h2>Historical Category Concentration (%)</h2>
+                <div style="flex: 1; min-height: 0; width: 100%; position: relative;">
+                    <canvas id="concentrationChart"></canvas>
+                </div>
+            </div>
             <div class="chart-wrapper glass">
                 <h2 style="display: flex; justify-content: space-between;">
                     Portfolio NAV (Indexed to 100)
                     <button class="btn-edit-strategy" onclick="openModal()">Edit Model Strategy</button>
                 </h2>
-                <canvas id="navChart"></canvas>
+                <div style="flex: 1; min-height: 0; width: 100%; position: relative;">
+                    <canvas id="navChart"></canvas>
+                </div>
             </div>
             <div class="chart-wrapper glass" style="height: auto;">
                 <h2>Deep Comparison: My Portfolio vs Model</h2>
