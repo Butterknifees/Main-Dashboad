@@ -298,6 +298,85 @@
             border-color: var(--accent-blue);
             box-shadow: 0 20px 40px rgba(0, 210, 255, 0.05);
         }
+
+        /* Mobile-friendly responsiveness for simulator.html */
+        @media (max-width: 768px) {
+            .simulator-layout {
+                padding: 1rem 3% !important;
+                gap: 1.5rem !important;
+            }
+            h1 {
+                font-size: 2rem !important;
+                text-align: center !important;
+                margin-top: 1rem !important;
+            }
+            .subtitle {
+                font-size: 0.9rem !important;
+                text-align: center !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .builder-panel {
+                padding: 1.2rem !important;
+                border-radius: 16px !important;
+            }
+            .builder-panel h2 {
+                font-size: 1.2rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .metrics-summary {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.8rem !important;
+            }
+            .metric-mini-card {
+                padding: 1rem !important;
+                border-radius: 12px !important;
+            }
+            .m-value {
+                font-size: 1.3rem !important;
+            }
+            .m-label {
+                font-size: 0.65rem !important;
+                letter-spacing: 0.5px !important;
+            }
+            .chart-container {
+                padding: 1.2rem !important;
+                border-radius: 16px !important;
+                height: 320px !important;
+            }
+            .chart-container h2 {
+                font-size: 1rem !important;
+                margin-bottom: 0.8rem !important;
+            }
+            .asset-row {
+                padding: 0.8rem !important;
+                border-radius: 12px !important;
+                margin-bottom: 0.8rem !important;
+                gap: 0.5rem !important;
+            }
+            nav {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 0.8rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .metrics-summary {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.6rem !important;
+            }
+            .metric-mini-card {
+                padding: 0.8rem !important;
+            }
+            .m-value {
+                font-size: 1.15rem !important;
+            }
+            .m-label {
+                font-size: 0.6rem !important;
+            }
+            .chart-container {
+                height: 280px !important;
+            }
+        }
     </style>
 </head>
 <body>
