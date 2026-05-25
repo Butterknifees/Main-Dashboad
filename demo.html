@@ -457,6 +457,115 @@
                 height: 260px !important;
             }
         }
+
+        /* --- Premium Searchable Dropdowns --- */
+        .search-select-container {
+            position: relative !important;
+            width: 100% !important;
+        }
+
+        .search-select-wrapper {
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            width: 100% !important;
+        }
+
+        .search-select-input {
+            width: 100% !important;
+            background: rgba(0, 0, 0, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #FFFFFF !important;
+            padding: 0.7rem 2rem 0.7rem 0.8rem !important;
+            border-radius: 10px !important;
+            outline: none !important;
+            font-size: 0.85rem !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            box-shadow: none !important;
+        }
+
+        .search-select-input:focus {
+            border-color: var(--accent-blue) !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2) !important;
+        }
+
+        .search-select-arrow {
+            position: absolute !important;
+            right: 0.8rem !important;
+            font-size: 0.6rem !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            pointer-events: none !important;
+            transition: transform 0.3s ease !important;
+            background: transparent !important;
+        }
+
+        .search-select-container.open .search-select-arrow {
+            transform: rotate(180deg) !important;
+            color: var(--accent-blue) !important;
+        }
+
+        .search-select-dropdown {
+            display: none !important;
+            position: absolute !important;
+            top: 105% !important;
+            left: 0 !important;
+            width: 100% !important;
+            max-height: 220px !important;
+            overflow-y: auto !important;
+            background: rgba(11, 15, 25, 0.98) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 12px !important;
+            z-index: 1000 !important;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+        }
+
+        .search-select-container.open .search-select-dropdown {
+            display: block !important;
+            animation: dropdownFadeIn 0.2s ease-out !important;
+        }
+
+        .search-select-option {
+            padding: 0.6rem 0.8rem !important;
+            cursor: pointer !important;
+            font-size: 0.8rem !important;
+            color: #94A3B8 !important;
+            transition: all 0.2s ease !important;
+            text-align: left !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02) !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            background: transparent !important;
+        }
+
+        .search-select-option:last-child {
+            border-bottom: none !important;
+        }
+
+        .search-select-option:hover,
+        .search-select-option.selected {
+            background: rgba(0, 210, 255, 0.1) !important;
+            color: #FFFFFF !important;
+        }
+
+        .search-select-option.selected {
+            border-left: 2px solid var(--accent-blue) !important;
+            padding-left: 0.7rem !important;
+        }
+
+        .search-select-no-results {
+            padding: 0.8rem !important;
+            font-size: 0.8rem !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            text-align: center !important;
+        }
     </style>
 </head>
 <body>
@@ -593,10 +702,68 @@
     <footer><p>&copy; 2026 Hisaab by Play Theory. Real-time quantitative engine.</p></footer>
 
     <script>
+        const STOCK_NAMES = {
+            "ADANIENT.NS": "Adani Enterprises",
+            "ADANIPORTS.NS": "Adani Ports & SEZ",
+            "APOLLOHOSP.NS": "Apollo Hospitals",
+            "ASIANPAINT.NS": "Asian Paints",
+            "AXISBANK.NS": "Axis Bank",
+            "BAJAJ-AUTO.NS": "Bajaj Auto",
+            "BAJFINANCE.NS": "Bajaj Finance",
+            "BAJAJFINSV.NS": "Bajaj Finserv",
+            "BPCL.NS": "Bharat Petroleum",
+            "BHARTIARTL.NS": "Bharti Airtel",
+            "BRITANNIA.NS": "Britannia Industries",
+            "CIPLA.NS": "Cipla",
+            "COALINDIA.NS": "Coal India",
+            "DIVISLAB.NS": "Divi's Laboratories",
+            "DRREDDY.NS": "Dr. Reddy's Labs",
+            "EICHERMOT.NS": "Eicher Motors",
+            "GRASIM.NS": "Grasim Industries",
+            "HCLTECH.NS": "HCL Technologies",
+            "HDFCBANK.NS": "HDFC Bank",
+            "HDFCLIFE.NS": "HDFC Life Insurance",
+            "HEROMOTOCO.NS": "Hero MotoCorp",
+            "HINDALCO.NS": "Hindalco Industries",
+            "HINDUNILVR.NS": "Hindustan Unilever",
+            "ICICIBANK.NS": "ICICI Bank",
+            "ITC.NS": "ITC",
+            "INDUSINDBK.NS": "IndusInd Bank",
+            "INFY.NS": "Infosys",
+            "JSWSTEEL.NS": "JSW Steel",
+            "KOTAKBANK.NS": "Kotak Mahindra Bank",
+            "LTIM.NS": "LTIMindtree",
+            "LT.NS": "Larsen & Toubro",
+            "M&M.NS": "Mahindra & Mahindra",
+            "MARUTI.NS": "Maruti Suzuki",
+            "NTPC.NS": "NTPC",
+            "NESTLEIND.NS": "Nestle India",
+            "ONGC.NS": "ONGC",
+            "POWERGRID.NS": "Power Grid Corp",
+            "RELIANCE.NS": "Reliance Industries",
+            "SBILIFE.NS": "SBI Life Insurance",
+            "SBIN.NS": "State Bank of India",
+            "SUNPHARMA.NS": "Sun Pharmaceuticals",
+            "TCS.NS": "Tata Consultancy Services",
+            "TATACONSUM.NS": "Tata Consumer Products",
+            "TATAMOTORS.NS": "Tata Motors",
+            "TATASTEEL.NS": "Tata Steel",
+            "TECHM.NS": "Tech Mahindra",
+            "TITAN.NS": "Titan Company",
+            "ULTRACEMCO.NS": "UltraTech Cement",
+            "UPL.NS": "UPL",
+            "WIPRO.NS": "Wipro",
+            "NIFTYBEES.NS": "Nippon India Nifty 50 ETF",
+            "MIDCAPIETF.NS": "Mirae Asset Nifty Midcap 150 ETF",
+            "HDFCGOLD.NS": "HDFC Gold ETF",
+            "SILVERIETF.NS": "ICICI Prudential Silver ETF"
+        };
+
         function createSearchableSelect(container, rawOptions, initialValue, onChange) {
             const parsedOptions = rawOptions.map(opt => {
                 if (typeof opt === 'string' || typeof opt === 'number') {
-                    return { value: String(opt), label: String(opt) };
+                    const name = STOCK_NAMES[opt] || String(opt).replace('.NS', '');
+                    return { value: String(opt), label: name };
                 } else if (opt && typeof opt === 'object') {
                     const val = opt.value !== undefined ? opt.value : opt.code;
                     const lbl = opt.label !== undefined ? opt.label : opt.name;
@@ -610,6 +777,7 @@
 
             const currentOption = parsedOptions.find(o => o.value === selectedValue);
             const initialLabel = currentOption ? currentOption.label : '';
+            container.dataset.activeLabel = initialLabel;
 
             container.innerHTML = `
                 <div class="search-select-wrapper">
@@ -653,8 +821,10 @@
             function selectOption(opt) {
                 selectedValue = opt.value;
                 container.dataset.value = selectedValue;
+                container.dataset.activeLabel = opt.label;
                 input.value = opt.label;
                 closeDropdown();
+                input.blur();
                 if (onChange) {
                     onChange(selectedValue);
                 }
@@ -668,25 +838,53 @@
                     return;
                 }
 
-                const prefixMatches = [];
-                const substringMatches = [];
+                const terms = query.split(/\s+/).filter(t => t);
+                const matches = [];
 
                 parsedOptions.forEach(opt => {
                     const labelLower = opt.label.toLowerCase();
                     const valLower = opt.value.toLowerCase();
-                    if (labelLower.startsWith(query) || valLower.startsWith(query)) {
-                        prefixMatches.push(opt);
-                    } else if (labelLower.includes(query) || valLower.includes(query)) {
-                        substringMatches.push(opt);
+                    
+                    const isMatch = terms.every(term => labelLower.includes(term) || valLower.includes(term));
+                    if (isMatch) {
+                        let score = 0;
+                        if (labelLower === query || valLower === query) {
+                            score = 100;
+                        } else if (labelLower.startsWith(query) || valLower.startsWith(query)) {
+                            score = 80;
+                        } else {
+                            let termScore = 0;
+                            terms.forEach(term => {
+                                const idxL = labelLower.indexOf(term);
+                                const idxV = valLower.indexOf(term);
+                                const minIdx = Math.min(
+                                    idxL !== -1 ? idxL : 999,
+                                    idxV !== -1 ? idxV : 999
+                                );
+                                termScore += (100 - minIdx);
+                            });
+                            score = Math.max(1, Math.min(79, termScore / terms.length));
+                        }
+                        matches.push({ opt, score });
                     }
                 });
 
-                renderOptions([...prefixMatches, ...substringMatches]);
+                matches.sort((a, b) => {
+                    if (b.score !== a.score) return b.score - a.score;
+                    return a.opt.label.localeCompare(b.opt.label);
+                });
+
+                renderOptions(matches.map(m => m.opt));
             }
 
             function openDropdown() {
                 document.querySelectorAll('.search-select-container').forEach(c => {
-                    if (c !== container) c.classList.remove('open');
+                    if (c !== container) {
+                        c.classList.remove('open');
+                        const activeLabel = c.dataset.activeLabel || '';
+                        const otherInput = c.querySelector('.search-select-input');
+                        if (otherInput) otherInput.value = activeLabel;
+                    }
                 });
                 container.classList.add('open');
                 filterAndRender();
@@ -694,6 +892,11 @@
 
             function closeDropdown() {
                 container.classList.remove('open');
+            }
+
+            function revertInput() {
+                const active = parsedOptions.find(o => o.value === selectedValue);
+                input.value = active ? active.label : '';
             }
 
             input.addEventListener('click', () => {
@@ -717,10 +920,8 @@
 
             input.addEventListener('blur', () => {
                 setTimeout(() => {
-                    closeDropdown();
-                    const active = parsedOptions.find(o => o.value === selectedValue);
-                    input.value = active ? active.label : '';
-                }, 150);
+                    revertInput();
+                }, 100);
             });
 
             const arrow = container.querySelector('.search-select-arrow');
@@ -736,8 +937,7 @@
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeDropdown();
-                    const active = parsedOptions.find(o => o.value === selectedValue);
-                    input.value = active ? active.label : '';
+                    revertInput();
                     input.blur();
                 } else if (e.key === 'Enter') {
                     e.preventDefault();
@@ -746,9 +946,25 @@
                         const val = firstOpt.dataset.value;
                         const opt = parsedOptions.find(o => o.value === val);
                         if (opt) selectOption(opt);
+                    } else {
+                        closeDropdown();
+                        revertInput();
+                        input.blur();
                     }
                 }
             });
+
+            const handleOutsideClick = (e) => {
+                if (!document.body.contains(container)) {
+                    document.removeEventListener('click', handleOutsideClick, true);
+                    return;
+                }
+                if (!container.contains(e.target)) {
+                    closeDropdown();
+                    revertInput();
+                }
+            };
+            document.addEventListener('click', handleOutsideClick, true);
         }
 
         let dashboardData = null;
