@@ -292,6 +292,8 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .chart-container:hover {
@@ -452,7 +454,7 @@
 
             <div class="chart-container glass" style="position: relative;">
                 <h2 style="margin-bottom: 1rem;">Backtest Performance (1 Year)</h2>
-                <div style="height: calc(100% - 40px); width: 100%;">
+                <div style="flex: 1; min-height: 0; width: 100%; position: relative;">
                     <canvas id="simChart"></canvas>
                 </div>
             </div>
@@ -694,13 +696,16 @@
                     scales: {
                         y: { 
                             grid: { color: 'rgba(255,255,255,0.05)' }, 
-                            ticks: { color: '#94A3B8' },
-                            title: { display: true, text: 'Index (Initial = 100)', color: '#94A3B8' }
+                            ticks: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } },
+                            title: { display: true, text: 'Index (Initial = 100)', color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } }
                         },
-                        x: { grid: { display: false }, ticks: { color: '#94A3B8', maxTicksLimit: 10 } }
+                        x: { 
+                            grid: { display: false }, 
+                            ticks: { color: '#94A3B8', maxTicksLimit: window.innerWidth < 768 ? 6 : 10, font: { size: window.innerWidth < 768 ? 9 : 11 } } 
+                        }
                     },
                     plugins: {
-                        legend: { labels: { color: '#FFFFFF', font: { family: 'Inter' } } }
+                        legend: { labels: { color: '#FFFFFF', font: { family: 'Inter', size: window.innerWidth < 768 ? 9 : 12 } } }
                     }
                 }
             });

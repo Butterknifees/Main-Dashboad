@@ -312,7 +312,9 @@
         .metric-value { font-size: 2rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.5rem; }
         .metric-label { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .charts-section { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
-        .chart-wrapper { padding: 2rem; border-radius: 24px; height: 400px; }
+        .chart-wrapper { padding: 2rem; border-radius: 24px; height: 400px; position: relative; display: flex; flex-direction: column; }
+        .chart-wrapper h2 { margin-bottom: 1.5rem; font-weight: 600; flex-shrink: 0; }
+        .chart-wrapper canvas { flex: 1; min-height: 0; width: 100% !important; }
         .assets-table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
         .assets-table th, .assets-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
         .assets-table th { color: var(--text-secondary); font-size: 0.8rem; text-transform: uppercase; }
@@ -358,6 +360,9 @@
                 padding: 1.2rem !important;
                 border-radius: 16px !important;
                 height: 300px !important;
+            }
+            .chart-wrapper[style*="height: auto"] {
+                height: auto !important;
             }
             .chart-wrapper h2 {
                 font-size: 0.95rem !important;
@@ -701,7 +706,22 @@
             document.getElementById('val-vol').textContent = `${data.metrics.annualized_volatility}%`;
             document.getElementById('val-daily-vol').textContent = `${data.metrics.daily_volatility}%`;
 
-            new Chart(document.getElementById('valueChart'), { type: 'line', data: { labels: data.history.dates, datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { color: '#94A3B8' } }, x: { ticks: { color: '#94A3B8', maxTicksLimit: 12 } } }, plugins: { legend: { display: false } } } });
+            new Chart(document.getElementById('valueChart'), { 
+                type: 'line', 
+                data: { 
+                    labels: data.history.dates, 
+                    datasets: [{ label: 'Value', data: data.history.total_value, borderColor: '#00D2FF', backgroundColor: 'rgba(0, 210, 255, 0.1)', fill: true, tension: 0.4, pointRadius: 0 }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { ticks: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } } }, 
+                        x: { ticks: { color: '#94A3B8', maxTicksLimit: window.innerWidth < 768 ? 6 : 12, font: { size: window.innerWidth < 768 ? 9 : 11 } } } 
+                    }, 
+                    plugins: { legend: { display: false } } 
+                } 
+            });
             
             // Initial Model Calculation
             calculateNiftyTriNav();
@@ -710,7 +730,22 @@
             updateComparisonTable();
 
             const catLabels = Array.from(new Set(data.history.allocation.flatMap(d => Object.keys(d))));
-            new Chart(document.getElementById('concentrationChart'), { type: 'line', data: { labels: data.history.dates, datasets: catLabels.map(cat => ({ label: cat, data: data.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + '88', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, tension: 0.3 })) }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true, max: 100, ticks: { color: '#94A3B8' } } }, plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8' } } } } });
+            new Chart(document.getElementById('concentrationChart'), { 
+                type: 'line', 
+                data: { 
+                    labels: data.history.dates, 
+                    datasets: catLabels.map(cat => ({ label: cat, data: data.history.allocation.map(d => d[cat] || 0), backgroundColor: (CATEGORY_COLORS[cat] || '#6366F1') + '88', borderColor: CATEGORY_COLORS[cat] || '#6366F1', fill: true, pointRadius: 0, tension: 0.3 })) 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { stacked: true, max: 100, ticks: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } } }, 
+                        x: { ticks: { color: '#94A3B8', maxTicksLimit: window.innerWidth < 768 ? 6 : 12, font: { size: window.innerWidth < 768 ? 9 : 11 } } } 
+                    }, 
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } } } } 
+                } 
+            });
 
             const tbody = document.getElementById('assets-body'); tbody.innerHTML = '';
             data.assets.sort((a, b) => b.value - a.value).forEach(asset => {
@@ -785,7 +820,17 @@
                         { label: 'Nifty 50 TRI', data: nifty50TriNav, borderColor: '#00D2FF', borderDash: [4, 4], pointRadius: 0 }
                     ] 
                 }, 
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, labels: { color: '#94A3B8' } } } } 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { ticks: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } } }, 
+                        x: { ticks: { color: '#94A3B8', maxTicksLimit: window.innerWidth < 768 ? 6 : 12, font: { size: window.innerWidth < 768 ? 9 : 11 } } } 
+                    },
+                    plugins: { 
+                        legend: { display: true, labels: { color: '#94A3B8', font: { size: window.innerWidth < 768 ? 9 : 11 } } } 
+                    } 
+                } 
             });
         }
 
