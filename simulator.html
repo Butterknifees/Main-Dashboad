@@ -27,14 +27,6 @@
             margin: 0 auto;
         }
 
-        @media (max-width: 1200px) {
-            .simulator-layout {
-                grid-template-columns: 1fr;
-            }
-            .builder-panel {
-                position: static;
-            }
-        }
 
         .builder-panel {
             padding: 2rem;
@@ -302,6 +294,18 @@
         }
 
         /* Mobile-friendly responsiveness for simulator.html */
+        @media (max-width: 1200px) {
+            .simulator-layout {
+                grid-template-columns: 1fr !important;
+            }
+            .builder-panel {
+                position: static !important;
+                max-height: none !important;
+                overflow-y: visible !important;
+                height: auto !important;
+            }
+        }
+
         @media (max-width: 768px) {
             .simulator-layout {
                 padding: 1rem 3% !important;
