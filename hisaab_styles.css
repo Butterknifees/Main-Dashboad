@@ -641,3 +641,125 @@ footer {
         padding: 0.5rem;
     }
 }
+
+/* --- Premium Searchable Dropdowns --- */
+.search-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-select-input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #FFFFFF;
+    padding: 0.7rem 2rem 0.7rem 0.8rem;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.search-select-input:focus {
+    border-color: var(--accent-blue);
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+.search-select-arrow {
+    position: absolute;
+    right: 0.8rem;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    transition: transform 0.3s ease;
+}
+
+.search-select-container.open .search-select-arrow {
+    transform: rotate(180deg);
+    color: var(--accent-blue);
+}
+
+.search-select-dropdown {
+    display: none;
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background: rgba(11, 15, 25, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    z-index: 1000;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.search-select-dropdown::-webkit-scrollbar {
+    width: 4px;
+}
+
+.search-select-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.search-select-container.open .search-select-dropdown {
+    display: block;
+    animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.search-select-option {
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #94A3B8;
+    transition: all 0.2s ease;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.search-select-option:last-child {
+    border-bottom: none;
+}
+
+.search-select-option:hover,
+.search-select-option.selected {
+    background: rgba(0, 210, 255, 0.08);
+    color: #FFFFFF;
+}
+
+.search-select-option.selected {
+    border-left: 2px solid var(--accent-blue);
+    padding-left: 0.7rem;
+}
+
+.search-select-no-results {
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+}

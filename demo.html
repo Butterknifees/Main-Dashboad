@@ -593,6 +593,164 @@
     <footer><p>&copy; 2026 Hisaab by Play Theory. Real-time quantitative engine.</p></footer>
 
     <script>
+        function createSearchableSelect(container, rawOptions, initialValue, onChange) {
+            const parsedOptions = rawOptions.map(opt => {
+                if (typeof opt === 'string' || typeof opt === 'number') {
+                    return { value: String(opt), label: String(opt) };
+                } else if (opt && typeof opt === 'object') {
+                    const val = opt.value !== undefined ? opt.value : opt.code;
+                    const lbl = opt.label !== undefined ? opt.label : opt.name;
+                    return { value: String(val), label: String(lbl) };
+                }
+                return { value: '', label: '' };
+            }).filter(opt => opt.value);
+
+            let selectedValue = String(initialValue || '');
+            container.dataset.value = selectedValue;
+
+            const currentOption = parsedOptions.find(o => o.value === selectedValue);
+            const initialLabel = currentOption ? currentOption.label : '';
+
+            container.innerHTML = `
+                <div class="search-select-wrapper">
+                    <input type="text" class="search-select-input" placeholder="Search..." value="${initialLabel}" autocomplete="off" spellcheck="false" />
+                    <span class="search-select-arrow">▼</span>
+                </div>
+                <div class="search-select-dropdown"></div>
+            `;
+
+            const input = container.querySelector('.search-select-input');
+            const dropdown = container.querySelector('.search-select-dropdown');
+
+            function renderOptions(filtered) {
+                dropdown.innerHTML = '';
+                if (filtered.length === 0) {
+                    const noRes = document.createElement('div');
+                    noRes.className = 'search-select-no-results';
+                    noRes.textContent = 'No matches found';
+                    dropdown.appendChild(noRes);
+                    return;
+                }
+
+                // Show top 5 matches
+                filtered.slice(0, 5).forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'search-select-option';
+                    if (opt.value === selectedValue) {
+                        div.classList.add('selected');
+                    }
+                    div.textContent = opt.label;
+                    div.dataset.value = opt.value;
+
+                    div.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        selectOption(opt);
+                    });
+                    dropdown.appendChild(div);
+                });
+            }
+
+            function selectOption(opt) {
+                selectedValue = opt.value;
+                container.dataset.value = selectedValue;
+                input.value = opt.label;
+                closeDropdown();
+                if (onChange) {
+                    onChange(selectedValue);
+                }
+            }
+
+            function filterAndRender() {
+                const query = input.value.trim().toLowerCase();
+                const activeOption = parsedOptions.find(o => o.value === selectedValue);
+                if (!query || (activeOption && query === activeOption.label.toLowerCase())) {
+                    renderOptions(parsedOptions);
+                    return;
+                }
+
+                const prefixMatches = [];
+                const substringMatches = [];
+
+                parsedOptions.forEach(opt => {
+                    const labelLower = opt.label.toLowerCase();
+                    const valLower = opt.value.toLowerCase();
+                    if (labelLower.startsWith(query) || valLower.startsWith(query)) {
+                        prefixMatches.push(opt);
+                    } else if (labelLower.includes(query) || valLower.includes(query)) {
+                        substringMatches.push(opt);
+                    }
+                });
+
+                renderOptions([...prefixMatches, ...substringMatches]);
+            }
+
+            function openDropdown() {
+                document.querySelectorAll('.search-select-container').forEach(c => {
+                    if (c !== container) c.classList.remove('open');
+                });
+                container.classList.add('open');
+                filterAndRender();
+            }
+
+            function closeDropdown() {
+                container.classList.remove('open');
+            }
+
+            input.addEventListener('click', () => {
+                if (!container.classList.contains('open')) {
+                    openDropdown();
+                    input.select();
+                }
+            });
+
+            input.addEventListener('focus', () => {
+                openDropdown();
+                input.select();
+            });
+
+            input.addEventListener('input', () => {
+                if (!container.classList.contains('open')) {
+                    openDropdown();
+                }
+                filterAndRender();
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => {
+                    closeDropdown();
+                    const active = parsedOptions.find(o => o.value === selectedValue);
+                    input.value = active ? active.label : '';
+                }, 150);
+            });
+
+            const arrow = container.querySelector('.search-select-arrow');
+            arrow.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (container.classList.contains('open')) {
+                    closeDropdown();
+                } else {
+                    input.focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeDropdown();
+                    const active = parsedOptions.find(o => o.value === selectedValue);
+                    input.value = active ? active.label : '';
+                    input.blur();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const firstOpt = dropdown.querySelector('.search-select-option');
+                    if (firstOpt) {
+                        const val = firstOpt.dataset.value;
+                        const opt = parsedOptions.find(o => o.value === val);
+                        if (opt) selectOption(opt);
+                    }
+                }
+            });
+        }
+
         let dashboardData = null;
         let simulatorData = null;
         let navChart = null;
@@ -936,22 +1094,14 @@
             row.dataset.type = type;
             
             if (type === 'mf') {
-                const categoryOptions = Object.keys(simulatorData.categories).map(cat => 
-                    `<option value="${cat}" ${cat === category ? 'selected' : ''}>${cat}</option>`
-                ).join('');
-                
                 row.innerHTML = `
                     <div class="asset-row-header">
                         <span class="asset-type-tag">Mutual Fund</span>
                         <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
                     </div>
-                    <select class="category-select" onchange="updateFundList(this)">
-                        ${categoryOptions}
-                    </select>
+                    <div class="category-select-container search-select-container"></div>
                     <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
-                        <select class="asset-select" style="flex: 1;">
-                            <!-- Populated by updateFundList -->
-                        </select>
+                        <div class="asset-select-container search-select-container" style="flex: 1;"></div>
                         <div class="weight-input-wrapper">
                             <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
                             <span class="weight-input-suffix">%</span>
@@ -959,20 +1109,32 @@
                     </div>
                 `;
                 container.appendChild(row);
-                updateFundList(row.querySelector('.category-select'), selectedId);
-            } else {
-                const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
-                const stockOptions = stockTickers.map(t => `<option value="${t}" ${t === selectedId ? 'selected' : ''}>${t}</option>`).join('');
                 
+                const catContainer = row.querySelector('.category-select-container');
+                const fundContainer = row.querySelector('.asset-select-container');
+                
+                const categories = Object.keys(simulatorData.categories);
+                const activeCategory = category || categories[0];
+                
+                // Initialize category select
+                createSearchableSelect(catContainer, categories, activeCategory, (newCat) => {
+                    const funds = simulatorData.categories[newCat] || [];
+                    const defaultFundId = funds.length > 0 ? funds[0].code : '';
+                    createSearchableSelect(fundContainer, funds, defaultFundId);
+                });
+                
+                // Initialize fund select initially
+                const initialFunds = simulatorData.categories[activeCategory] || [];
+                const initialFundId = selectedId || (initialFunds.length > 0 ? initialFunds[0].code : '');
+                createSearchableSelect(fundContainer, initialFunds, initialFundId);
+            } else {
                 row.innerHTML = `
                     <div class="asset-row-header">
                         <span class="asset-type-tag">Individual Stock</span>
                         <span class="remove-btn" onclick="this.parentElement.parentElement.remove(); updateTotalWeight();">×</span>
                     </div>
                     <div style="display: flex; gap: 0.8rem; align-items: center; margin-top: 0.5rem;">
-                        <select class="asset-select" style="flex: 1;">
-                            ${stockOptions}
-                        </select>
+                        <div class="asset-select-container search-select-container" style="flex: 1;"></div>
                         <div class="weight-input-wrapper">
                             <input type="number" class="weight-input" value="${weight}" min="0" max="100" onchange="updateTotalWeight();">
                             <span class="weight-input-suffix">%</span>
@@ -980,20 +1142,14 @@
                     </div>
                 `;
                 container.appendChild(row);
+                
+                const stockContainer = row.querySelector('.asset-select-container');
+                const stockTickers = Object.keys(simulatorData.assets).filter(t => t.endsWith('.NS')).sort();
+                const initialStockId = selectedId || stockTickers[0];
+                
+                createSearchableSelect(stockContainer, stockTickers, initialStockId);
             }
             updateTotalWeight();
-        }
-
-        function updateFundList(catSelect, selectedId = "") {
-            const category = catSelect.value;
-            const fundSelect = catSelect.parentElement.querySelector('.asset-select');
-            const funds = simulatorData.categories[category];
-            
-            if (funds) {
-                fundSelect.innerHTML = funds.map(f => 
-                    `<option value="${f.code}" ${String(f.code) === String(selectedId) ? 'selected' : ''}>${f.name}</option>`
-                ).join('');
-            }
         }
 
         function updateTotalWeight() {
@@ -1023,9 +1179,9 @@
             
             const newConfig = [];
             document.querySelectorAll('.asset-row').forEach(row => {
-                const select = row.querySelector('.asset-select');
-                if (!select) return;
-                const id = select.value;
+                const selectContainer = row.querySelector('.asset-select-container');
+                if (!selectContainer) return;
+                const id = selectContainer.dataset.value;
                 const weight = parseFloat(row.querySelector('.weight-input').value) || 0;
                 if (weight > 0) {
                     newConfig.push({ id, weight });
