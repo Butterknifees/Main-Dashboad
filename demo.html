@@ -380,6 +380,19 @@
             .assets-table th {
                 font-size: 0.65rem !important;
             }
+            /* Align table columns correctly for financial statements on mobile */
+            .assets-table th:first-child, .assets-table td:first-child {
+                white-space: normal !important;
+                min-width: 130px !important;
+                max-width: 180px !important;
+                word-break: break-word !important;
+            }
+            .assets-table th:nth-child(2), .assets-table td:nth-child(2),
+            .assets-table th:nth-child(3), .assets-table td:nth-child(3),
+            .assets-table th:nth-child(4), .assets-table td:nth-child(4) {
+                text-align: right !important;
+                white-space: nowrap !important;
+            }
             .modal-content {
                 padding: 1.2rem !important;
                 margin: 20px auto !important;
@@ -549,7 +562,9 @@
             </div>
             <div class="chart-wrapper glass" style="height: auto;">
                 <h2>Deep Comparison: My Portfolio vs Model</h2>
-                <table class="assets-table"><thead><tr><th>Metric</th><th>My Portfolio</th><th>Model Portfolio</th><th>Nifty 50 TRI</th></tr></thead><tbody id="comparison-body"></tbody></table>
+                <div style="overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch;">
+                    <table class="assets-table"><thead><tr><th>Metric</th><th>My Portfolio</th><th>Model Portfolio</th><th>Nifty 50 TRI</th></tr></thead><tbody id="comparison-body"></tbody></table>
+                </div>
             </div>
         </div>
 
