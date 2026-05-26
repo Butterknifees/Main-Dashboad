@@ -523,6 +523,66 @@ def main():
     with open('Gemini/personal finance accounting/dashboard_data.json', 'w') as f:
         json.dump(dashboard_data, f, indent=4)
     
+    # Update index.html statically with the latest numbers
+    index_path = "Gemini/personal finance accounting/index.html"
+    if not os.path.exists(index_path):
+        index_path = "index.html"
+    if os.path.exists(index_path):
+        try:
+            with open(index_path, 'r', encoding='utf-8') as f:
+                html = f.read()
+
+            def format_indian(number):
+                s = f"{number:.2f}"
+                parts = s.split('.')
+                integral = parts[0]
+                fractional = parts[1]
+                if len(integral) <= 3:
+                    return s
+                last_three = integral[-3:]
+                remaining = integral[:-3]
+                groups = []
+                while len(remaining) > 0:
+                    if len(remaining) >= 2:
+                        groups.insert(0, remaining[-2:])
+                        remaining = remaining[:-2]
+                    else:
+                        groups.insert(0, remaining)
+                        remaining = ""
+                return ",".join(groups) + "," + last_three + "." + fractional
+
+            import re
+            
+            # Calculate Sharpe
+            years = (pd.to_datetime(trimmed_dates[-1]) - pd.to_datetime(trimmed_dates[0])).days / 365.25
+            port_ann_growth = ((trimmed_nav[-1] / 100) ** (1 / years) - 1) * 100 if years > 0 else 0
+            port_vol = volatility * np.sqrt(252)
+            sharpe = (port_ann_growth - 5.5) / port_vol if port_vol > 0 else 0
+            
+            # Replacements
+            html = re.sub(r'<div class="card-value">[^<]+</div>', f'<div class="card-value">₹{format_indian(final_value)}</div>', html)
+            
+            sign = "+" if portfolio_xirr >= 0 else ""
+            html = re.sub(r'<div class="card-change">[^<]+<span', f'<div class="card-change">{sign}{portfolio_xirr*100:.2f}% <span', html)
+            
+            html = re.sub(
+                r'<div class="stat-pill"><span class="label">Volatility:</span> <span class="val">[^<]+</span></div>',
+                f'<div class="stat-pill"><span class="label">Volatility:</span> <span class="val">{volatility * np.sqrt(252):.2f}%</span></div>',
+                html
+            )
+            
+            html = re.sub(
+                r'<div class="stat-pill"><span class="label">Sharpe:</span> <span class="val">[^<]+</span></div>',
+                f'<div class="stat-pill"><span class="label">Sharpe:</span> <span class="val">{sharpe:.2f}</span></div>',
+                html
+            )
+            
+            with open(index_path, 'w', encoding='utf-8') as f:
+                f.write(html)
+            print(f"Statically updated metrics inside index.html successfully.")
+        except Exception as e:
+            print(f"Warning: Could not update index.html metrics: {e}")
+    
     print(f"Dashboard data successfully stabilized and exported to root.")
 
     print("\n" + "="*50)
