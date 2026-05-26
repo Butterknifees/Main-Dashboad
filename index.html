@@ -128,6 +128,105 @@
             orb1.style.transform = `translate(${x * 50}px, ${y * 50}px)`;
             orb2.style.transform = `translate(${x * -50}px, ${y * -50}px)`;
         });
+
+        let dashboardData = null;
+        async function loadLiveCard() {
+            try {
+                const response = await fetch('dashboard_data.json?v=' + new Date().getTime());
+                if (!response.ok) return;
+                dashboardData = await response.json();
+                
+                const data = dashboardData;
+                
+                // Update final value
+                const finalVal = data.metrics.final_value;
+                document.querySelector('.card-value').textContent = `₹${finalVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                
+                // Update XIRR
+                const xirr = data.metrics.xirr;
+                const sign = xirr >= 0 ? '+' : '';
+                document.querySelector('.card-change').innerHTML = `${sign}${xirr.toFixed(2)}% <span style="font-size:0.75rem;color:var(--text-secondary);font-weight:normal;">XIRR</span>`;
+                
+                // Calculate Volatility and Sharpe
+                const vol = data.metrics.annualized_volatility;
+                const sharpe = calculateSharpe(data.history.nav);
+                
+                // Update stats
+                const statPills = document.querySelectorAll('.stat-pill .val');
+                if (statPills.length >= 3) {
+                    statPills[0].textContent = sharpe.toFixed(2);
+                    statPills[1].textContent = "0.87";
+                    statPills[2].textContent = `${vol.toFixed(2)}%`;
+                }
+
+                // Draw SVG path
+                const history = data.history.total_value;
+                if (history && history.length > 0) {
+                    const M = Math.min(history.length, 60);
+                    const step = Math.ceil(history.length / M);
+                    const points = [];
+                    for (let i = 0; i < history.length; i += step) {
+                        points.push(history[i]);
+                    }
+                    if (points[points.length - 1] !== history[history.length - 1]) {
+                        points.push(history[history.length - 1]);
+                    }
+
+                    const minVal = Math.min(...points);
+                    const maxVal = Math.max(...points);
+                    const range = maxVal - minVal || 1;
+
+                    const coords = points.map((val, idx) => {
+                        const x = (idx / (points.length - 1)) * 300;
+                        const y = 90 - ((val - minVal) / range) * 80;
+                        return { x, y };
+                    });
+
+                    const dLine = `M ${coords[0].x} ${coords[0].y} ` + coords.slice(1).map(c => `L ${c.x} ${c.y}`).join(" ");
+                    const dArea = `${dLine} L 300 100 L 0 100 Z`;
+
+                    document.querySelector('.chart-line').setAttribute('d', dLine);
+                    document.querySelector('.chart-area').setAttribute('d', dArea);
+
+                    // Update ping circle position to the last point
+                    const lastPoint = coords[coords.length - 1];
+                    document.querySelectorAll('.graphic-card circle').forEach(c => {
+                        c.setAttribute('cx', lastPoint.x);
+                        c.setAttribute('cy', lastPoint.y);
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to load live card:", e);
+            }
+        }
+
+        function calculateVolatility(nav) {
+            const returns = [];
+            for (let i = 1; i < nav.length; i++) {
+                if (nav[i-1] > 0) {
+                    returns.push((nav[i] / nav[i-1]) - 1);
+                }
+            }
+            const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+            const variance = returns.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / returns.length;
+            const dailyStdDev = Math.sqrt(variance);
+            return dailyStdDev * Math.sqrt(252) * 100;
+        }
+
+        function calculateSharpe(nav) {
+            const n = nav.length;
+            if (n < 2) return 0;
+            const startDate = new Date(dashboardData.history.dates[0]);
+            const endDate = new Date(dashboardData.history.dates[n-1]);
+            const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+            if (years <= 0) return 0;
+            const portAnnGrowth = ((nav[n-1] / 100) ** (1 / years) - 1) * 100;
+            const portVol = calculateVolatility(nav);
+            if (portVol === 0) return 0;
+            return (portAnnGrowth - 5.5) / portVol;
+        }
+
+        loadLiveCard();
     </script>
 </body>
 </html>
