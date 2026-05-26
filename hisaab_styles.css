@@ -763,3 +763,16 @@ footer {
     color: rgba(255, 255, 255, 0.4);
     text-align: center;
 }
+
+/* Home navigation button */
+.btn-nav-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-nav-home:hover {
+    color: var(--accent-blue);
+}

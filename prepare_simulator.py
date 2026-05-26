@@ -6,7 +6,7 @@ import numpy as np
 import sqlite3
 
 def prepare_simulator_data():
-    base_path = "Gemini/personal finance accounting/"
+    base_path = "Gemini/personal finance accounting/" if os.path.exists("Gemini/personal finance accounting") else ""
     universe_file = base_path + "nifty_universe_historical_data.csv"
     etf_file = base_path + "etf_historical_data.csv"
     grouped_funds_file = base_path + "grouped_funds.json"

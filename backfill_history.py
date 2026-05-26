@@ -1,9 +1,10 @@
 import sqlite3
 import requests
 import time
+import os
 from datetime import datetime, timedelta
 
-DB_FILE = "Gemini/personal finance accounting/nav_data.db"
+DB_FILE = "Gemini/personal finance accounting/nav_data.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data.db"
 BASE_URL = "https://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx"
 
 def init_db():

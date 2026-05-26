@@ -633,7 +633,19 @@
     </div>
 
     <div class="glow-container"><div class="glow-orb" id="orb-1"></div><div class="glow-orb" id="orb-2"></div></div>
-    <header><nav><div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div><div class="powered-by">Live Portfolio Analytics <button class="btn btn-secondary btn-export" onclick="generatePDF()">Export Summary PDF</button></div></nav></header>
+    <header>
+        <nav>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by" style="display:flex;align-items:center;gap:1.5rem">
+                <span class="btn-nav-home" onclick="location.href='index.html'">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </span>
+                <span>Live Portfolio Analytics</span>
+                <button class="btn btn-secondary btn-export" onclick="generatePDF()">Export Summary PDF</button>
+            </div>
+        </nav>
+    </header>
 
     <main class="dashboard-container">
         <h1 class="fade-in">Portfolio <span class="highlight">Intelligence</span></h1>
@@ -976,8 +988,11 @@
         
         const CATEGORY_COLORS = {
             'Large Cap': '#00D2FF', 'Mid Cap': '#9D50BB', 'Small Cap': '#00C853',
-            'Thematic': '#F59E0B', 'Sectoral/Thematic': '#F59E0B', 'Hybrid/Arbitrage': '#EF4444', 
-            'Arbitrage': '#EF4444', 'Gold': '#F59E0B', 'Index/Other': '#6366F1', 'Other': '#94A3B8'
+            'Large & Mid Cap': '#0EA5E9', 'Flexi/Multi Cap': '#EC4899', 'Sectoral/Thematic': '#F59E0B',
+            'Thematic': '#F59E0B', 'Arbitrage': '#E11D48', 'Multi Asset': '#8B5CF6', 'Hybrid': '#10B981',
+            'Liquid': '#6EE7B7', 'Overnight': '#A7F3D0', 'Money Market': '#3B82F6', 'Ultra Short': '#60A5FA',
+            'Duration': '#93C5FD', 'Credit Risk': '#FCA5A5', 'Debt (Other)': '#6366F1', 'Foreign Funds': '#FBBF24',
+            'Gold': '#F59E0B', 'Index/Other': '#6366F1', 'Other': '#94A3B8'
         };
 
         // Default Model Strategy (Initial)

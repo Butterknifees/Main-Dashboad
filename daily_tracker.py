@@ -3,7 +3,7 @@ import requests
 import os
 from datetime import datetime
 
-DB_FILE = "Gemini/personal finance accounting/nav_data.db"
+DB_FILE = "Gemini/personal finance accounting/nav_data.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data.db"
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
@@ -48,6 +48,37 @@ def update_all_schemes():
     conn = init_db()
     cursor = conn.cursor()
 
+    BACKUP_DB_FILE = "Gemini/personal finance accounting/nav_data_backup.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data_backup.db"
+    conn_backup = None
+    cursor_backup = None
+    if os.path.exists(BACKUP_DB_FILE):
+        try:
+            conn_backup = sqlite3.connect(BACKUP_DB_FILE)
+            cursor_backup = conn_backup.cursor()
+            # Ensure tables exist in backup
+            cursor_backup.execute('''
+                CREATE TABLE IF NOT EXISTS schemes (
+                    scheme_code TEXT PRIMARY KEY,
+                    isin_growth TEXT,
+                    isin_div TEXT,
+                    scheme_name TEXT,
+                    category TEXT,
+                    amc TEXT
+                )
+            ''')
+            cursor_backup.execute('''
+                CREATE TABLE IF NOT EXISTS nav_history (
+                    scheme_code TEXT,
+                    nav REAL,
+                    date TEXT,
+                    PRIMARY KEY (scheme_code, date),
+                    FOREIGN KEY (scheme_code) REFERENCES schemes (scheme_code)
+                )
+            ''')
+            conn_backup.commit()
+        except Exception as e:
+            print(f"Warning: Could not connect to backup database: {e}")
+
     current_category = "Unknown"
     current_amc = "Unknown"
     updated_count = 0
@@ -76,14 +107,11 @@ def update_all_schemes():
                 isin_d = parts[2].strip()
                 name = parts[3].strip()
                 
-                # Filter out Regular and IDCW schemes to keep the database size small and clean
                 name_lower = name.lower()
                 is_direct = "direct" in name_lower or "dir" in name_lower
                 is_regular = "regular" in name_lower
                 is_idcw = "idcw" in name_lower or "dividend" in name_lower or "payout" in name_lower or "reinvestment" in name_lower
-                
-                if is_regular or not is_direct or is_idcw:
-                    continue  # Skip regular and dividend payout/reinvestment schemes
+                is_growth = "growth" in name_lower or "gr" in name_lower
                 
                 try:
                     nav = float(parts[4].strip())
@@ -97,6 +125,29 @@ def update_all_schemes():
                     iso_date = dt_obj.strftime("%Y-%m-%d")
                 except:
                     iso_date = date_str
+
+                # Write to Backup DB (All Growth plans - Direct & Regular, skip IDCW)
+                if cursor_backup and not is_idcw and is_growth:
+                    try:
+                        cursor_backup.execute('''
+                            INSERT INTO schemes (scheme_code, isin_growth, isin_div, scheme_name, category, amc)
+                            VALUES (?, ?, ?, ?, ?, ?)
+                            ON CONFLICT(scheme_code) DO UPDATE SET
+                                scheme_name=excluded.scheme_name,
+                                category=excluded.category,
+                                amc=excluded.amc
+                        ''', (code, isin_g, isin_d, name, current_category, current_amc))
+                        
+                        cursor_backup.execute('''
+                            INSERT OR IGNORE INTO nav_history (scheme_code, nav, date)
+                            VALUES (?, ?, ?)
+                        ''', (code, nav, iso_date))
+                    except Exception as e:
+                        pass
+
+                # Write to Main DB (Only Direct Growth plans, skip Regular & IDCW)
+                if is_regular or not is_direct or is_idcw:
+                    continue  # Skip regular and dividend payout/reinvestment schemes for main db
 
                 # 1. Update/Insert Scheme Metadata
                 cursor.execute('''
@@ -122,9 +173,12 @@ def update_all_schemes():
 
     conn.commit()
     conn.close()
+    if conn_backup:
+        conn_backup.commit()
+        conn_backup.close()
     print(f"Update Complete.")
-    print(f"- New daily records added: {updated_count}")
-    print(f"- Total schemes tracked: {new_schemes_count}")
+    print(f"- New daily records added to main DB: {updated_count}")
+    print(f"- Total schemes tracked in main DB: {new_schemes_count}")
 
 def get_latest_nav_for_scheme(name_query):
     conn = sqlite3.connect(DB_FILE)

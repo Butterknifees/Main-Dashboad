@@ -1,9 +1,10 @@
 import sqlite3
 import pandas as pd
 import numpy as np
+import os
 from datetime import datetime, timedelta
 
-DB_FILE = "Gemini/personal finance accounting/nav_data.db"
+DB_FILE = "Gemini/personal finance accounting/nav_data.db" if os.path.exists("Gemini/personal finance accounting") else "nav_data.db"
 
 def analyze_large_cap_performance():
     conn = sqlite3.connect(DB_FILE)

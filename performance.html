@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutual Fund Performance Leaderboard | Hisaab</title>
+    <link rel="stylesheet" href="hisaab_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --table-hover: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Subnav layout */
+        .page-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Searchable Select Overrides & Styling */
+        .select-container {
+            position: relative;
+            width: 320px;
+            margin-bottom: 2rem;
+            z-index: 100;
+        }
+
+        .search-select-input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            padding-right: 2.5rem;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid var(--glass-border) !important;
+            color: var(--text-primary) !important;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-select-input:focus {
+            border-color: var(--accent-blue) !important;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.25);
+            background: rgba(15, 23, 42, 0.8) !important;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .select-container.active .select-arrow {
+            transform: translateY(-50%) rotate(180deg);
+            opacity: 1;
+        }
+
+        .search-select-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            max-height: 280px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: rgba(10, 15, 30, 0.95) !important;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .select-container.active .search-select-dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .search-select-option {
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .search-select-option:last-child {
+            border-bottom: none;
+        }
+
+        .search-select-option:hover, .search-select-option.selected {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            padding-left: 1.5rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            padding: 1.8rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--accent-blue);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card.best-card::before {
+            background: var(--accent-green);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+            line-height: 1.2;
+        }
+
+        .stat-value.return-pos {
+            color: var(--accent-green);
+        }
+
+        .stat-value.return-neg {
+            color: var(--accent-red);
+        }
+
+        .stat-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            word-break: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Leaderboard Table Section */
+        .leaderboard-card {
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .leaderboard-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .leaderboard-count-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-blue);
+        }
+
+        .table-search-input {
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            width: 250px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .table-search-input:focus {
+            border-color: var(--accent-blue);
+            background: rgba(15, 23, 42, 0.6);
+            width: 280px;
+        }
+
+        /* Table Design */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            max-height: 550px;
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* Custom Scrollbar for dropdown and table */
+        .search-select-dropdown::-webkit-scrollbar,
+        .table-container::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .search-select-dropdown::-webkit-scrollbar-track,
+        .table-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .search-select-dropdown::-webkit-scrollbar-thumb,
+        .table-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .search-select-dropdown::-webkit-scrollbar-thumb:hover,
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            background: #0f1424;
+            z-index: 5;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        th {
+            padding: 1rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        td {
+            padding: 1rem 1.25rem;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s ease;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr {
+            transition: all 0.25s ease;
+        }
+
+        tr:hover td {
+            background: var(--table-hover);
+        }
+
+        /* Ranks styling */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        tr:nth-child(1) .rank-badge {
+            background: rgba(251, 191, 36, 0.15);
+            border-color: rgba(251, 191, 36, 0.4);
+            color: #FBBF24;
+        }
+
+        tr:nth-child(2) .rank-badge {
+            background: rgba(156, 163, 175, 0.15);
+            border-color: rgba(156, 163, 175, 0.4);
+            color: #9CA3AF;
+        }
+
+        tr:nth-child(3) .rank-badge {
+            background: rgba(180, 83, 9, 0.15);
+            border-color: rgba(180, 83, 9, 0.4);
+            color: #B45309;
+        }
+
+        .fund-name-cell {
+            font-weight: 600;
+            max-width: 450px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fund-code {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.2rem;
+        }
+
+        .return-cell {
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .return-cell.pos {
+            color: var(--accent-green);
+        }
+
+        .return-cell.neg {
+            color: var(--accent-red);
+        }
+
+        .nav-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .nav-date {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        /* Empty state styling */
+        .empty-state {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+            color: var(--text-secondary);
+        }
+
+        /* Back to top/navigation buttons */
+        .btn-nav-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-nav-home:hover {
+            color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-orb" id="orb-1"></div>
+        <div class="glow-orb" id="orb-2"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by" style="display:flex;align-items:center;gap:1.5rem">
+                <span class="btn-nav-home" onclick="location.href='index.html'">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </span>
+                <span>Mutual Fund Rankings</span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-header">
+            <h1 class="page-title">Performance Leaderboard</h1>
+            <p class="page-subtitle">Historical mutual fund rankings and statistics computed directly from local NAV reports.</p>
+        </section>
+
+        <!-- Category Dropdown -->
+        <div class="select-container" id="category-select-container">
+            <input type="text" class="search-select-input" id="category-input" placeholder="Select Category..." readonly autocomplete="off">
+            <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            <div class="search-select-dropdown" id="category-dropdown">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+
+        <!-- Aggregate Stat Cards -->
+        <div class="stats-grid">
+            <div class="stat-card best-card">
+                <div class="stat-label">
+                    <span>Best Performing Fund</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                </div>
+                <div class="stat-value return-pos" id="stat-best-val">--</div>
+                <div class="stat-desc" id="stat-best-name">No category selected</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    <span>Category Median</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+                </div>
+                <div class="stat-value" id="stat-median-val">--</div>
+                <div class="stat-desc">Median 1-year return across all funds in this category.</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">
+                    <span>Category Average</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                </div>
+                <div class="stat-value" id="stat-avg-val">--</div>
+                <div class="stat-desc">Mean 1-year return of the category (equally weighted).</div>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="leaderboard-card">
+            <div class="leaderboard-header">
+                <div class="leaderboard-title">
+                    <span>Category Ranks</span>
+                    <span class="leaderboard-count-pill" id="funds-count-pill">0 Funds</span>
+                </div>
+                <input type="text" class="table-search-input" id="table-search" placeholder="Search funds in this category..." disabled>
+            </div>
+
+            <div class="table-container">
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">Rank</th>
+                            <th>Scheme Name</th>
+                            <th style="width: 140px; text-align: right;">1Y Return</th>
+                            <th style="width: 140px; text-align: right;">1M Return</th>
+                            <th style="width: 180px; text-align: right;">Latest NAV</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <p>Please select a mutual fund category to view rankings.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hisaab by Play Theory. Precision Financial Analytics.</p>
+    </footer>
+
+    <script>
+        // Parallax glowing orbs
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            const orb1 = document.getElementById('orb-1');
+            const orb2 = document.getElementById('orb-2');
+            
+            orb1.style.transform = `translate(${x * 40}px, ${y * 40}px)`;
+            orb2.style.transform = `translate(${x * -40}px, ${y * -40}px)`;
+        });
+
+        let performanceData = null;
+        let selectedCategory = "";
+        let searchFilter = "";
+
+        // UI Selectors
+        const selectContainer = document.getElementById('category-select-container');
+        const selectValInput = document.getElementById('category-input');
+        const selectDropdown = document.getElementById('category-dropdown');
+        const searchInput = document.getElementById('table-search');
+        const tableBody = document.getElementById('table-body');
+        const fundsCountPill = document.getElementById('funds-count-pill');
+
+        const bestVal = document.getElementById('stat-best-val');
+        const bestName = document.getElementById('stat-best-name');
+        const medianVal = document.getElementById('stat-median-val');
+        const avgVal = document.getElementById('stat-avg-val');
+
+        // Fetch data on load
+        async function fetchPerformanceData() {
+            try {
+                const response = await fetch('mutual_fund_performance.json?v=' + new Date().getTime());
+                if (!response.ok) throw new Error("Failed to load performance data");
+                performanceData = await response.json();
+                initializeDropdown();
+            } catch (e) {
+                console.error(e);
+                tableBody.innerHTML = `<tr><td colspan="5" class="empty-state" style="color:var(--accent-red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><p>Error loading performance file. Make sure calculate_performance_json.py has been run.</p></td></tr>`;
+            }
+        }
+
+        // Initialize Dropdown list
+        function initializeDropdown() {
+            if (!performanceData) return;
+            const categories = Object.keys(performanceData).sort();
+            
+            selectDropdown.innerHTML = "";
+            categories.forEach(cat => {
+                const opt = document.createElement('div');
+                opt.className = "search-select-option";
+                opt.dataset.value = cat;
+                opt.textContent = cat;
+                selectDropdown.appendChild(opt);
+            });
+
+            // Set up dropdown events
+            setupDropdownEvents();
+        }
+
+        function setupDropdownEvents() {
+            // Toggle dropdown open
+            selectValInput.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectContainer.classList.toggle('active');
+            });
+
+            // Handle option click
+            selectDropdown.addEventListener('mousedown', (e) => {
+                const option = e.target.closest('.search-select-option');
+                if (!option) return;
+                e.preventDefault(); // Prevent input blur from triggering before selection
+
+                const value = option.dataset.value;
+                selectValInput.value = value;
+                selectedCategory = value;
+
+                // Highlight selected
+                selectDropdown.querySelectorAll('.search-select-option').forEach(opt => {
+                    opt.classList.toggle('selected', opt === option);
+                });
+
+                selectContainer.classList.remove('active');
+                
+                // Reset search and filter
+                searchInput.value = "";
+                searchInput.removeAttribute('disabled');
+                searchFilter = "";
+
+                renderCategoryData();
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!selectContainer.contains(e.target)) {
+                    selectContainer.classList.remove('active');
+                }
+            });
+
+            // Keyboard navigation
+            selectValInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    selectContainer.classList.toggle('active');
+                } else if (e.key === 'Escape') {
+                    selectContainer.classList.remove('active');
+                }
+            });
+        }
+
+        // Render Stats and Table Rows
+        function renderCategoryData() {
+            if (!performanceData || !selectedCategory) return;
+            const categoryObj = performanceData[selectedCategory];
+            if (!categoryObj) return;
+
+            const stats = categoryObj.stats;
+            const funds = categoryObj.funds;
+
+            // 1. Update stats panel
+            bestVal.textContent = `${stats.best_fund_return >= 0 ? '+' : ''}${stats.best_fund_return.toFixed(2)}%`;
+            bestName.textContent = stats.best_fund_name;
+            
+            // Format median and average
+            const med = stats.median_return;
+            medianVal.textContent = `${med >= 0 ? '+' : ''}${med.toFixed(2)}%`;
+            medianVal.className = `stat-value ${med >= 0 ? 'return-pos' : 'return-neg'}`;
+
+            const avg = stats.average_return;
+            avgVal.textContent = `${avg >= 0 ? '+' : ''}${avg.toFixed(2)}%`;
+            avgVal.className = `stat-value ${avg >= 0 ? 'return-pos' : 'return-neg'}`;
+
+            // 2. Render funds list
+            filterAndRenderTable(funds);
+        }
+
+        // Live Table Search/Filtering
+        function filterAndRenderTable(funds) {
+            const query = searchFilter.toLowerCase().trim();
+            const filtered = funds.filter(f => f.name.toLowerCase().includes(query) || f.code.includes(query));
+
+            fundsCountPill.textContent = `${filtered.length} of ${funds.length} Funds`;
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>No funds found matching "${searchFilter}".</p></td></tr>`;
+                return;
+            }
+
+            let html = "";
+            filtered.forEach(f => {
+                const r1y = f.return_1y;
+                const r1m = f.return_1m;
+
+                const return1yStr = r1y !== null ? `${r1y >= 0 ? '+' : ''}${r1y.toFixed(2)}%` : '--';
+                const return1mStr = r1m !== null ? `${r1m >= 0 ? '+' : ''}${r1m.toFixed(2)}%` : '--';
+
+                const r1yClass = r1y !== null ? (r1y >= 0 ? 'pos' : 'neg') : '';
+                const r1mClass = r1m !== null ? (r1m >= 0 ? 'pos' : 'neg') : '';
+
+                // Format NAV with commas
+                const navStr = f.latest_nav.toLocaleString('en-IN', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+                
+                // Format NAV Date
+                const dateObj = new Date(f.latest_date);
+                const dateStr = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                html += `
+                    <tr>
+                        <td>
+                            <span class="rank-badge">${f.rank}</span>
+                        </td>
+                        <td>
+                            <div class="fund-name-cell" title="${f.name}">${f.name}</div>
+                            <span class="fund-code">Code: ${f.code}</span>
+                        </td>
+                        <td class="return-cell ${r1yClass}" style="text-align: right;">${return1yStr}</td>
+                        <td class="return-cell ${r1mClass}" style="text-align: right;">${return1mStr}</td>
+                        <td class="nav-cell" style="text-align: right;">
+                            ₹${navStr}
+                            <span class="nav-date">as of ${dateStr}</span>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+        }
+
+        // Bind Search Input
+        searchInput.addEventListener('input', (e) => {
+            searchFilter = e.target.value;
+            if (performanceData && selectedCategory) {
+                filterAndRenderTable(performanceData[selectedCategory].funds);
+            }
+        });
+
+        // Run fetch on load
+        fetchPerformanceData();
+    </script>
+</body>
+</html>

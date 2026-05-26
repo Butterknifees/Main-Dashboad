@@ -9,6 +9,7 @@
 !simulator_data.json
 !grouped_funds.json
 !benchmark_mapping.json
+!mutual_fund_performance.json
 large_cap_historical.json
 
 # Python
