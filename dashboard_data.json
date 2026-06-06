@@ -1,16 +1,16 @@
 {
     "metrics": {
-        "xirr": 14.09,
-        "daily_volatility": 0.8517,
-        "annualized_volatility": 13.52,
-        "final_value": 368524.36,
+        "xirr": 14.84,
+        "daily_volatility": 0.8522,
+        "annualized_volatility": 13.53,
+        "final_value": 419938.91,
         "period": "2025-08-04 to 2026-06-06",
         "comparison": {
             "portfolio": {
-                "return": 14.09,
-                "volatility": 13.52,
+                "return": 14.84,
+                "volatility": 13.53,
                 "max_drawdown": -8.01,
-                "avg_return": 15.25
+                "avg_return": 15.44
             },
             "model": {
                 "return": 18.4,
@@ -621,7 +621,7 @@
             119.18,
             119.27,
             119.45,
-            119.64,
+            119.67,
             119.44,
             119.44,
             119.44,
@@ -629,15 +629,15 @@
             120.11,
             120.12,
             120.12,
-            119.28,
-            119.28,
-            119.28,
-            118.8,
-            118.87,
-            119.07,
-            119.25,
-            119.46,
-            119.46
+            119.33,
+            119.33,
+            119.33,
+            118.75,
+            118.91,
+            119.36,
+            119.38,
+            119.74,
+            119.74
         ],
         "model_nav": [
             100.0,
@@ -930,7 +930,7 @@
             109.33,
             109.55,
             109.78,
-            109.83,
+            109.91,
             110.03,
             110.03,
             110.03,
@@ -1239,7 +1239,7 @@
             367687.11,
             367952.05,
             368490.78,
-            369087.71,
+            369196.76,
             368489.58,
             368489.58,
             368489.58,
@@ -1247,651 +1247,690 @@
             370526.85,
             370565.64,
             370565.64,
-            367973.7,
-            367973.7,
-            367973.7,
-            366487.48,
-            366711.05,
-            367322.78,
-            367885.51,
-            368524.36,
-            368524.36
+            381880.1,
+            381880.1,
+            381880.1,
+            405957.29,
+            406499.32,
+            417081.15,
+            417122.38,
+            419938.91,
+            419938.91
         ],
         "allocation": [
             {
                 "Gold": 35.0,
-                "Other": 15.0,
+                "Silver": 15.0,
                 "Mid Cap": 50.0
             },
             {
                 "Gold": 35.1,
-                "Other": 15.05,
+                "Silver": 15.05,
                 "Mid Cap": 49.85
             },
             {
                 "Gold": 35.18,
-                "Other": 15.21,
+                "Silver": 15.21,
                 "Mid Cap": 49.61
             },
             {
                 "Gold": 35.19,
-                "Other": 15.34,
+                "Silver": 15.34,
                 "Mid Cap": 49.47
             },
             {
                 "Gold": 35.53,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.01
             },
             {
                 "Gold": 35.53,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.01
             },
             {
                 "Gold": 35.53,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.01
             },
             {
                 "Gold": 35.19,
-                "Other": 15.3,
+                "Silver": 15.3,
                 "Mid Cap": 49.51
             },
             {
                 "Gold": 35.17,
-                "Other": 15.32,
+                "Silver": 15.32,
                 "Mid Cap": 49.51
             },
             {
                 "Gold": 35.04,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.48
             },
             {
                 "Gold": 35.08,
-                "Other": 15.44,
+                "Silver": 15.44,
                 "Mid Cap": 49.48
             },
             {
                 "Gold": 35.08,
-                "Other": 15.44,
+                "Silver": 15.44,
                 "Mid Cap": 49.48
             },
             {
                 "Gold": 35.08,
-                "Other": 15.44,
+                "Silver": 15.44,
                 "Mid Cap": 49.48
             },
             {
                 "Gold": 35.08,
-                "Other": 15.44,
+                "Silver": 15.44,
                 "Mid Cap": 49.48
             },
             {
                 "Gold": 34.85,
-                "Other": 15.28,
+                "Silver": 15.28,
                 "Mid Cap": 49.87
             },
             {
                 "Gold": 34.56,
-                "Other": 15.18,
+                "Silver": 15.18,
                 "Mid Cap": 50.26
             },
             {
                 "Gold": 34.53,
-                "Other": 14.87,
+                "Silver": 14.87,
                 "Mid Cap": 50.6
             },
             {
                 "Gold": 34.64,
-                "Other": 15.11,
+                "Silver": 15.11,
                 "Mid Cap": 50.25
             },
             {
                 "Gold": 34.62,
-                "Other": 15.22,
+                "Silver": 15.22,
                 "Mid Cap": 50.16
             },
             {
                 "Gold": 34.62,
-                "Other": 15.22,
+                "Silver": 15.22,
                 "Mid Cap": 50.16
             },
             {
                 "Gold": 34.62,
-                "Other": 15.22,
+                "Silver": 15.22,
                 "Mid Cap": 50.16
             },
             {
                 "Gold": 34.77,
-                "Other": 15.41,
+                "Silver": 15.41,
                 "Mid Cap": 49.82
             },
             {
                 "Gold": 35.12,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.41
             },
             {
                 "Gold": 35.12,
-                "Other": 15.47,
+                "Silver": 15.47,
                 "Mid Cap": 49.41
             },
             {
                 "Gold": 35.44,
-                "Other": 15.64,
+                "Silver": 15.64,
                 "Mid Cap": 48.92
             },
             {
                 "Gold": 35.74,
-                "Other": 15.72,
+                "Silver": 15.72,
                 "Mid Cap": 48.54
             },
             {
                 "Gold": 35.74,
-                "Other": 15.72,
+                "Silver": 15.72,
                 "Mid Cap": 48.54
             },
             {
                 "Gold": 35.74,
-                "Other": 15.72,
+                "Silver": 15.72,
                 "Mid Cap": 48.54
             },
             {
                 "Gold": 32.02,
-                "Other": 22.4,
+                "Silver": 22.4,
                 "Mid Cap": 45.58
             },
             {
                 "Gold": 32.04,
-                "Other": 22.3,
+                "Silver": 22.3,
                 "Mid Cap": 45.66
             },
             {
                 "Gold": 32.21,
-                "Other": 22.22,
+                "Silver": 22.22,
                 "Mid Cap": 45.57
             },
             {
                 "Gold": 32.33,
-                "Other": 22.31,
+                "Silver": 22.31,
                 "Mid Cap": 45.37
             },
             {
                 "Gold": 32.43,
-                "Other": 22.31,
+                "Silver": 22.31,
                 "Mid Cap": 45.26
             },
             {
                 "Gold": 32.43,
-                "Other": 22.31,
+                "Silver": 22.31,
                 "Mid Cap": 45.26
             },
             {
                 "Gold": 32.43,
-                "Other": 22.31,
+                "Silver": 22.31,
                 "Mid Cap": 45.26
             },
             {
                 "Gold": 32.7,
-                "Other": 22.17,
+                "Silver": 22.17,
                 "Mid Cap": 45.13
             },
             {
                 "Gold": 32.89,
-                "Other": 22.24,
+                "Silver": 22.24,
                 "Mid Cap": 44.87
             },
             {
                 "Gold": 32.76,
-                "Other": 22.03,
+                "Silver": 22.03,
                 "Mid Cap": 45.21
             },
             {
                 "Gold": 32.64,
-                "Other": 22.11,
+                "Silver": 22.11,
                 "Mid Cap": 45.25
             },
             {
                 "Gold": 32.55,
-                "Other": 22.5,
+                "Silver": 22.5,
                 "Mid Cap": 44.95
             },
             {
                 "Gold": 32.55,
-                "Other": 22.5,
+                "Silver": 22.5,
                 "Mid Cap": 44.95
             },
             {
                 "Gold": 32.55,
-                "Other": 22.5,
+                "Silver": 22.5,
                 "Mid Cap": 44.95
             },
             {
                 "Gold": 32.45,
-                "Other": 22.4,
+                "Silver": 22.4,
                 "Mid Cap": 45.15
             },
             {
                 "Gold": 32.51,
-                "Other": 22.62,
+                "Silver": 22.62,
                 "Mid Cap": 44.87
             },
             {
                 "Gold": 29.09,
-                "Other": 19.84,
+                "Silver": 19.84,
                 "Mid Cap": 51.07
             },
             {
                 "Gold": 29.08,
-                "Other": 19.94,
+                "Silver": 19.94,
                 "Mid Cap": 50.98
             },
             {
                 "Gold": 28.96,
-                "Other": 20.05,
+                "Silver": 20.05,
                 "Mid Cap": 50.99
             },
             {
                 "Gold": 28.96,
-                "Other": 20.05,
+                "Silver": 20.05,
                 "Mid Cap": 50.99
             },
             {
                 "Gold": 28.96,
-                "Other": 20.05,
+                "Silver": 20.05,
                 "Mid Cap": 50.99
             },
             {
                 "Gold": 29.24,
-                "Other": 20.55,
+                "Silver": 20.55,
                 "Mid Cap": 50.2
             },
             {
                 "Gold": 29.67,
-                "Other": 20.65,
+                "Silver": 20.65,
                 "Mid Cap": 49.68
             },
             {
                 "Gold": 29.7,
-                "Other": 20.76,
+                "Silver": 20.76,
                 "Mid Cap": 49.55
             },
             {
                 "Gold": 29.7,
-                "Other": 20.76,
+                "Silver": 20.76,
                 "Mid Cap": 49.55
             },
             {
                 "Gold": 29.82,
-                "Other": 21.5,
+                "Silver": 21.5,
                 "Mid Cap": 48.68
             },
             {
                 "Gold": 29.82,
-                "Other": 21.5,
+                "Silver": 21.5,
                 "Mid Cap": 48.68
             },
             {
                 "Gold": 29.82,
-                "Other": 21.5,
+                "Silver": 21.5,
                 "Mid Cap": 48.68
             },
             {
                 "Gold": 27.94,
-                "Other": 20.56,
+                "Silver": 20.56,
                 "Mid Cap": 51.49
             },
             {
                 "Gold": 27.94,
-                "Other": 20.56,
+                "Silver": 20.56,
                 "Mid Cap": 51.49
             },
             {
                 "Gold": 31.57,
-                "Other": 3.95,
+                "Silver": 3.95,
                 "Mid Cap": 64.48
             },
             {
                 "Gold": 31.57,
-                "Other": 3.95,
+                "Silver": 3.95,
                 "Mid Cap": 64.48
             },
             {
                 "Gold": 31.26,
-                "Other": 3.93,
+                "Silver": 3.93,
                 "Mid Cap": 64.8
             },
             {
                 "Gold": 31.26,
-                "Other": 3.93,
+                "Silver": 3.93,
                 "Mid Cap": 64.8
             },
             {
                 "Gold": 31.26,
-                "Other": 3.93,
+                "Silver": 3.93,
                 "Mid Cap": 64.8
             },
             {
                 "Gold": 29.97,
-                "Other": 3.79,
+                "Silver": 3.79,
                 "Mid Cap": 66.24
             },
             {
                 "Gold": 30.0,
-                "Other": 3.82,
+                "Silver": 3.82,
                 "Mid Cap": 66.18
             },
             {
                 "Gold": 30.52,
-                "Other": 3.89,
+                "Silver": 3.89,
                 "Mid Cap": 65.59
             },
             {
                 "Gold": 30.35,
-                "Other": 3.99,
+                "Silver": 3.99,
                 "Mid Cap": 65.66
             },
             {
                 "Gold": 30.03,
-                "Other": 4.08,
+                "Silver": 4.08,
                 "Mid Cap": 65.89
             },
             {
                 "Gold": 30.03,
-                "Other": 4.08,
+                "Silver": 4.08,
                 "Mid Cap": 65.89
             },
             {
                 "Gold": 30.03,
-                "Other": 4.08,
+                "Silver": 4.08,
                 "Mid Cap": 65.89
             },
             {
                 "Gold": 30.35,
-                "Other": 4.27,
+                "Silver": 4.27,
                 "Mid Cap": 65.38
             },
             {
                 "Gold": 30.98,
-                "Other": 4.31,
+                "Silver": 4.31,
                 "Mid Cap": 64.71
             },
             {
                 "Gold": 30.92,
-                "Other": 4.1,
+                "Silver": 4.1,
                 "Mid Cap": 64.98
             },
             {
                 "Gold": 30.85,
-                "Other": 4.01,
+                "Silver": 4.01,
                 "Mid Cap": 65.15
             },
             {
                 "Gold": 31.47,
-                "Other": 4.06,
+                "Silver": 4.06,
                 "Mid Cap": 64.48
             },
             {
                 "Gold": 31.47,
-                "Other": 4.06,
+                "Silver": 4.06,
                 "Mid Cap": 64.48
             },
             {
                 "Gold": 31.47,
-                "Other": 4.06,
+                "Silver": 4.06,
                 "Mid Cap": 64.48
             },
             {
                 "Gold": 30.92,
-                "Other": 3.79,
+                "Silver": 3.79,
                 "Mid Cap": 65.3
             },
             {
                 "Gold": 30.92,
-                "Other": 3.79,
+                "Silver": 3.79,
                 "Mid Cap": 65.3
             },
             {
                 "Gold": 30.92,
-                "Other": 3.79,
+                "Silver": 3.79,
                 "Mid Cap": 65.3
             },
             {
                 "Gold": 31.86,
-                "Other": 3.61,
+                "Silver": 3.61,
                 "Mid Cap": 64.53
             },
             {
                 "Gold": 31.53,
-                "Other": 3.54,
+                "Silver": 3.54,
                 "Mid Cap": 64.93
             },
             {
                 "Gold": 31.53,
-                "Other": 3.54,
+                "Silver": 3.54,
                 "Mid Cap": 64.93
             },
             {
                 "Gold": 31.53,
-                "Other": 3.54,
+                "Silver": 3.54,
                 "Mid Cap": 64.93
             },
             {
                 "Gold": 33.71,
-                "Other": 3.4,
+                "Silver": 3.4,
                 "Mid Cap": 62.89
             },
             {
                 "Gold": 32.98,
-                "Other": 3.32,
+                "Silver": 3.32,
                 "Mid Cap": 63.7
             },
             {
                 "Gold": 33.5,
-                "Other": 3.43,
+                "Silver": 3.43,
                 "Mid Cap": 63.07
             },
             {
                 "Gold": 33.5,
-                "Other": 3.44,
+                "Silver": 3.44,
                 "Mid Cap": 63.06
             },
             {
                 "Gold": 32.0,
-                "Other": 7.7,
-                "Mid Cap": 60.3
+                "Silver": 5.12,
+                "Mid Cap": 60.3,
+                "Other": 2.59
             },
             {
                 "Gold": 32.0,
-                "Other": 7.7,
-                "Mid Cap": 60.3
+                "Silver": 5.12,
+                "Mid Cap": 60.3,
+                "Other": 2.59
             },
             {
                 "Gold": 32.0,
-                "Other": 7.7,
-                "Mid Cap": 60.3
+                "Silver": 5.12,
+                "Mid Cap": 60.3,
+                "Other": 2.59
             },
             {
                 "Gold": 32.02,
-                "Other": 7.74,
-                "Mid Cap": 60.24
+                "Silver": 5.16,
+                "Mid Cap": 60.24,
+                "Other": 2.58
             },
             {
                 "Gold": 32.07,
-                "Other": 7.67,
-                "Mid Cap": 60.26
+                "Silver": 5.1,
+                "Mid Cap": 60.26,
+                "Other": 2.57
             },
             {
                 "Gold": 32.07,
-                "Other": 7.67,
-                "Mid Cap": 60.26
+                "Silver": 5.1,
+                "Mid Cap": 60.26,
+                "Other": 2.57
             },
             {
                 "Gold": 30.48,
-                "Other": 7.3,
-                "Mid Cap": 62.22
+                "Silver": 4.89,
+                "Mid Cap": 62.22,
+                "Other": 2.4
             },
             {
                 "Gold": 30.36,
-                "Other": 7.28,
-                "Mid Cap": 62.36
+                "Silver": 4.89,
+                "Mid Cap": 62.36,
+                "Other": 2.39
             },
             {
                 "Gold": 30.36,
-                "Other": 7.28,
-                "Mid Cap": 62.36
+                "Silver": 4.89,
+                "Mid Cap": 62.36,
+                "Other": 2.39
             },
             {
                 "Gold": 30.36,
-                "Other": 7.28,
-                "Mid Cap": 62.36
+                "Silver": 4.89,
+                "Mid Cap": 62.36,
+                "Other": 2.39
             },
             {
                 "Gold": 30.6,
-                "Other": 7.31,
-                "Mid Cap": 62.09
+                "Silver": 4.95,
+                "Mid Cap": 62.09,
+                "Other": 2.37
             },
             {
                 "Gold": 30.81,
-                "Other": 7.34,
-                "Mid Cap": 61.85
+                "Silver": 5.0,
+                "Mid Cap": 61.85,
+                "Other": 2.35
             },
             {
                 "Gold": 30.53,
-                "Other": 7.41,
-                "Mid Cap": 62.06
+                "Silver": 5.05,
+                "Mid Cap": 62.06,
+                "Other": 2.35
             },
             {
                 "Gold": 31.05,
-                "Other": 7.57,
-                "Mid Cap": 61.38
+                "Silver": 5.25,
+                "Mid Cap": 61.38,
+                "Other": 2.32
             },
             {
                 "Gold": 31.05,
-                "Other": 7.57,
-                "Mid Cap": 61.38
+                "Silver": 5.25,
+                "Mid Cap": 61.38,
+                "Other": 2.32
             },
             {
                 "Gold": 31.05,
-                "Other": 7.57,
-                "Mid Cap": 61.38
+                "Silver": 5.25,
+                "Mid Cap": 61.38,
+                "Other": 2.32
             },
             {
                 "Gold": 31.05,
-                "Other": 7.57,
-                "Mid Cap": 61.38
+                "Silver": 5.25,
+                "Mid Cap": 61.38,
+                "Other": 2.32
             },
             {
                 "Gold": 30.33,
-                "Other": 7.38,
-                "Mid Cap": 62.29
+                "Silver": 5.02,
+                "Mid Cap": 62.29,
+                "Other": 2.36
             },
             {
                 "Gold": 30.24,
-                "Other": 7.33,
-                "Mid Cap": 62.43
+                "Silver": 4.97,
+                "Mid Cap": 62.43,
+                "Other": 2.36
             },
             {
                 "Gold": 30.38,
-                "Other": 7.39,
-                "Mid Cap": 62.23
+                "Silver": 5.05,
+                "Mid Cap": 62.23,
+                "Other": 2.33
             },
             {
                 "Gold": 30.32,
-                "Other": 7.34,
-                "Mid Cap": 62.34
+                "Silver": 5.01,
+                "Mid Cap": 62.34,
+                "Other": 2.34
             },
             {
                 "Gold": 30.66,
-                "Other": 7.25,
-                "Mid Cap": 62.09
+                "Silver": 4.93,
+                "Mid Cap": 62.09,
+                "Other": 2.32
             },
             {
                 "Gold": 30.66,
-                "Other": 7.25,
-                "Mid Cap": 62.09
+                "Silver": 4.93,
+                "Mid Cap": 62.09,
+                "Other": 2.32
             },
             {
                 "Gold": 30.66,
-                "Other": 7.25,
-                "Mid Cap": 62.09
+                "Silver": 4.93,
+                "Mid Cap": 62.09,
+                "Other": 2.32
             },
             {
                 "Gold": 30.66,
-                "Other": 7.25,
-                "Mid Cap": 62.09
+                "Silver": 4.93,
+                "Mid Cap": 62.09,
+                "Other": 2.32
             },
             {
                 "Gold": 30.93,
-                "Other": 7.36,
-                "Mid Cap": 61.71
+                "Silver": 5.06,
+                "Mid Cap": 61.71,
+                "Other": 2.3
             },
             {
                 "Gold": 30.83,
-                "Other": 7.37,
-                "Mid Cap": 61.8
+                "Silver": 5.07,
+                "Mid Cap": 61.8,
+                "Other": 2.3
             },
             {
                 "Gold": 30.77,
-                "Other": 7.5,
-                "Mid Cap": 61.74
+                "Silver": 5.21,
+                "Mid Cap": 61.74,
+                "Other": 2.29
             },
             {
                 "Gold": 30.85,
-                "Other": 7.52,
-                "Mid Cap": 61.63
+                "Silver": 5.24,
+                "Mid Cap": 61.63,
+                "Other": 2.28
             },
             {
                 "Gold": 30.85,
-                "Other": 7.52,
-                "Mid Cap": 61.63
+                "Silver": 5.24,
+                "Mid Cap": 61.63,
+                "Other": 2.28
             },
             {
                 "Gold": 30.85,
-                "Other": 7.52,
-                "Mid Cap": 61.63
+                "Silver": 5.24,
+                "Mid Cap": 61.63,
+                "Other": 2.28
             },
             {
                 "Gold": 31.23,
-                "Other": 7.77,
-                "Mid Cap": 61.0
+                "Silver": 5.5,
+                "Mid Cap": 61.0,
+                "Other": 2.27
             },
             {
                 "Gold": 26.53,
-                "Other": 9.3,
-                "Mid Cap": 64.17
+                "Silver": 4.69,
+                "Mid Cap": 64.17,
+                "Other": 4.61
             },
             {
                 "Gold": 26.76,
-                "Other": 9.43,
-                "Mid Cap": 63.81
+                "Silver": 4.83,
+                "Mid Cap": 63.81,
+                "Other": 4.6
             },
             {
                 "Gold": 26.73,
-                "Other": 9.37,
-                "Mid Cap": 63.9
+                "Silver": 4.77,
+                "Mid Cap": 63.9,
+                "Other": 4.6
             },
             {
                 "Gold": 26.77,
-                "Other": 9.38,
-                "Mid Cap": 63.85
+                "Silver": 4.83,
+                "Mid Cap": 63.85,
+                "Other": 4.55
             },
             {
                 "Gold": 26.77,
-                "Other": 9.38,
-                "Mid Cap": 63.85
+                "Silver": 4.83,
+                "Mid Cap": 63.85,
+                "Other": 4.55
             },
             {
                 "Gold": 26.77,
-                "Other": 9.38,
-                "Mid Cap": 63.85
+                "Silver": 4.83,
+                "Mid Cap": 63.85,
+                "Other": 4.55
             },
             {
                 "Gold": 27.08,
-                "Other": 9.41,
-                "Mid Cap": 63.51
+                "Silver": 4.91,
+                "Mid Cap": 63.51,
+                "Other": 4.5
             },
             {
                 "Gold": 28.29,
@@ -2151,946 +2190,885 @@
                 "Gold": 33.74,
                 "Mid Cap": 57.8,
                 "Large Cap": 5.86,
-                "Other": 2.61
+                "Sectoral/Thematic": 2.61
             },
             {
                 "Gold": 34.57,
                 "Mid Cap": 57.12,
                 "Large Cap": 5.73,
-                "Other": 2.58
+                "Sectoral/Thematic": 2.58
             },
             {
                 "Gold": 34.78,
                 "Mid Cap": 56.95,
                 "Large Cap": 5.71,
-                "Other": 2.55
+                "Sectoral/Thematic": 2.55
             },
             {
                 "Gold": 38.26,
                 "Mid Cap": 53.91,
                 "Large Cap": 5.4,
-                "Other": 2.43
+                "Sectoral/Thematic": 2.43
             },
             {
                 "Gold": 38.26,
                 "Mid Cap": 53.91,
                 "Large Cap": 5.4,
-                "Other": 2.43
+                "Sectoral/Thematic": 2.43
             },
             {
                 "Gold": 36.96,
                 "Mid Cap": 52.07,
                 "Large Cap": 5.21,
-                "Other": 5.7
+                "Sectoral/Thematic": 5.7
             },
             {
                 "Gold": 34.66,
                 "Mid Cap": 54.11,
                 "Large Cap": 5.43,
-                "Other": 5.8
+                "Sectoral/Thematic": 5.8
             },
             {
                 "Gold": 35.47,
                 "Mid Cap": 53.47,
                 "Large Cap": 5.34,
-                "Other": 5.72
+                "Sectoral/Thematic": 5.72
             },
             {
                 "Gold": 36.16,
                 "Mid Cap": 52.95,
                 "Large Cap": 5.27,
-                "Other": 5.62
+                "Sectoral/Thematic": 5.62
             },
             {
                 "Gold": 35.49,
                 "Mid Cap": 53.56,
                 "Large Cap": 5.32,
-                "Other": 5.63
+                "Sectoral/Thematic": 5.63
             },
             {
                 "Gold": 33.99,
                 "Mid Cap": 51.47,
                 "Large Cap": 5.12,
-                "Other": 9.41
+                "Sectoral/Thematic": 5.38,
+                "Other": 4.03
             },
             {
                 "Gold": 33.99,
                 "Mid Cap": 51.47,
                 "Large Cap": 5.12,
-                "Other": 9.41
+                "Sectoral/Thematic": 5.38,
+                "Other": 4.03
             },
             {
                 "Gold": 33.99,
                 "Mid Cap": 51.47,
                 "Large Cap": 5.12,
-                "Other": 9.41
+                "Sectoral/Thematic": 5.38,
+                "Other": 4.03
             },
             {
                 "Gold": 34.0,
                 "Mid Cap": 51.26,
                 "Large Cap": 5.06,
-                "Other": 9.68
+                "Sectoral/Thematic": 5.41,
+                "Other": 4.27
             },
             {
                 "Gold": 34.01,
                 "Mid Cap": 51.29,
                 "Large Cap": 5.05,
-                "Other": 9.65
+                "Sectoral/Thematic": 5.39,
+                "Other": 4.26
             },
             {
                 "Gold": 35.41,
                 "Mid Cap": 53.28,
                 "Large Cap": 5.25,
-                "Other": 6.05
+                "Sectoral/Thematic": 6.05
             },
             {
                 "Gold": 35.5,
                 "Mid Cap": 53.18,
                 "Large Cap": 5.24,
-                "Other": 6.09
+                "Sectoral/Thematic": 6.09
             },
             {
                 "Gold": 4.88,
                 "Mid Cap": 68.8,
                 "Large Cap": 6.78,
-                "Other": 14.8,
-                "Thematic": 4.74
+                "Sectoral/Thematic": 19.54
             },
             {
                 "Gold": 4.88,
                 "Mid Cap": 68.8,
                 "Large Cap": 6.78,
-                "Other": 14.8,
-                "Thematic": 4.74
+                "Sectoral/Thematic": 19.54
             },
             {
                 "Gold": 4.88,
                 "Mid Cap": 68.8,
                 "Large Cap": 6.78,
-                "Other": 14.8,
-                "Thematic": 4.74
+                "Sectoral/Thematic": 19.54
             },
             {
                 "Gold": 4.86,
                 "Mid Cap": 68.53,
                 "Large Cap": 6.8,
-                "Other": 14.99,
-                "Thematic": 4.82
+                "Sectoral/Thematic": 19.81
             },
             {
                 "Gold": 4.27,
                 "Mid Cap": 61.42,
                 "Large Cap": 6.09,
-                "Other": 23.9,
-                "Thematic": 4.32
+                "Sectoral/Thematic": 17.92,
+                "Debt (Other)": 10.3
             },
             {
                 "Gold": 4.24,
                 "Mid Cap": 61.47,
                 "Large Cap": 6.08,
-                "Other": 23.89,
-                "Thematic": 4.31
+                "Sectoral/Thematic": 17.96,
+                "Debt (Other)": 10.25
             },
             {
                 "Gold": 3.85,
                 "Mid Cap": 53.92,
                 "Large Cap": 5.34,
-                "Other": 24.85,
-                "Thematic": 4.9,
+                "Sectoral/Thematic": 20.56,
+                "Debt (Other)": 9.2,
                 "Arbitrage": 7.13
             },
             {
                 "Gold": 3.85,
                 "Mid Cap": 53.87,
                 "Large Cap": 5.34,
-                "Other": 24.92,
-                "Thematic": 4.91,
+                "Other": 9.11,
+                "Sectoral/Thematic": 20.71,
                 "Arbitrage": 7.13
             },
             {
                 "Gold": 3.85,
                 "Mid Cap": 53.87,
                 "Large Cap": 5.34,
-                "Other": 24.92,
-                "Thematic": 4.91,
+                "Other": 9.11,
+                "Sectoral/Thematic": 20.71,
                 "Arbitrage": 7.13
             },
             {
                 "Gold": 3.85,
                 "Mid Cap": 53.87,
                 "Large Cap": 5.34,
-                "Other": 24.92,
-                "Thematic": 4.91,
+                "Other": 9.11,
+                "Sectoral/Thematic": 20.71,
                 "Arbitrage": 7.13
             },
             {
                 "Gold": 3.82,
                 "Mid Cap": 53.56,
                 "Large Cap": 5.31,
-                "Other": 25.32,
-                "Thematic": 4.91,
+                "Other": 9.6,
+                "Sectoral/Thematic": 20.63,
                 "Arbitrage": 7.09
             },
             {
                 "Gold": 3.82,
                 "Mid Cap": 53.54,
                 "Large Cap": 5.3,
-                "Other": 25.32,
-                "Thematic": 4.93,
+                "Other": 9.61,
+                "Sectoral/Thematic": 20.64,
                 "Arbitrage": 7.08
             },
             {
                 "Gold": 3.94,
                 "Mid Cap": 53.53,
                 "Large Cap": 5.27,
-                "Other": 25.24,
-                "Thematic": 4.98,
+                "Other": 9.64,
+                "Sectoral/Thematic": 20.58,
                 "Arbitrage": 7.04
             },
             {
                 "Gold": 3.9,
                 "Mid Cap": 53.72,
                 "Large Cap": 5.26,
-                "Other": 25.08,
-                "Thematic": 5.01,
+                "Other": 9.33,
+                "Sectoral/Thematic": 20.76,
                 "Arbitrage": 7.02
             },
             {
                 "Gold": 3.78,
                 "Mid Cap": 51.01,
                 "Large Cap": 4.99,
-                "Other": 24.23,
-                "Thematic": 4.76,
+                "Other": 9.22,
+                "Sectoral/Thematic": 19.77,
                 "Arbitrage": 11.23
             },
             {
                 "Gold": 3.78,
                 "Mid Cap": 51.01,
                 "Large Cap": 4.99,
-                "Other": 24.23,
-                "Thematic": 4.76,
+                "Other": 9.22,
+                "Sectoral/Thematic": 19.77,
                 "Arbitrage": 11.23
             },
             {
                 "Gold": 3.78,
                 "Mid Cap": 51.01,
                 "Large Cap": 4.99,
-                "Other": 24.23,
-                "Thematic": 4.76,
+                "Other": 9.22,
+                "Sectoral/Thematic": 19.77,
                 "Arbitrage": 11.23
             },
             {
                 "Gold": 3.98,
                 "Mid Cap": 50.38,
                 "Large Cap": 4.95,
-                "Other": 24.62,
-                "Thematic": 4.78,
+                "Sectoral/Thematic": 29.4,
                 "Arbitrage": 11.29
             },
             {
                 "Gold": 3.98,
                 "Mid Cap": 50.38,
                 "Large Cap": 4.95,
-                "Other": 24.62,
-                "Thematic": 4.78,
+                "Sectoral/Thematic": 29.4,
                 "Arbitrage": 11.29
             },
             {
                 "Gold": 7.24,
                 "Large Cap": 9.15,
-                "Other": 45.09,
-                "Thematic": 8.83,
+                "Sectoral/Thematic": 53.92,
                 "Arbitrage": 29.69
             },
             {
                 "Gold": 7.09,
                 "Large Cap": 9.19,
-                "Other": 45.36,
-                "Thematic": 8.9,
+                "Sectoral/Thematic": 54.26,
                 "Arbitrage": 29.46
             },
             {
                 "Gold": 6.5,
                 "Large Cap": 8.4,
-                "Other": 41.82,
-                "Thematic": 8.22,
+                "Sectoral/Thematic": 50.04,
                 "Arbitrage": 35.06
             },
             {
                 "Gold": 6.5,
                 "Large Cap": 8.4,
-                "Other": 41.82,
-                "Thematic": 8.22,
+                "Sectoral/Thematic": 50.04,
                 "Arbitrage": 35.06
             },
             {
                 "Gold": 6.5,
                 "Large Cap": 8.4,
-                "Other": 41.82,
-                "Thematic": 8.22,
+                "Sectoral/Thematic": 50.04,
                 "Arbitrage": 35.06
             },
             {
                 "Gold": 5.51,
                 "Large Cap": 6.98,
-                "Other": 37.73,
-                "Thematic": 6.96,
+                "Sectoral/Thematic": 44.68,
                 "Arbitrage": 42.83
             },
             {
                 "Gold": 5.5,
                 "Large Cap": 6.99,
-                "Other": 38.06,
-                "Thematic": 7.0,
+                "Sectoral/Thematic": 45.06,
                 "Arbitrage": 42.45
             },
             {
                 "Gold": 5.57,
                 "Large Cap": 6.92,
-                "Other": 37.63,
-                "Thematic": 7.08,
+                "Sectoral/Thematic": 44.71,
                 "Arbitrage": 42.8
             },
             {
                 "Gold": 5.57,
                 "Large Cap": 6.87,
-                "Other": 37.64,
-                "Thematic": 7.07,
+                "Sectoral/Thematic": 44.71,
                 "Arbitrage": 42.85
             },
             {
                 "Gold": 5.07,
                 "Large Cap": 6.21,
-                "Other": 33.58,
-                "Thematic": 6.39,
+                "Sectoral/Thematic": 39.98,
                 "Arbitrage": 48.74
             },
             {
                 "Gold": 5.07,
                 "Large Cap": 6.21,
-                "Other": 33.58,
-                "Thematic": 6.39,
+                "Sectoral/Thematic": 39.98,
                 "Arbitrage": 48.74
             },
             {
                 "Gold": 5.07,
                 "Large Cap": 6.21,
-                "Other": 33.58,
-                "Thematic": 6.39,
+                "Sectoral/Thematic": 39.98,
                 "Arbitrage": 48.74
             },
             {
                 "Gold": 4.94,
                 "Large Cap": 6.29,
-                "Other": 33.61,
-                "Thematic": 6.33,
+                "Sectoral/Thematic": 39.94,
                 "Arbitrage": 48.82
             },
             {
                 "Gold": 4.96,
                 "Large Cap": 6.31,
-                "Other": 33.75,
-                "Thematic": 6.32,
+                "Sectoral/Thematic": 40.08,
                 "Arbitrage": 48.64
             },
             {
                 "Gold": 4.93,
                 "Large Cap": 6.34,
-                "Other": 33.93,
-                "Thematic": 6.3,
+                "Sectoral/Thematic": 40.23,
                 "Arbitrage": 48.49
             },
             {
                 "Gold": 4.76,
                 "Large Cap": 6.24,
-                "Other": 33.38,
-                "Thematic": 6.34,
+                "Sectoral/Thematic": 39.73,
                 "Arbitrage": 49.28
             },
             {
                 "Gold": 4.73,
                 "Large Cap": 6.2,
-                "Other": 33.69,
-                "Thematic": 6.37,
+                "Sectoral/Thematic": 40.06,
                 "Arbitrage": 49.01
             },
             {
                 "Gold": 4.73,
                 "Large Cap": 6.2,
-                "Other": 33.69,
-                "Thematic": 6.37,
+                "Sectoral/Thematic": 40.06,
                 "Arbitrage": 49.01
             },
             {
                 "Gold": 4.73,
                 "Large Cap": 6.2,
-                "Other": 33.69,
-                "Thematic": 6.37,
+                "Sectoral/Thematic": 40.06,
                 "Arbitrage": 49.01
             },
             {
                 "Gold": 4.81,
                 "Large Cap": 6.31,
-                "Other": 32.72,
-                "Thematic": 6.34,
+                "Sectoral/Thematic": 39.05,
                 "Arbitrage": 49.83
             },
             {
                 "Gold": 4.26,
                 "Large Cap": 5.58,
-                "Other": 29.44,
-                "Thematic": 5.64,
+                "Sectoral/Thematic": 35.07,
                 "Arbitrage": 55.09
             },
             {
                 "Gold": 4.14,
                 "Large Cap": 5.61,
-                "Other": 29.86,
-                "Thematic": 5.7,
+                "Sectoral/Thematic": 35.56,
                 "Arbitrage": 54.69
             },
             {
                 "Gold": 4.14,
                 "Large Cap": 5.61,
-                "Other": 29.86,
-                "Thematic": 5.7,
+                "Sectoral/Thematic": 35.56,
                 "Arbitrage": 54.69
             },
             {
                 "Gold": 4.14,
                 "Large Cap": 5.56,
-                "Other": 29.12,
-                "Thematic": 5.75,
+                "Sectoral/Thematic": 34.87,
                 "Arbitrage": 55.43
             },
             {
                 "Gold": 4.14,
                 "Large Cap": 5.56,
-                "Other": 29.12,
-                "Thematic": 5.75,
+                "Sectoral/Thematic": 34.87,
                 "Arbitrage": 55.43
             },
             {
                 "Gold": 4.14,
                 "Large Cap": 5.56,
-                "Other": 29.12,
-                "Thematic": 5.75,
+                "Sectoral/Thematic": 34.87,
                 "Arbitrage": 55.43
             },
             {
                 "Gold": 4.19,
                 "Large Cap": 5.63,
-                "Other": 28.36,
-                "Thematic": 5.72,
+                "Sectoral/Thematic": 34.08,
                 "Arbitrage": 56.1
             },
             {
                 "Gold": 4.31,
                 "Large Cap": 5.51,
-                "Other": 28.35,
-                "Thematic": 5.72,
+                "Sectoral/Thematic": 34.07,
                 "Arbitrage": 56.12
             },
             {
                 "Gold": 4.23,
                 "Large Cap": 5.39,
-                "Other": 28.6,
-                "Thematic": 7.75,
+                "Sectoral/Thematic": 36.35,
                 "Arbitrage": 54.03
             },
             {
                 "Gold": 3.84,
                 "Large Cap": 5.0,
-                "Other": 26.37,
-                "Thematic": 7.22,
+                "Sectoral/Thematic": 33.59,
                 "Arbitrage": 57.58
             },
             {
                 "Gold": 3.84,
                 "Large Cap": 5.0,
-                "Other": 26.37,
-                "Thematic": 7.22,
+                "Sectoral/Thematic": 33.59,
                 "Arbitrage": 57.58
             },
             {
                 "Gold": 3.84,
                 "Large Cap": 5.0,
-                "Other": 26.37,
-                "Thematic": 7.22,
+                "Sectoral/Thematic": 33.59,
                 "Arbitrage": 57.58
             },
             {
                 "Gold": 3.84,
                 "Large Cap": 5.0,
-                "Other": 26.37,
-                "Thematic": 7.22,
+                "Sectoral/Thematic": 33.59,
                 "Arbitrage": 57.58
             },
             {
                 "Gold": 3.88,
                 "Large Cap": 5.02,
-                "Other": 26.69,
-                "Thematic": 7.18,
+                "Sectoral/Thematic": 33.87,
                 "Arbitrage": 57.22
             },
             {
                 "Gold": 3.74,
                 "Large Cap": 4.91,
-                "Other": 27.33,
-                "Thematic": 8.38,
+                "Sectoral/Thematic": 35.71,
                 "Arbitrage": 55.64
             },
             {
                 "Gold": 3.52,
                 "Large Cap": 4.7,
-                "Other": 28.36,
-                "Thematic": 12.1,
+                "Sectoral/Thematic": 40.45,
                 "Arbitrage": 51.32
             },
             {
                 "Gold": 3.52,
                 "Large Cap": 4.7,
-                "Other": 28.29,
-                "Thematic": 12.17,
+                "Sectoral/Thematic": 40.46,
                 "Arbitrage": 51.31
             },
             {
                 "Gold": 3.51,
                 "Large Cap": 4.68,
-                "Other": 28.62,
-                "Thematic": 12.11,
+                "Sectoral/Thematic": 40.73,
                 "Arbitrage": 51.08
             },
             {
                 "Gold": 3.51,
                 "Large Cap": 4.68,
-                "Other": 28.62,
-                "Thematic": 12.11,
+                "Sectoral/Thematic": 40.73,
                 "Arbitrage": 51.08
             },
             {
                 "Gold": 3.51,
                 "Large Cap": 4.68,
-                "Other": 28.62,
-                "Thematic": 12.11,
+                "Sectoral/Thematic": 40.73,
                 "Arbitrage": 51.08
             },
             {
                 "Gold": 3.5,
                 "Large Cap": 4.66,
-                "Other": 28.56,
-                "Thematic": 12.07,
+                "Sectoral/Thematic": 40.62,
                 "Arbitrage": 51.23
             },
             {
                 "Gold": 3.5,
                 "Large Cap": 4.66,
-                "Other": 28.56,
-                "Thematic": 12.07,
+                "Sectoral/Thematic": 40.62,
                 "Arbitrage": 51.23
             },
             {
                 "Gold": 3.43,
                 "Large Cap": 4.59,
-                "Other": 29.04,
-                "Thematic": 13.21,
+                "Sectoral/Thematic": 42.26,
                 "Arbitrage": 49.72
             },
             {
                 "Gold": 3.43,
                 "Large Cap": 4.57,
-                "Other": 29.16,
-                "Thematic": 13.2,
+                "Sectoral/Thematic": 42.36,
                 "Arbitrage": 49.63
             },
             {
                 "Gold": 3.4,
                 "Large Cap": 4.59,
-                "Other": 29.3,
-                "Thematic": 13.19,
+                "Sectoral/Thematic": 42.5,
                 "Arbitrage": 49.51
             },
             {
                 "Gold": 3.4,
                 "Large Cap": 4.59,
-                "Other": 29.3,
-                "Thematic": 13.19,
+                "Sectoral/Thematic": 42.5,
                 "Arbitrage": 49.51
             },
             {
                 "Gold": 3.4,
                 "Large Cap": 4.59,
-                "Other": 29.3,
-                "Thematic": 13.19,
+                "Sectoral/Thematic": 42.5,
                 "Arbitrage": 49.51
             },
             {
                 "Gold": 3.4,
                 "Large Cap": 4.59,
-                "Other": 29.4,
-                "Thematic": 13.12,
+                "Sectoral/Thematic": 42.52,
                 "Arbitrage": 49.49
             },
             {
                 "Gold": 3.4,
                 "Large Cap": 4.62,
-                "Other": 29.53,
-                "Thematic": 13.1,
+                "Sectoral/Thematic": 42.63,
                 "Arbitrage": 49.35
             },
             {
                 "Gold": 3.39,
                 "Large Cap": 4.57,
-                "Other": 29.7,
-                "Thematic": 13.06,
+                "Sectoral/Thematic": 42.76,
                 "Arbitrage": 49.28
             },
             {
                 "Gold": 3.36,
                 "Large Cap": 4.53,
-                "Other": 29.4,
-                "Thematic": 13.41,
+                "Sectoral/Thematic": 42.81,
                 "Arbitrage": 49.29
             },
             {
                 "Gold": 3.28,
                 "Large Cap": 4.38,
-                "Other": 31.3,
-                "Thematic": 12.88,
-                "Arbitrage": 48.15
+                "Sectoral/Thematic": 41.36,
+                "Arbitrage": 48.15,
+                "Other": 2.82
             },
             {
                 "Gold": 3.28,
                 "Large Cap": 4.38,
-                "Other": 31.3,
-                "Thematic": 12.88,
-                "Arbitrage": 48.15
+                "Sectoral/Thematic": 41.36,
+                "Arbitrage": 48.15,
+                "Other": 2.82
             },
             {
                 "Gold": 3.28,
                 "Large Cap": 4.38,
-                "Other": 31.3,
-                "Thematic": 12.88,
-                "Arbitrage": 48.15
+                "Sectoral/Thematic": 41.36,
+                "Arbitrage": 48.15,
+                "Other": 2.82
             },
             {
                 "Gold": 3.28,
                 "Large Cap": 4.4,
-                "Other": 31.27,
-                "Thematic": 13.13,
-                "Arbitrage": 47.93
+                "Sectoral/Thematic": 41.58,
+                "Arbitrage": 47.93,
+                "Other": 2.82
             },
             {
                 "Gold": 3.25,
                 "Large Cap": 4.39,
-                "Other": 31.09,
-                "Thematic": 13.15,
-                "Arbitrage": 48.11
+                "Sectoral/Thematic": 41.43,
+                "Arbitrage": 48.11,
+                "Other": 2.82
             },
             {
                 "Gold": 3.21,
                 "Large Cap": 4.42,
-                "Other": 31.09,
-                "Thematic": 13.2,
-                "Arbitrage": 48.07
+                "Sectoral/Thematic": 41.46,
+                "Arbitrage": 48.07,
+                "Other": 2.83
             },
             {
                 "Gold": 2.12,
                 "Large Cap": 2.86,
-                "Other": 31.63,
-                "Thematic": 10.54,
-                "Arbitrage": 52.85
+                "Sectoral/Thematic": 33.48,
+                "Arbitrage": 52.85,
+                "Other": 6.24,
+                "Mid Cap": 2.46
             },
             {
                 "Gold": 2.12,
                 "Large Cap": 2.86,
-                "Other": 31.63,
-                "Thematic": 10.54,
-                "Arbitrage": 52.85
+                "Sectoral/Thematic": 33.48,
+                "Arbitrage": 52.85,
+                "Other": 6.24,
+                "Mid Cap": 2.46
             },
             {
                 "Gold": 2.12,
                 "Large Cap": 2.86,
-                "Other": 31.63,
-                "Thematic": 10.54,
-                "Arbitrage": 52.85
+                "Sectoral/Thematic": 33.48,
+                "Arbitrage": 52.85,
+                "Other": 6.24,
+                "Mid Cap": 2.46
             },
             {
                 "Gold": 2.12,
                 "Large Cap": 2.86,
-                "Other": 31.63,
-                "Thematic": 10.54,
-                "Arbitrage": 52.85
+                "Sectoral/Thematic": 33.48,
+                "Arbitrage": 52.85,
+                "Other": 6.24,
+                "Mid Cap": 2.46
             },
             {
                 "Gold": 2.11,
                 "Large Cap": 2.87,
-                "Other": 31.62,
-                "Thematic": 10.59,
-                "Arbitrage": 52.81
+                "Sectoral/Thematic": 33.49,
+                "Arbitrage": 52.81,
+                "Other": 6.25,
+                "Mid Cap": 2.47
             },
             {
                 "Gold": 2.1,
                 "Large Cap": 2.85,
-                "Other": 31.66,
-                "Thematic": 10.63,
-                "Arbitrage": 52.76
+                "Sectoral/Thematic": 33.59,
+                "Arbitrage": 52.76,
+                "Other": 6.23,
+                "Mid Cap": 2.47
             },
             {
                 "Gold": 1.98,
                 "Large Cap": 2.68,
-                "Other": 32.47,
-                "Thematic": 10.15,
+                "Sectoral/Thematic": 31.87,
                 "Arbitrage": 48.97,
-                "Mid Cap": 3.75
+                "Other": 8.41,
+                "Mid Cap": 6.09
             },
             {
                 "Gold": 1.98,
                 "Large Cap": 2.68,
-                "Other": 32.6,
-                "Thematic": 10.1,
+                "Sectoral/Thematic": 31.98,
                 "Arbitrage": 48.89,
-                "Mid Cap": 3.76
+                "Other": 8.37,
+                "Mid Cap": 6.11
             },
             {
                 "Gold": 1.99,
                 "Large Cap": 2.67,
-                "Other": 32.32,
-                "Thematic": 10.14,
+                "Sectoral/Thematic": 31.74,
                 "Arbitrage": 49.11,
-                "Mid Cap": 3.78
+                "Other": 8.36,
+                "Mid Cap": 6.13
             },
             {
                 "Gold": 1.99,
                 "Large Cap": 2.67,
-                "Other": 32.32,
-                "Thematic": 10.14,
+                "Sectoral/Thematic": 31.74,
                 "Arbitrage": 49.11,
-                "Mid Cap": 3.78
+                "Other": 8.36,
+                "Mid Cap": 6.13
             },
             {
                 "Gold": 1.99,
                 "Large Cap": 2.67,
-                "Other": 32.32,
-                "Thematic": 10.14,
+                "Sectoral/Thematic": 31.74,
                 "Arbitrage": 49.11,
-                "Mid Cap": 3.78
+                "Other": 8.36,
+                "Mid Cap": 6.13
             },
             {
                 "Gold": 1.91,
                 "Large Cap": 2.55,
-                "Other": 32.95,
-                "Thematic": 11.35,
+                "Sectoral/Thematic": 34.04,
                 "Arbitrage": 47.63,
-                "Mid Cap": 3.62
+                "Other": 7.99,
+                "Mid Cap": 5.88
             },
             {
                 "Gold": 4.75,
                 "Large Cap": 2.46,
-                "Other": 31.57,
-                "Thematic": 10.97,
+                "Sectoral/Thematic": 32.67,
                 "Arbitrage": 46.78,
-                "Mid Cap": 3.48
+                "Other": 7.7,
+                "Mid Cap": 5.64
             },
             {
                 "Gold": 2.07,
                 "Large Cap": 2.56,
-                "Other": 31.76,
-                "Thematic": 11.44,
+                "Sectoral/Thematic": 32.93,
                 "Arbitrage": 48.56,
-                "Mid Cap": 3.61
+                "Other": 8.01,
+                "Mid Cap": 5.87
             },
             {
                 "Gold": 2.28,
                 "Large Cap": 2.83,
-                "Other": 22.2,
-                "Thematic": 15.51,
+                "Sectoral/Thematic": 36.03,
                 "Arbitrage": 53.18,
-                "Mid Cap": 4.0
+                "Mid Cap": 5.68
             },
             {
                 "Gold": 2.24,
                 "Large Cap": 2.83,
-                "Other": 21.95,
-                "Thematic": 15.59,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.38,
-                "Mid Cap": 4.0
+                "Mid Cap": 5.68
             },
             {
                 "Gold": 2.24,
                 "Large Cap": 2.83,
-                "Other": 21.95,
-                "Thematic": 15.59,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.38,
-                "Mid Cap": 4.0
+                "Mid Cap": 5.68
             },
             {
                 "Gold": 2.24,
                 "Large Cap": 2.83,
-                "Other": 21.95,
-                "Thematic": 15.59,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.38,
-                "Mid Cap": 4.0
+                "Mid Cap": 5.68
             },
             {
                 "Gold": 2.25,
                 "Large Cap": 2.84,
-                "Other": 21.73,
-                "Thematic": 15.71,
+                "Sectoral/Thematic": 35.77,
                 "Arbitrage": 53.47,
-                "Mid Cap": 4.0
+                "Mid Cap": 5.68
             },
             {
                 "Gold": 2.25,
                 "Large Cap": 2.84,
-                "Other": 21.75,
-                "Thematic": 15.75,
+                "Sectoral/Thematic": 35.8,
                 "Arbitrage": 53.43,
-                "Mid Cap": 3.99
+                "Mid Cap": 5.69
             },
             {
                 "Gold": 2.26,
                 "Large Cap": 2.83,
-                "Other": 21.87,
-                "Thematic": 15.69,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.32,
-                "Mid Cap": 4.03
+                "Mid Cap": 5.73
             },
             {
-                "Gold": 2.25,
+                "Gold": 2.26,
                 "Large Cap": 2.83,
-                "Other": 22.02,
-                "Thematic": 15.64,
-                "Arbitrage": 53.23,
-                "Mid Cap": 4.03
+                "Sectoral/Thematic": 35.95,
+                "Arbitrage": 53.24,
+                "Mid Cap": 5.72
             },
             {
                 "Gold": 2.26,
                 "Large Cap": 2.84,
-                "Other": 22.04,
-                "Thematic": 15.53,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.3,
-                "Mid Cap": 4.03
+                "Mid Cap": 5.74
             },
             {
                 "Gold": 2.26,
                 "Large Cap": 2.84,
-                "Other": 22.04,
-                "Thematic": 15.53,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.3,
-                "Mid Cap": 4.03
+                "Mid Cap": 5.74
             },
             {
                 "Gold": 2.26,
                 "Large Cap": 2.84,
-                "Other": 22.04,
-                "Thematic": 15.53,
+                "Sectoral/Thematic": 35.86,
                 "Arbitrage": 53.3,
-                "Mid Cap": 4.03
+                "Mid Cap": 5.74
             },
             {
                 "Gold": 2.25,
                 "Large Cap": 2.86,
-                "Other": 22.34,
-                "Thematic": 15.49,
+                "Sectoral/Thematic": 36.12,
                 "Arbitrage": 53.01,
-                "Mid Cap": 4.04
+                "Mid Cap": 5.75
             },
             {
                 "Gold": 2.23,
                 "Large Cap": 2.85,
-                "Other": 22.33,
-                "Thematic": 15.48,
+                "Sectoral/Thematic": 36.1,
                 "Arbitrage": 53.04,
-                "Mid Cap": 4.06
+                "Mid Cap": 5.77
             },
             {
                 "Gold": 2.22,
                 "Large Cap": 2.85,
-                "Other": 22.36,
-                "Thematic": 15.48,
+                "Sectoral/Thematic": 36.13,
                 "Arbitrage": 53.02,
-                "Mid Cap": 4.07
+                "Mid Cap": 5.79
             },
             {
                 "Gold": 2.22,
                 "Large Cap": 2.85,
-                "Other": 22.36,
-                "Thematic": 15.48,
+                "Sectoral/Thematic": 36.13,
                 "Arbitrage": 53.02,
-                "Mid Cap": 4.07
+                "Mid Cap": 5.79
             },
             {
-                "Gold": 2.23,
-                "Large Cap": 2.83,
-                "Other": 22.21,
-                "Thematic": 15.39,
-                "Arbitrage": 53.29,
-                "Mid Cap": 4.05
+                "Gold": 2.15,
+                "Large Cap": 6.08,
+                "Sectoral/Thematic": 34.58,
+                "Arbitrage": 51.35,
+                "Mid Cap": 5.56,
+                "Other": 0.29
             },
             {
-                "Gold": 2.23,
-                "Large Cap": 2.83,
-                "Other": 22.21,
-                "Thematic": 15.39,
-                "Arbitrage": 53.29,
-                "Mid Cap": 4.05
+                "Gold": 2.15,
+                "Large Cap": 6.08,
+                "Sectoral/Thematic": 34.58,
+                "Arbitrage": 51.35,
+                "Mid Cap": 5.56,
+                "Other": 0.29
             },
             {
-                "Gold": 2.23,
-                "Large Cap": 2.83,
-                "Other": 22.21,
-                "Thematic": 15.39,
-                "Arbitrage": 53.29,
-                "Mid Cap": 4.05
+                "Gold": 2.15,
+                "Large Cap": 6.08,
+                "Sectoral/Thematic": 34.58,
+                "Arbitrage": 51.35,
+                "Mid Cap": 5.56,
+                "Other": 0.29
             },
             {
-                "Gold": 2.22,
-                "Large Cap": 2.82,
-                "Other": 21.92,
-                "Thematic": 15.34,
-                "Arbitrage": 53.67,
-                "Mid Cap": 4.03
+                "Gold": 2.0,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 32.11,
+                "Arbitrage": 50.43,
+                "Mid Cap": 5.17,
+                "Other": 4.18
             },
             {
-                "Gold": 2.25,
-                "Large Cap": 2.83,
-                "Other": 22.07,
-                "Thematic": 15.24,
-                "Arbitrage": 53.56,
-                "Mid Cap": 4.04
+                "Gold": 2.03,
+                "Large Cap": 6.12,
+                "Sectoral/Thematic": 32.13,
+                "Arbitrage": 50.29,
+                "Mid Cap": 5.18,
+                "Other": 4.25
             },
             {
-                "Gold": 2.22,
-                "Large Cap": 2.82,
-                "Other": 22.2,
-                "Thematic": 15.24,
-                "Arbitrage": 53.51,
-                "Mid Cap": 4.02
+                "Gold": 1.95,
+                "Large Cap": 5.98,
+                "Sectoral/Thematic": 31.48,
+                "Arbitrage": 51.2,
+                "Mid Cap": 5.03,
+                "Other": 4.36
             },
             {
-                "Gold": 2.23,
-                "Large Cap": 2.81,
-                "Other": 22.23,
-                "Thematic": 15.23,
-                "Arbitrage": 53.47,
-                "Mid Cap": 4.03
+                "Gold": 1.96,
+                "Large Cap": 5.97,
+                "Sectoral/Thematic": 31.55,
+                "Arbitrage": 51.23,
+                "Mid Cap": 5.05,
+                "Other": 4.24
             },
             {
-                "Gold": 2.21,
-                "Large Cap": 2.8,
-                "Other": 22.27,
-                "Thematic": 15.26,
-                "Arbitrage": 53.42,
-                "Mid Cap": 4.03
+                "Gold": 1.94,
+                "Large Cap": 5.89,
+                "Sectoral/Thematic": 31.46,
+                "Arbitrage": 50.93,
+                "Mid Cap": 5.02,
+                "Other": 4.76
             },
             {
-                "Gold": 2.21,
-                "Large Cap": 2.8,
-                "Other": 22.27,
-                "Thematic": 15.26,
-                "Arbitrage": 53.42,
-                "Mid Cap": 4.03
+                "Gold": 1.94,
+                "Large Cap": 5.89,
+                "Sectoral/Thematic": 31.46,
+                "Arbitrage": 50.93,
+                "Mid Cap": 5.02,
+                "Other": 4.76
             }
         ]
     },
@@ -3110,31 +3088,31 @@
         {
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
-            "category": "Other",
+            "category": "Sectoral/Thematic",
             "value": 43109.48
         },
         {
             "id": "INF204KC1089",
             "name": "NIPPONAMC - NETFPHARMA",
-            "category": "Thematic",
+            "category": "Sectoral/Thematic",
             "value": 46936.5
         },
         {
             "id": "INF109KC10S8",
             "name": "ICICIPRAMC - PSUBANKICI",
-            "category": "Other",
+            "category": "Sectoral/Thematic",
             "value": 32753.8
         },
         {
             "id": "Kotak Arbitrage Fund Direct Growth",
             "name": "Kotak Arbitrage Fund Direct Growth",
             "category": "Arbitrage",
-            "value": 196859.55
+            "value": 213879.49
         },
         {
             "id": "INF109KC11W8",
             "name": "ICICIPRAMC - ICICIM150",
-            "category": "Other",
+            "category": "Mid Cap",
             "value": 6212.7
         },
         {
@@ -3146,8 +3124,38 @@
         {
             "id": "INF109KC19V3",
             "name": "ICICIPRAMC - ICICIFMCG",
-            "category": "Thematic",
+            "category": "Sectoral/Thematic",
             "value": 9318.6
+        },
+        {
+            "id": "INE397D01024",
+            "name": "BHARTI AIRTEL LIMITED",
+            "category": "Large Cap",
+            "value": 14385.6
+        },
+        {
+            "id": "INE953R01016",
+            "name": "P N GADGIL JEWELLERS LTD",
+            "category": "Other",
+            "value": 4006.45
+        },
+        {
+            "id": "INE0LEZ01016",
+            "name": "ATHER ENERGY LIMITED",
+            "category": "Other",
+            "value": 14470.4
+        },
+        {
+            "id": "INE947N01017",
+            "name": "AEQUS LIMITED",
+            "category": "Other",
+            "value": 747.8
+        },
+        {
+            "id": "INE0HOQ01053",
+            "name": "BILLIONBRAINS GARAGE VN L",
+            "category": "Other",
+            "value": 784.36
         }
     ]
 }
