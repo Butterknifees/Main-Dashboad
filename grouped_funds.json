@@ -1209,7 +1209,7 @@
         },
         {
             "code": "120364",
-            "name": "ICICI Prudential Equity Arbitrage Fund - Direct Plan - Growth",
+            "name": "ICICI Prudential Arbitrage Fund - Direct Plan - Growth",
             "category": "Unknown"
         },
         {
@@ -1255,6 +1255,11 @@
         {
             "code": "148468",
             "name": "Mahindra Manulife Arbitrage Fund - Direct Plan -Growth",
+            "category": "Unknown"
+        },
+        {
+            "code": "154007",
+            "name": "Mahindra Manulife Income Plus Arbitrage Active FOF  - Direct - Growth",
             "category": "Unknown"
         },
         {
@@ -1392,6 +1397,11 @@
         {
             "code": "120524",
             "name": "Axis Multi Asset Allocation Fund - Direct Plan - Growth Option",
+            "category": "Unknown"
+        },
+        {
+            "code": "153960",
+            "name": "Axis Multi-Asset Active FoF - Direct Plan - Growth",
             "category": "Unknown"
         },
         {
@@ -1557,6 +1567,11 @@
         {
             "code": "148053",
             "name": "Tata Multi Asset Allocation Fund-Direct Plan-Growth",
+            "category": "Unknown"
+        },
+        {
+            "code": "153999",
+            "name": "The Wealth Company Multi Asset Allocation Fund - Direct Growth",
             "category": "Unknown"
         },
         {
@@ -5008,6 +5023,11 @@
             "category": "Unknown"
         },
         {
+            "code": "153983",
+            "name": "Mirae Asset Infrastructure Fund - Direct Plan - Growth",
+            "category": "Unknown"
+        },
+        {
             "code": "148574",
             "name": "Mirae Asset Nifty 100 ESG Sector Leaders Fund of Fund Direct Growth",
             "category": "Unknown"
@@ -6210,6 +6230,11 @@
             "category": "Unknown"
         },
         {
+            "code": "154014",
+            "name": "DSP Nifty Midcap 150 Index Fund - Direct - Growth",
+            "category": "Unknown"
+        },
+        {
             "code": "150428",
             "name": "DSP Nifty Midcap 150 Quality 50 Index Fund - Direct - Growth",
             "category": "Unknown"
@@ -6222,6 +6247,11 @@
         {
             "code": "153348",
             "name": "DSP Nifty Private Bank Index Fund - Direct - Growth",
+            "category": "Unknown"
+        },
+        {
+            "code": "154018",
+            "name": "DSP Nifty Smallcap 250 Index Fund - Direct - Growth",
             "category": "Unknown"
         },
         {
@@ -6437,6 +6467,11 @@
         {
             "code": "153453",
             "name": "Groww Nifty 500 Momentum 50 ETF FOF - Direct Plan - Growth",
+            "category": "Unknown"
+        },
+        {
+            "code": "153908",
+            "name": "Groww Nifty Capital Markets ETF FOF Direct Growth",
             "category": "Unknown"
         },
         {
@@ -7462,6 +7497,11 @@
         {
             "code": "149447",
             "name": "Navi Nifty Next 50 Index Fund- Direct Plan- Growth",
+            "category": "Unknown"
+        },
+        {
+            "code": "154027",
+            "name": "Navi Nifty midsmallcap 400 Index Fund- Direct - Growth",
             "category": "Unknown"
         },
         {

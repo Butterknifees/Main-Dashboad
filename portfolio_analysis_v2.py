@@ -2,15 +2,18 @@ import pandas as pd
 import sqlite3
 import csv
 import os
+import glob
 from datetime import datetime, timedelta
 import numpy as np
 from collections import defaultdict
+import json
 
 # Paths
-DB_FILE = "Gemini/personal finance accounting/nav_data.db"
-ETF_FILE = "Gemini/personal finance accounting/etf_historical_data.csv"
-STOCK_FILE = "Gemini/personal finance accounting/nifty_universe_historical_data.csv"
-BASE_PATH = "Gemini/personal finance accounting/data/"
+BASE_DIR = "Gemini/personal finance accounting/" if os.path.exists("Gemini/personal finance accounting") else ""
+DB_FILE = os.path.join(BASE_DIR, "nav_data.db")
+ETF_FILE = os.path.join(BASE_DIR, "etf_historical_data.csv")
+STOCK_FILE = os.path.join(BASE_DIR, "nifty_universe_historical_data.csv")
+BASE_PATH = os.path.join(BASE_DIR, "data/")
 
 def xirr(dates, payments):
     if not dates or not payments: return 0
@@ -65,27 +68,31 @@ def load_transactions():
             seen_tx.add(sig)
             all_tx.append(tx)
 
-    # 1. CSV Tradebook
-    tradebook_path = BASE_PATH + 'tradebook-IZP332-MF (1).csv'
-    if os.path.exists(tradebook_path):
-        with open(tradebook_path, mode='r') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                add_tx({
-                    'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
-                    'id': row['isin'],
-                    'name': row['symbol'],
-                    'qty': float(row['quantity']),
-                    'price': float(row['price']),
-                    'type': row['trade_type'].lower(),
-                    'source': 'MF_DB'
-                })
-    # 2. MF Excel
-    mf_files = [
-        'Mutual_Funds_Order_History_01-04-2025_19-05-2026.xlsx'
-    ]
-    for mf_file in mf_files:
-        full_path = BASE_PATH + mf_file
+    # 1. CSV Tradebooks
+    tradebook_files = sorted(list(set(
+        glob.glob(os.path.join(BASE_PATH, 'tradebook-*.csv')) +
+        glob.glob(os.path.join(BASE_PATH, 'appending', 'tradebook-*.csv'))
+    )))
+    for tradebook_path in tradebook_files:
+        if os.path.exists(tradebook_path):
+            with open(tradebook_path, mode='r') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    add_tx({
+                        'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
+                        'id': row['isin'],
+                        'name': row['symbol'],
+                        'qty': float(row['quantity']),
+                        'price': float(row['price']),
+                        'type': row['trade_type'].lower(),
+                        'source': 'MF_DB'
+                    })
+    # 2. MF Excels
+    mf_files = sorted(list(set(
+        glob.glob(os.path.join(BASE_PATH, 'Mutual_Funds_Order_History_*.xlsx')) +
+        glob.glob(os.path.join(BASE_PATH, 'appending', 'Mutual_Funds_Order_History_*.xlsx'))
+    )))
+    for full_path in mf_files:
         if not os.path.exists(full_path): continue
         df_mf = pd.read_excel(full_path, header=11).dropna(how='all')
         for _, row in df_mf.iterrows():
@@ -101,12 +108,12 @@ def load_transactions():
                 'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
                 'source': 'MF_DB'
             })
-    # 3. Stocks/ETFs Excel
-    stk_files = [
-        'Stocks_Order_History_3181700510_01-04-2025_18-05-2026.xlsx'
-    ]
-    for stk_file in stk_files:
-        full_path = BASE_PATH + stk_file
+    # 3. Stocks/ETFs Excels
+    stk_files = sorted(list(set(
+        glob.glob(os.path.join(BASE_PATH, 'Stocks_Order_History_*.xlsx')) +
+        glob.glob(os.path.join(BASE_PATH, 'appending', 'Stocks_Order_History_*.xlsx'))
+    )))
+    for full_path in stk_files:
         if not os.path.exists(full_path): continue
         df_stk = pd.read_excel(full_path, header=5)
         for _, row in df_stk.iterrows():
@@ -121,6 +128,31 @@ def load_transactions():
                 'type': row['Type'].lower(),
                 'source': 'YF'
             })
+
+    # Sort chronologically
+    all_tx.sort(key=lambda x: x['date'])
+
+    # Save the deduplicated master transaction list to data/consolidated_transactions.csv
+    consolidated_path = os.path.join(BASE_PATH, 'consolidated_transactions.csv')
+    try:
+        with open(consolidated_path, 'w', newline='', encoding='utf-8') as f_out:
+            writer = csv.DictWriter(f_out, fieldnames=['date', 'id', 'name', 'qty', 'price', 'type', 'source'])
+            writer.writeheader()
+            for tx in all_tx:
+                row = {
+                    'date': tx['date'].strftime('%Y-%m-%d %H:%M:%S') if tx['date'].time() != datetime.min.time() else tx['date'].strftime('%Y-%m-%d'),
+                    'id': tx['id'],
+                    'name': tx['name'],
+                    'qty': tx['qty'],
+                    'price': tx['price'],
+                    'type': tx['type'],
+                    'source': tx['source']
+                }
+                writer.writerow(row)
+        print(f"Consolidated transactions written to {consolidated_path}")
+    except Exception as e:
+        print(f"Warning: Could not write consolidated transactions to CSV: {e}")
+
     return all_tx
 
 def get_latest_holdings_prices():
@@ -184,7 +216,12 @@ def get_prices(assets, start_date, end_date):
         "SILVERIETF": "INF109KC1Y56",
         "GOLDIETF": "INF109KC1NT3",
         "SETFNN50": "INF109K01Z71",
-        "BANKBEES": "INF204KB15I0"
+        "BANKBEES": "INF204KB15I0",
+        "BHARTIARTL": "INE397D01024",
+        "PNGJL": "INE953R01016",
+        "ATHERENERG": "INE0LEZ01016",
+        "AEQUS": "INE947N01017",
+        "GROWW": "INE0HOQ01053"
     }
     
     mf_name_map = {
@@ -423,7 +460,7 @@ def main():
         return float(np.mean(rets) * 252)
 
     # Historical Concentration Calculation
-    with open("Gemini/personal finance accounting/grouped_funds.json", "r") as f:
+    with open(os.path.join(BASE_DIR, "grouped_funds.json"), "r") as f:
         grouped = json.load(f)
         code_to_cat = {f['code']: cat for cat, funds in grouped.items() for f in funds}
     
@@ -432,10 +469,21 @@ def main():
         if cat == "Other":
             n = name.lower()
             if "gold" in n: return "Gold"
-            if "nifty 50" in n or "large" in n: return "Large Cap"
-            if "mid cap" in n or "midcap" in n: return "Mid Cap"
+            if "silver" in n: return "Silver"
+            if "large & mid" in n or "large and mid" in n: return "Large & Mid Cap"
+            if "nifty 50" in n or "large" in n or "niftybees" in n or "nn50" in n or "next 50" in n or "airtel" in n or "bharti" in n: return "Large Cap"
+            if "mid cap" in n or "midcap" in n or "m150" in n: return "Mid Cap"
             if "arbitrage" in n: return "Arbitrage"
-            if "pharma" in n or "defense" in n or "fmcg" in n: return "Thematic"
+            if "pharma" in n or "defense" in n or "defence" in n or "fmcg" in n or "thematic" in n or "chemical" in n or "psu" in n or "bank" in n: return "Sectoral/Thematic"
+            if "liquid" in n: return "Liquid"
+            if "overnight" in n: return "Overnight"
+            if "money market" in n: return "Money Market"
+            if "ultra short" in n or "ultra-short" in n: return "Ultra Short"
+            if "duration" in n: return "Duration"
+            if "credit risk" in n: return "Credit Risk"
+            if "multi asset" in n or "multi-asset" in n: return "Multi Asset"
+            if "foreign" in n or "overseas" in n or "global" in n: return "Foreign Funds"
+            if "ebbetf" in n or "bond" in n: return "Debt (Other)"
         return cat
 
     historical_holdings = defaultdict(float)
@@ -520,11 +568,11 @@ def main():
         ]
     }
     
-    with open('Gemini/personal finance accounting/dashboard_data.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'dashboard_data.json'), 'w') as f:
         json.dump(dashboard_data, f, indent=4)
     
     # Update index.html statically with the latest numbers
-    index_path = "Gemini/personal finance accounting/index.html"
+    index_path = os.path.join(BASE_DIR, "index.html")
     if not os.path.exists(index_path):
         index_path = "index.html"
     if os.path.exists(index_path):
@@ -597,6 +645,5 @@ def main():
     print(f"Total Trading Days Analyzed: {len(clean_returns)}")
     print("="*50)
 
-import json
 if __name__ == "__main__":
     main()

@@ -9,11 +9,12 @@ etf_tickers = [
     "SILVERIETF.NS", "PHARMABEES.NS", "PSUBNKIETF.NS", 
     "EBBETF0433.NS", "NIFTYBEES.NS", "MIDCAPIETF.NS",
     "GOLDIETF.NS", "FMCGIETF.NS", "SETFNN50.NS", "BANKBEES.NS",
-    "SMLCSE.NS"
+    "SMLCSE.NS", "BHARTIARTL.NS", "PNGJL.NS", "ATHERENERG.NS",
+    "AEQUS.NS", "GROWW.NS"
 ]
 
 def fetch_etf_historical():
-    output_dir = "Gemini/personal finance accounting"
+    output_dir = "Gemini/personal finance accounting" if os.path.exists("Gemini/personal finance accounting") else ""
     output_file = os.path.join(output_dir, "etf_historical_data.csv")
     
     start_date = None

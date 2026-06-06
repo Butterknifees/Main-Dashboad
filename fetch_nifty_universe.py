@@ -5,7 +5,7 @@ import time
 from datetime import datetime, timedelta
 
 def fetch_nifty_universe_historical():
-    output_dir = "Gemini/personal finance accounting"
+    output_dir = "Gemini/personal finance accounting" if os.path.exists("Gemini/personal finance accounting") else ""
     output_file = os.path.join(output_dir, "nifty_universe_historical_data.csv")
     
     start_date = None
