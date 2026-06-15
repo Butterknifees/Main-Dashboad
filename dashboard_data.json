@@ -1,22 +1,22 @@
 {
     "metrics": {
-        "xirr": 14.63,
-        "daily_volatility": 0.8453,
-        "annualized_volatility": 13.42,
-        "final_value": 420945.08,
-        "period": "2025-08-04 to 2026-06-14",
+        "xirr": 15.62,
+        "daily_volatility": 0.8435,
+        "annualized_volatility": 13.39,
+        "final_value": 422396.21,
+        "period": "2025-08-04 to 2026-06-15",
         "comparison": {
             "portfolio": {
-                "return": 14.63,
-                "volatility": 13.42,
+                "return": 15.62,
+                "volatility": 13.39,
                 "max_drawdown": -8.01,
-                "avg_return": 15.25
+                "avg_return": 15.47
             },
             "model": {
                 "return": 18.4,
-                "volatility": 9.65,
+                "volatility": 9.68,
                 "max_drawdown": -11.34,
-                "avg_return": 7.0
+                "avg_return": 7.76
             }
         }
     },
@@ -336,7 +336,8 @@
             "2026-06-11",
             "2026-06-12",
             "2026-06-13",
-            "2026-06-14"
+            "2026-06-14",
+            "2026-06-15"
         ],
         "nav": [
             100.0,
@@ -653,7 +654,8 @@
             119.19,
             120.03,
             120.03,
-            120.03
+            120.03,
+            120.44
         ],
         "model_nav": [
             100.0,
@@ -970,7 +972,8 @@
             106.75,
             108.48,
             108.48,
-            108.48
+            108.48,
+            109.54
         ],
         "total_value": [
             19999.02,
@@ -1287,7 +1290,8 @@
             417986.04,
             420945.08,
             420945.08,
-            420945.08
+            420945.08,
+            422396.21
         ],
         "allocation": [
             {
@@ -3165,6 +3169,14 @@
                 "Arbitrage": 50.92,
                 "Mid Cap": 5.0,
                 "Other": 4.69
+            },
+            {
+                "Gold": 1.84,
+                "Large Cap": 5.95,
+                "Sectoral/Thematic": 31.73,
+                "Arbitrage": 50.74,
+                "Mid Cap": 5.01,
+                "Other": 4.72
             }
         ]
     },
@@ -3185,19 +3197,19 @@
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
             "category": "Sectoral/Thematic",
-            "value": 42797.72
+            "value": 43334.64
         },
         {
             "id": "INF204KC1089",
             "name": "NIPPONAMC - NETFPHARMA",
             "category": "Sectoral/Thematic",
-            "value": 47143.85
+            "value": 47068.45
         },
         {
             "id": "INF109KC10S8",
             "name": "ICICIPRAMC - PSUBANKICI",
             "category": "Sectoral/Thematic",
-            "value": 33629.05
+            "value": 34154.2
         },
         {
             "id": "Kotak Arbitrage Fund Direct Growth",
@@ -3209,7 +3221,7 @@
             "id": "INF109KC11W8",
             "name": "ICICIPRAMC - ICICIM150",
             "category": "Mid Cap",
-            "value": 6215.4
+            "value": 6326.1
         },
         {
             "id": "HDFC Mid Cap Fund Direct Growth",
@@ -3221,37 +3233,37 @@
             "id": "INF109KC19V3",
             "name": "ICICIPRAMC - ICICIFMCG",
             "category": "Sectoral/Thematic",
-            "value": 9423.0
+            "value": 9489.6
         },
         {
             "id": "INE397D01024",
             "name": "BHARTI AIRTEL LIMITED",
             "category": "Large Cap",
-            "value": 14580.0
+            "value": 14696.8
         },
         {
             "id": "INE953R01016",
             "name": "P N GADGIL JEWELLERS LTD",
             "category": "Other",
-            "value": 3832.85
+            "value": 3914.75
         },
         {
             "id": "INE0LEZ01016",
             "name": "ATHER ENERGY LIMITED",
             "category": "Other",
-            "value": 14401.8
+            "value": 14373.1
         },
         {
             "id": "INE947N01017",
             "name": "AEQUS LIMITED",
             "category": "Other",
-            "value": 730.12
+            "value": 817.0
         },
         {
             "id": "INE0HOQ01053",
             "name": "BILLIONBRAINS GARAGE VN L",
             "category": "Other",
-            "value": 795.88
+            "value": 826.16
         }
     ]
 }
