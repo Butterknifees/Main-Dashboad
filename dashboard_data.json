@@ -1,22 +1,22 @@
 {
     "metrics": {
-        "xirr": 17.65,
+        "xirr": 17.51,
         "daily_volatility": 0.8362,
         "annualized_volatility": 13.27,
         "final_value": 425962.3,
-        "period": "2025-08-04 to 2026-06-20",
+        "period": "2025-08-04 to 2026-06-21",
         "comparison": {
             "portfolio": {
-                "return": 17.65,
+                "return": 17.51,
                 "volatility": 13.27,
                 "max_drawdown": -8.01,
-                "avg_return": 15.9
+                "avg_return": 15.85
             },
             "model": {
                 "return": 18.4,
-                "volatility": 9.62,
+                "volatility": 9.6,
                 "max_drawdown": -11.34,
-                "avg_return": 7.74
+                "avg_return": 7.71
             }
         }
     },
@@ -342,7 +342,8 @@
             "2026-06-17",
             "2026-06-18",
             "2026-06-19",
-            "2026-06-20"
+            "2026-06-20",
+            "2026-06-21"
         ],
         "nav": [
             100.0,
@@ -664,6 +665,7 @@
             120.42,
             121.1,
             121.21,
+            121.46,
             121.46,
             121.46
         ],
@@ -988,6 +990,7 @@
             110.17,
             110.12,
             109.67,
+            109.67,
             109.67
         ],
         "total_value": [
@@ -1310,6 +1313,7 @@
             422330.76,
             424686.35,
             425088.51,
+            425962.3,
             425962.3,
             425962.3
         ],
@@ -3221,6 +3225,14 @@
                 "Arbitrage": 50.49,
                 "Mid Cap": 5.08,
                 "Other": 4.49
+            },
+            {
+                "Gold": 1.79,
+                "Large Cap": 6.09,
+                "Sectoral/Thematic": 32.11,
+                "Arbitrage": 50.42,
+                "Mid Cap": 5.09,
+                "Other": 4.5
             },
             {
                 "Gold": 1.79,
