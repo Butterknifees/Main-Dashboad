@@ -1,22 +1,22 @@
 {
     "metrics": {
-        "xirr": 18.66,
-        "daily_volatility": 0.8129,
-        "annualized_volatility": 12.9,
-        "final_value": 431541.1,
-        "period": "2025-08-04 to 2026-07-11",
+        "xirr": 19.05,
+        "daily_volatility": 0.8132,
+        "annualized_volatility": 12.91,
+        "final_value": 432353.3,
+        "period": "2025-08-04 to 2026-07-12",
         "comparison": {
             "portfolio": {
-                "return": 18.66,
-                "volatility": 12.9,
+                "return": 19.05,
+                "volatility": 12.91,
                 "max_drawdown": -8.01,
-                "avg_return": 15.88
+                "avg_return": 15.98
             },
             "model": {
                 "return": 18.4,
-                "volatility": 9.49,
+                "volatility": 9.48,
                 "max_drawdown": -11.34,
-                "avg_return": 7.4
+                "avg_return": 7.47
             }
         }
     },
@@ -363,7 +363,8 @@
             "2026-07-08",
             "2026-07-09",
             "2026-07-10",
-            "2026-07-11"
+            "2026-07-11",
+            "2026-07-12"
         ],
         "nav": [
             100.0,
@@ -706,8 +707,9 @@
             122.79,
             122.11,
             122.62,
-            123.05,
-            123.05
+            123.28,
+            123.28,
+            123.28
         ],
         "model_nav": [
             100.0,
@@ -1050,8 +1052,9 @@
             110.17,
             108.71,
             109.48,
-            109.86,
-            109.86
+            110.0,
+            110.0,
+            110.0
         ],
         "total_value": [
             19999.02,
@@ -1394,8 +1397,9 @@
             430631.31,
             428250.7,
             430037.34,
-            431541.1,
-            431541.1
+            432353.3,
+            432353.3,
+            432353.3
         ],
         "allocation": [
             {
@@ -3475,19 +3479,27 @@
                 "Other": 5.34
             },
             {
-                "Gold": 1.75,
-                "Large Cap": 6.07,
-                "Sectoral/Thematic": 31.74,
-                "Arbitrage": 49.99,
-                "Mid Cap": 5.12,
+                "Gold": 1.74,
+                "Large Cap": 6.04,
+                "Sectoral/Thematic": 31.87,
+                "Arbitrage": 49.9,
+                "Mid Cap": 5.11,
                 "Other": 5.34
             },
             {
-                "Gold": 1.75,
-                "Large Cap": 6.07,
-                "Sectoral/Thematic": 31.74,
-                "Arbitrage": 49.99,
-                "Mid Cap": 5.12,
+                "Gold": 1.74,
+                "Large Cap": 6.04,
+                "Sectoral/Thematic": 31.87,
+                "Arbitrage": 49.9,
+                "Mid Cap": 5.11,
+                "Other": 5.34
+            },
+            {
+                "Gold": 1.74,
+                "Large Cap": 6.04,
+                "Sectoral/Thematic": 31.87,
+                "Arbitrage": 49.9,
+                "Mid Cap": 5.11,
                 "Other": 5.34
             }
         ]
@@ -3509,7 +3521,7 @@
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
             "category": "Sectoral/Thematic",
-            "value": 44317.55
+            "value": 45148.91
         },
         {
             "id": "INF204KC1089",
@@ -3551,7 +3563,7 @@
             "id": "INE397D01024",
             "name": "BHARTI AIRTEL LIMITED",
             "category": "Large Cap",
-            "value": 15448.8
+            "value": 15363.2
         },
         {
             "id": "INE953R01016",
@@ -3563,13 +3575,13 @@
             "id": "INE0LEZ01016",
             "name": "ATHER ENERGY LIMITED",
             "category": "Other",
-            "value": 17057.6
+            "value": 17161.2
         },
         {
             "id": "INE947N01017",
             "name": "AEQUS LIMITED",
             "category": "Other",
-            "value": 1032.28
+            "value": 995.12
         },
         {
             "id": "INE0HOQ01053",
