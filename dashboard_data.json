@@ -1,22 +1,22 @@
 {
     "metrics": {
-        "xirr": 19.4,
-        "daily_volatility": 0.8088,
-        "annualized_volatility": 12.84,
-        "final_value": 433540.82,
-        "period": "2025-08-04 to 2026-07-15",
+        "xirr": 18.59,
+        "daily_volatility": 0.8069,
+        "annualized_volatility": 12.81,
+        "final_value": 432449.62,
+        "period": "2025-08-04 to 2026-07-16",
         "comparison": {
             "portfolio": {
-                "return": 19.4,
-                "volatility": 12.84,
+                "return": 18.59,
+                "volatility": 12.81,
                 "max_drawdown": -8.01,
-                "avg_return": 16.04
+                "avg_return": 15.81
             },
             "model": {
                 "return": 18.4,
                 "volatility": 9.44,
                 "max_drawdown": -11.34,
-                "avg_return": 7.34
+                "avg_return": 7.2
             }
         }
     },
@@ -367,7 +367,8 @@
             "2026-07-12",
             "2026-07-13",
             "2026-07-14",
-            "2026-07-15"
+            "2026-07-15",
+            "2026-07-16"
         ],
         "nav": [
             100.0,
@@ -714,8 +715,9 @@
             123.28,
             123.28,
             122.95,
-            122.95,
-            123.62
+            122.85,
+            123.37,
+            123.31
         ],
         "model_nav": [
             100.0,
@@ -1062,8 +1064,9 @@
             110.0,
             110.0,
             109.97,
-            109.69,
-            109.89
+            109.49,
+            109.68,
+            109.72
         ],
         "total_value": [
             19999.02,
@@ -1410,8 +1413,9 @@
             432353.3,
             432353.3,
             431175.31,
-            431170.86,
-            433540.82
+            430826.4,
+            432655.64,
+            432449.62
         ],
         "allocation": [
             {
@@ -3525,18 +3529,26 @@
             {
                 "Gold": 1.72,
                 "Large Cap": 6.07,
-                "Sectoral/Thematic": 31.82,
-                "Arbitrage": 50.08,
+                "Sectoral/Thematic": 31.72,
+                "Arbitrage": 50.12,
                 "Mid Cap": 5.09,
-                "Other": 5.23
+                "Other": 5.28
             },
             {
-                "Gold": 1.71,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.78,
-                "Arbitrage": 49.8,
-                "Mid Cap": 5.07,
-                "Other": 5.6
+                "Gold": 1.72,
+                "Large Cap": 6.05,
+                "Sectoral/Thematic": 31.69,
+                "Arbitrage": 49.89,
+                "Mid Cap": 5.09,
+                "Other": 5.57
+            },
+            {
+                "Gold": 1.72,
+                "Large Cap": 6.03,
+                "Sectoral/Thematic": 31.69,
+                "Arbitrage": 49.92,
+                "Mid Cap": 5.09,
+                "Other": 5.55
             }
         ]
     },
@@ -3545,49 +3557,49 @@
             "id": "INF179K01VX0",
             "name": "HDFC GOLD ETF FUND OF FUND - DIRECT PLAN",
             "category": "Gold",
-            "value": 7403.31
+            "value": 7429.83
         },
         {
             "id": "INF109K012M7",
             "name": "ICICI PRUDENTIAL NIFTY 50 INDEX FUND - DIRECT PLAN GROWTH",
             "category": "Large Cap",
-            "value": 10665.73
+            "value": 10678.48
         },
         {
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
             "category": "Sectoral/Thematic",
-            "value": 44728.9
+            "value": 44196.31
         },
         {
             "id": "INF204KC1089",
             "name": "NIPPONAMC - NETFPHARMA",
             "category": "Sectoral/Thematic",
-            "value": 50367.2
+            "value": 50404.9
         },
         {
             "id": "INF109KC10S8",
             "name": "ICICIPRAMC - PSUBANKICI",
             "category": "Sectoral/Thematic",
-            "value": 33294.51
+            "value": 33076.67
         },
         {
             "id": "Kotak Arbitrage Fund Direct Growth",
             "name": "Kotak Arbitrage Fund Direct Growth",
             "category": "Arbitrage",
-            "value": 215912.89
+            "value": 215866.49
         },
         {
             "id": "INF109KC11W8",
             "name": "ICICIPRAMC - ICICIM150",
             "category": "Mid Cap",
-            "value": 6480.0
+            "value": 6458.4
         },
         {
             "id": "HDFC Mid Cap Fund Direct Growth",
             "name": "HDFC Mid Cap Fund Direct Growth",
             "category": "Mid Cap",
-            "value": 15504.84
+            "value": 15540.16
         },
         {
             "id": "INF109KC19V3",
@@ -3599,31 +3611,31 @@
             "id": "INE397D01024",
             "name": "BHARTI AIRTEL LIMITED",
             "category": "Large Cap",
-            "value": 15508.0
+            "value": 15402.4
         },
         {
             "id": "INE953R01016",
             "name": "P N GADGIL JEWELLERS LTD",
             "category": "Other",
-            "value": 4219.25
+            "value": 4192.3
         },
         {
             "id": "INE0LEZ01016",
             "name": "ATHER ENERGY LIMITED",
             "category": "Other",
-            "value": 18256.0
+            "value": 18029.2
         },
         {
             "id": "INE947N01017",
             "name": "AEQUS LIMITED",
             "category": "Other",
-            "value": 978.0
+            "value": 949.44
         },
         {
             "id": "INE0HOQ01053",
             "name": "BILLIONBRAINS GARAGE VN L",
             "category": "Other",
-            "value": 840.6
+            "value": 843.44
         }
     ]
 }
