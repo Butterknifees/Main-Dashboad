@@ -1,22 +1,22 @@
 {
     "metrics": {
-        "xirr": 17.58,
-        "daily_volatility": 0.8054,
-        "annualized_volatility": 12.79,
-        "final_value": 431202.57,
-        "period": "2025-08-04 to 2026-07-18",
+        "xirr": 17.6,
+        "daily_volatility": 0.8053,
+        "annualized_volatility": 12.78,
+        "final_value": 431419.07,
+        "period": "2025-08-04 to 2026-07-19",
         "comparison": {
             "portfolio": {
-                "return": 17.58,
-                "volatility": 12.79,
+                "return": 17.6,
+                "volatility": 12.78,
                 "max_drawdown": -8.01,
-                "avg_return": 15.51
+                "avg_return": 15.5
             },
             "model": {
                 "return": 18.4,
-                "volatility": 9.41,
+                "volatility": 9.4,
                 "max_drawdown": -11.34,
-                "avg_return": 6.99
+                "avg_return": 7.11
             }
         }
     },
@@ -370,7 +370,8 @@
             "2026-07-15",
             "2026-07-16",
             "2026-07-17",
-            "2026-07-18"
+            "2026-07-18",
+            "2026-07-19"
         ],
         "nav": [
             100.0,
@@ -720,8 +721,9 @@
             122.85,
             123.35,
             123.12,
-            122.95,
-            122.95
+            123.02,
+            123.02,
+            123.02
         ],
         "model_nav": [
             100.0,
@@ -1071,8 +1073,9 @@
             109.49,
             109.74,
             109.59,
-            109.47,
-            109.47
+            109.68,
+            109.68,
+            109.68
         ],
         "total_value": [
             19999.02,
@@ -1422,8 +1425,9 @@
             430826.4,
             432605.56,
             431768.19,
-            431202.57,
-            431202.57
+            431419.07,
+            431419.07,
+            431419.07
         ],
         "allocation": [
             {
@@ -3560,19 +3564,27 @@
             },
             {
                 "Gold": 1.71,
-                "Large Cap": 6.06,
-                "Sectoral/Thematic": 31.62,
-                "Arbitrage": 50.1,
+                "Large Cap": 6.05,
+                "Sectoral/Thematic": 31.65,
+                "Arbitrage": 50.08,
                 "Mid Cap": 5.07,
-                "Other": 5.44
+                "Other": 5.43
             },
             {
                 "Gold": 1.71,
-                "Large Cap": 6.06,
-                "Sectoral/Thematic": 31.62,
-                "Arbitrage": 50.1,
+                "Large Cap": 6.05,
+                "Sectoral/Thematic": 31.65,
+                "Arbitrage": 50.08,
                 "Mid Cap": 5.07,
-                "Other": 5.44
+                "Other": 5.43
+            },
+            {
+                "Gold": 1.71,
+                "Large Cap": 6.05,
+                "Sectoral/Thematic": 31.65,
+                "Arbitrage": 50.08,
+                "Mid Cap": 5.07,
+                "Other": 5.43
             }
         ]
     },
@@ -3593,7 +3605,7 @@
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
             "category": "Sectoral/Thematic",
-            "value": 44127.03
+            "value": 44343.53
         },
         {
             "id": "INF204KC1089",
