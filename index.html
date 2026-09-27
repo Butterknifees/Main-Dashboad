@@ -17,8 +17,14 @@
 
     <header>
         <nav>
-            <div class="logo">HISAAB<span class="dot">.</span></div>
-            <div class="powered-by">powered by Play Theory</div>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by" style="display:flex;align-items:center;gap:1.5rem">
+                <span class="btn-nav-home" onclick="location.href='upload.html'">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload Data
+                </span>
+                <span>powered by Play Theory</span>
+            </div>
         </nav>
     </header>
 
@@ -42,8 +48,8 @@
                         <span class="card-title">Live Portfolio Value</span>
                     </div>
                     <div class="card-body">
-                        <div class="card-value">₹4,19,938.91</div>
-                        <div class="card-change">+14.84% <span style="font-size:0.75rem;color:var(--text-secondary);font-weight:normal;">XIRR</span></div>
+                        <div class="card-value">₹2,04,287.92</div>
+                        <div class="card-change">+10.82% <span style="font-size:0.75rem;color:var(--text-secondary);font-weight:normal;">XIRR</span></div>
                         <svg class="chart-svg" viewBox="0 0 300 100">
                             <defs>
                                 <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
@@ -57,9 +63,9 @@
                             <circle cx="300" cy="15" r="10" fill="var(--accent-blue)" opacity="0.3" class="ping-circle"></circle>
                         </svg>
                         <div class="card-stats">
-                            <div class="stat-pill"><span class="label">Sharpe:</span> <span class="val">1.37</span></div>
+                            <div class="stat-pill"><span class="label">Sharpe:</span> <span class="val">-0.51</span></div>
                             <div class="stat-pill"><span class="label">Beta:</span> <span class="val">0.87</span></div>
-                            <div class="stat-pill"><span class="label">Volatility:</span> <span class="val">13.53%</span></div>
+                            <div class="stat-pill"><span class="label">Volatility:</span> <span class="val">87.05%</span></div>
                         </div>
                     </div>
                 </div>
@@ -102,6 +108,7 @@
 
     <footer>
         <p>&copy; 2026 Hisaab by Play Theory. Precision Financial Analytics.</p>
+        <p style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.35); margin-top: 0.6rem; letter-spacing: 0.02em;">Data pipeline requires monthly token refresh &bull; Next update due: Oct 14th</p>
     </footer>
 
     <script>

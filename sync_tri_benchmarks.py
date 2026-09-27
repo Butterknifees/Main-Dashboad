@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import time
 
 def sync_tri_benchmarks():
-    base_path = "Gemini/personal finance accounting/"
+    base_path = "Gemini/personal finance accounting/" if os.path.exists("Gemini/personal finance accounting") else ""
     mapping_file = os.path.join(base_path, "benchmark_mapping.json")
     output_file = os.path.join(base_path, "benchmark_tri_history.csv")
     

@@ -51,7 +51,7 @@ def xirr(dates, payments):
         if rate <= -1.0: rate = -0.999 # Keep it above -100%
     return rate
 
-def load_transactions():
+def load_transactions(client_mode=False):
     all_tx = []
     seen_tx = set() # To prevent double counting from overlapping files
 
@@ -68,66 +68,106 @@ def load_transactions():
             seen_tx.add(sig)
             all_tx.append(tx)
 
-    # 1. CSV Tradebooks
-    tradebook_files = sorted(list(set(
-        glob.glob(os.path.join(BASE_PATH, 'tradebook-*.csv')) +
-        glob.glob(os.path.join(BASE_PATH, 'appending', 'tradebook-*.csv'))
-    )))
-    for tradebook_path in tradebook_files:
-        if os.path.exists(tradebook_path):
-            with open(tradebook_path, mode='r') as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    add_tx({
-                        'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
-                        'id': row['isin'],
-                        'name': row['symbol'],
-                        'qty': float(row['quantity']),
-                        'price': float(row['price']),
-                        'type': row['trade_type'].lower(),
-                        'source': 'MF_DB'
-                    })
-    # 2. MF Excels
-    mf_files = sorted(list(set(
-        glob.glob(os.path.join(BASE_PATH, 'Mutual_Funds_Order_History_*.xlsx')) +
-        glob.glob(os.path.join(BASE_PATH, 'appending', 'Mutual_Funds_Order_History_*.xlsx'))
-    )))
-    for full_path in mf_files:
-        if not os.path.exists(full_path): continue
-        df_mf = pd.read_excel(full_path, header=11).dropna(how='all')
-        for _, row in df_mf.iterrows():
-            if pd.isna(row['Scheme Name']): continue
-            name = str(row['Scheme Name']).strip()
-            amt_str = str(row['Amount']).replace(',', '')
-            add_tx({
-                'date': pd.to_datetime(row['Date']),
-                'id': name,
-                'name': name,
-                'qty': float(row['Units']),
-                'price': float(amt_str) / float(row['Units']),
-                'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
-                'source': 'MF_DB'
-            })
-    # 3. Stocks/ETFs Excels
-    stk_files = sorted(list(set(
-        glob.glob(os.path.join(BASE_PATH, 'Stocks_Order_History_*.xlsx')) +
-        glob.glob(os.path.join(BASE_PATH, 'appending', 'Stocks_Order_History_*.xlsx'))
-    )))
-    for full_path in stk_files:
-        if not os.path.exists(full_path): continue
-        df_stk = pd.read_excel(full_path, header=5)
-        for _, row in df_stk.iterrows():
-            if pd.isna(row['Stock name']) or row['Order status'] != 'Executed': continue
-            isin = str(row['ISIN']).strip()
-            add_tx({
-                'date': pd.to_datetime(row['Execution date and time'], dayfirst=True),
-                'id': isin,
-                'name': row['Stock name'],
-                'qty': float(row['Quantity']),
-                'price': float(row['Value']) / float(row['Quantity']),
-                'type': row['Type'].lower(),
-                'source': 'YF'
-            })
+    if client_mode:
+        # 1. Client-only CSV Tradebooks (uploaded via portal)
+        tradebook_files = sorted(glob.glob(os.path.join(BASE_PATH, 'appending', 'tradebook-uploaded-*.csv')))
+        for tradebook_path in tradebook_files:
+            if os.path.exists(tradebook_path):
+                with open(tradebook_path, mode='r') as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        add_tx({
+                            'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
+                            'id': row['isin'],
+                            'name': row['symbol'],
+                            'qty': float(row['quantity']),
+                            'price': float(row['price']),
+                            'type': row['trade_type'].lower(),
+                            'source': 'MF_DB'
+                        })
+    else:
+        # Demo Mode: load default demo statements only
+        # 1. Demo CSV Tradebooks
+        tradebook_files = sorted(list(set(
+            glob.glob(os.path.join(BASE_PATH, 'tradebook-*.csv'))
+        )))
+        # Exclude client uploaded tradebooks if they are in root data folder
+        tradebook_files = [f for f in tradebook_files if 'tradebook-uploaded-' not in os.path.basename(f)]
+        for tradebook_path in tradebook_files:
+            if os.path.exists(tradebook_path):
+                with open(tradebook_path, mode='r') as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        add_tx({
+                            'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
+                            'id': row['isin'],
+                            'name': row['symbol'],
+                            'qty': float(row['quantity']),
+                            'price': float(row['price']),
+                            'type': row['trade_type'].lower(),
+                            'source': 'MF_DB'
+                        })
+        # 2. MF Excels
+        mf_files = sorted(glob.glob(os.path.join(BASE_PATH, 'Mutual_Funds_Order_History_*.xlsx')))
+        for full_path in mf_files:
+            if not os.path.exists(full_path): continue
+            
+            # Scan dynamically for the header row index
+            header_idx = 11  # default fallback
+            try:
+                df_all = pd.read_excel(full_path, header=None)
+                for i, row in df_all.iterrows():
+                    row_strs = [str(v).strip().lower() for v in row.values if not pd.isna(v)]
+                    if 'scheme name' in row_strs or 'scheme' in row_strs:
+                        header_idx = i
+                        break
+            except Exception as e:
+                print(f"Warning: Failed to scan headers for {full_path}: {e}")
+                
+            df_mf = pd.read_excel(full_path, header=header_idx).dropna(how='all')
+            for _, row in df_mf.iterrows():
+                if pd.isna(row['Scheme Name']): continue
+                name = str(row['Scheme Name']).strip()
+                amt_str = str(row['Amount']).replace(',', '')
+                add_tx({
+                    'date': pd.to_datetime(row['Date']),
+                    'id': name,
+                    'name': name,
+                    'qty': float(row['Units']),
+                    'price': float(amt_str) / float(row['Units']),
+                    'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
+                    'source': 'MF_DB'
+                })
+        # 3. Stocks/ETFs Excels
+        stk_files = sorted(glob.glob(os.path.join(BASE_PATH, 'Stocks_Order_History_*.xlsx')))
+        for full_path in stk_files:
+            if not os.path.exists(full_path): continue
+            
+            # Scan dynamically for the header row index
+            header_idx = 5  # default fallback
+            try:
+                df_all = pd.read_excel(full_path, header=None)
+                for i, row in df_all.iterrows():
+                    row_strs = [str(v).strip().lower() for v in row.values if not pd.isna(v)]
+                    if 'stock name' in row_strs or 'isin' in row_strs or 'symbol' in row_strs:
+                        header_idx = i
+                        break
+            except Exception as e:
+                print(f"Warning: Failed to scan headers for {full_path}: {e}")
+                
+            df_stk = pd.read_excel(full_path, header=header_idx)
+            for _, row in df_stk.iterrows():
+                if pd.isna(row['Stock name']) or row['Order status'] != 'Executed': continue
+                isin = str(row['ISIN']).strip()
+                add_tx({
+                    'date': pd.to_datetime(row['Execution date and time'], dayfirst=True),
+                    'id': isin,
+                    'name': row['Stock name'],
+                    'qty': float(row['Quantity']),
+                    'price': float(row['Value']) / float(row['Quantity']),
+                    'type': row['Type'].lower(),
+                    'source': 'YF'
+                })
 
     # Sort chronologically
     all_tx.sort(key=lambda x: x['date'])
@@ -162,41 +202,49 @@ def get_latest_holdings_prices():
     
     for stk_h_file in [BASE_PATH + f for f in stk_h_files]:
         if os.path.exists(stk_h_file):
-            df_stk_all = pd.read_excel(stk_h_file, header=None)
-            header_idx = -1
-            for i, row in df_stk_all.iterrows():
-                if 'ISIN' in [str(v).strip() for v in row.values]:
-                    header_idx = i
-                    break
-            if header_idx != -1:
-                df_stk = pd.read_excel(stk_h_file, header=header_idx)
-                df_stk.columns = [str(c).strip() for c in df_stk.columns]
-                for _, row in df_stk.iterrows():
-                    isin = str(row.get('ISIN')).strip()
-                    if isin == 'nan' or isin == '': continue
-                    if 'Closing price' in row:
-                        prices[isin] = float(row['Closing price'])
-                    elif 'Closing value' in row and 'Quantity' in row:
-                        prices[isin] = float(row['Closing value']) / float(row['Quantity'])
+            try:
+                df_stk_all = pd.read_excel(stk_h_file, header=None)
+                header_idx = -1
+                for i, row in df_stk_all.iterrows():
+                    row_strs = [str(v).strip().lower() for v in row.values if not pd.isna(v)]
+                    if 'isin' in row_strs:
+                        header_idx = i
+                        break
+                if header_idx != -1:
+                    df_stk = pd.read_excel(stk_h_file, header=header_idx)
+                    df_stk.columns = [str(c).strip() for c in df_stk.columns]
+                    for _, row in df_stk.iterrows():
+                        isin = str(row.get('ISIN')).strip()
+                        if isin == 'nan' or isin == '': continue
+                        if 'Closing price' in row:
+                            prices[isin] = float(row['Closing price'])
+                        elif 'Closing value' in row and 'Quantity' in row:
+                            prices[isin] = float(row['Closing value']) / float(row['Quantity'])
+            except Exception as e:
+                print(f"Warning: Failed to load holdings from {stk_h_file}: {e}")
     
     mf_h_file = BASE_PATH + mf_h_files[0]
     if os.path.exists(mf_h_file):
-        df_mf_all = pd.read_excel(mf_h_file, header=None)
-        header_idx = -1
-        for i, row in df_mf_all.iterrows():
-            if 'Scheme Name' in [str(v).strip() for v in row.values]:
-                header_idx = i
-                break
-        if header_idx != -1:
-            df_mf = pd.read_excel(mf_h_file, header=header_idx)
-            df_mf.columns = [str(c).strip() for c in df_mf.columns]
-            for _, row in df_mf.iterrows():
-                name = str(row.get('Scheme Name')).strip()
-                if name == 'nan' or name == '': continue
-                if 'NAV' in row:
-                    prices[name] = float(row['NAV'])
-                elif 'Current Value' in row and 'Units' in row:
-                    prices[name] = float(row['Current Value']) / float(row['Units'])
+        try:
+            df_mf_all = pd.read_excel(mf_h_file, header=None)
+            header_idx = -1
+            for i, row in df_mf_all.iterrows():
+                row_strs = [str(v).strip().lower() for v in row.values if not pd.isna(v)]
+                if 'scheme name' in row_strs or 'scheme' in row_strs:
+                    header_idx = i
+                    break
+            if header_idx != -1:
+                df_mf = pd.read_excel(mf_h_file, header=header_idx)
+                df_mf.columns = [str(c).strip() for c in df_mf.columns]
+                for _, row in df_mf.iterrows():
+                    name = str(row.get('Scheme Name')).strip()
+                    if name == 'nan' or name == '': continue
+                    if 'NAV' in row:
+                        prices[name] = float(row['NAV'])
+                    elif 'Current Value' in row and 'Units' in row:
+                        prices[name] = float(row['Current Value']) / float(row['Units'])
+        except Exception as e:
+            print(f"Warning: Failed to load holdings from {mf_h_file}: {e}")
     return prices
 
 def get_prices(assets, start_date, end_date):
@@ -330,15 +378,71 @@ def get_prices(assets, start_date, end_date):
     return price_map
 
 def main():
-    transactions = load_transactions()
-    if not transactions: return
+    starting_holdings_path = os.path.join(BASE_PATH, 'starting_holdings.csv')
+    uploaded_tx_files = glob.glob(os.path.join(BASE_PATH, 'appending', 'tradebook-uploaded-*.csv'))
+    client_mode = os.path.exists(starting_holdings_path) or len(uploaded_tx_files) > 0
     
+    transactions = load_transactions(client_mode=client_mode)
+    
+    # Check for starting holdings
+    starting_holdings = defaultdict(float)
+    starting_holdings_names = {}
+    starting_date = None
+    df_sh = None
+    total_starting_val_provided = 0
+    
+    if os.path.exists(starting_holdings_path):
+        try:
+            df_sh = pd.read_csv(starting_holdings_path)
+            if not df_sh.empty:
+                starting_date_str = str(df_sh['date'].iloc[0]).strip()
+                starting_date = datetime.strptime(starting_date_str, '%Y-%m-%d')
+                
+                for _, row in df_sh.iterrows():
+                    aid = str(row['id']).strip()
+                    qty = float(row['qty'])
+                    price = float(row['price'])
+                    val = float(row['value']) if 'value' in row and not pd.isna(row['value']) else qty * price
+                    
+                    starting_holdings[aid] = qty
+                    starting_holdings_names[aid] = str(row['name']).strip() if 'name' in row and not pd.isna(row['name']) else aid
+                    total_starting_val_provided += val
+                
+                print(f"Loaded starting holdings as of {starting_date_str} with total provided value ₹{total_starting_val_provided:,.2f}")
+        except Exception as e:
+            print(f"Warning: Failed to load starting holdings: {e}")
+
+    if not transactions and not starting_holdings:
+        print("Error: No transactions and no starting holdings found.")
+        return
+
+    # Filter transactions to be strictly AFTER starting_date if it exists
+    tx_df = pd.DataFrame()
+    if transactions:
+        tx_df = pd.DataFrame(transactions)
+        tx_df['date_str'] = tx_df['date'].dt.strftime('%Y-%m-%d')
+        if starting_date is not None:
+            tx_df = tx_df[tx_df['date'] > starting_date]
+            print(f"Filtered transactions: kept {len(tx_df)} transactions after {starting_date.strftime('%Y-%m-%d')}")
+
     assets = []
     seen = set()
-    for tx in transactions:
-        if tx['id'] not in seen:
-            assets.append({'id': tx['id'], 'source': tx['source'], 'name': tx['name']})
-            seen.add(tx['id'])
+    
+    # Add assets from filtered transactions
+    if not tx_df.empty:
+        for _, r in tx_df.iterrows():
+            aid = r['id']
+            if aid not in seen:
+                assets.append({'id': aid, 'source': r['source'], 'name': r['name']})
+                seen.add(aid)
+                
+    # Add starting holdings assets
+    for aid, qty in starting_holdings.items():
+        if aid not in seen:
+            source = 'MF_DB' if (aid.startswith('INF') or aid.isdigit()) else 'STOCK'
+            name = starting_holdings_names.get(aid, aid)
+            assets.append({'id': aid, 'source': source, 'name': name})
+            seen.add(aid)
 
     # Add model portfolio assets to ensure their prices are fetched
     model_assets_meta = [
@@ -354,8 +458,15 @@ def main():
             assets.append(ma)
             seen.add(ma['id'])
     
-    # Dynamic Analysis Period: April 1, 2025 to today
-    start_date = datetime(2025, 4, 1)
+    # Dynamic Analysis Period
+    if starting_date is not None:
+        start_date = starting_date
+    else:
+        if not tx_df.empty:
+            start_date = tx_df['date'].min().to_pydatetime()
+        else:
+            start_date = datetime(2025, 4, 1)
+            
     end_date = datetime.now()
     
     price_map = get_prices(assets, start_date, end_date)
@@ -364,49 +475,59 @@ def main():
     all_dates = sorted([d for d in price_map.keys() if start_date <= datetime.strptime(d, '%Y-%m-%d') <= end_date])
     if not all_dates: return
 
-    current_holdings = defaultdict(float)
+    # Initialize current_holdings with a copy of starting_holdings
+    current_holdings = defaultdict(float, {k: v for k, v in starting_holdings.items()})
     daily_returns = []
     daily_values = []
     cash_flows = []
-    tx_df = pd.DataFrame(transactions)
-    tx_df['date_str'] = tx_df['date'].dt.strftime('%Y-%m-%d')
+    
+    # Valuation of starting holdings on the starting date
+    starting_date_str = start_date.strftime('%Y-%m-%d')
+    if starting_date is not None:
+        total_starting_val = 0
+        for aid, qty in starting_holdings.items():
+            price_on_start = price_map[starting_date_str].get(aid, 0)
+            if price_on_start <= 0:
+                # Fallback to provided price in CSV
+                price_on_start = df_sh[df_sh['id'] == aid]['price'].iloc[0]
+            val = qty * price_on_start
+            total_starting_val += val
+        
+        # Record starting outflow cash flow
+        cash_flows.append((starting_date, -total_starting_val))
+        print(f"Initial starting portfolio valuation on {starting_date_str}: ₹{total_starting_val:,.2f}")
 
-    # Configuration for Exception Days (e.g., Budget Day or days with partial reporting)
-    # These days will be treated as flat holidays (market return = 0) even if some prices exist.
+    # Configuration for Exception Days
     EXCEPTION_HOLIDAYS = ["2026-02-01"]
 
     prev_val = 0
     for i, d in enumerate(all_dates):
-        todays_tx = tx_df[tx_df['date_str'] == d]
+        todays_tx = tx_df[tx_df['date_str'] == d] if not tx_df.empty else pd.DataFrame()
         buy_amt = 0
         sell_amt = 0
         
-        for _, tx in todays_tx.iterrows():
-            amt = tx['qty'] * tx['price']
-            if tx['type'] == 'buy':
-                current_holdings[tx['id']] += tx['qty']
-                cash_flows.append((datetime.strptime(d, '%Y-%m-%d'), -amt))
-                buy_amt += amt
-            else:
-                current_holdings[tx['id']] -= tx['qty']
-                cash_flows.append((datetime.strptime(d, '%Y-%m-%d'), amt))
-                sell_amt += amt
+        if not todays_tx.empty:
+            for _, tx in todays_tx.iterrows():
+                amt = tx['qty'] * tx['price']
+                if tx['type'] == 'buy':
+                    current_holdings[tx['id']] += tx['qty']
+                    cash_flows.append((datetime.strptime(d, '%Y-%m-%d'), -amt))
+                    buy_amt += amt
+                else:
+                    current_holdings[tx['id']] -= tx['qty']
+                    cash_flows.append((datetime.strptime(d, '%Y-%m-%d'), amt))
+                    sell_amt += amt
 
         # Closing value at the end of day d
         day_val = sum(qty * price_map[d].get(aid, 0) for aid, qty in current_holdings.items() if qty > 0.001)
         
-        # If it's a weekend/holiday (day_val=0) OR a specifically marked exception day, 
-        # force the portfolio valuation to be neutral (market return = 0)
         if (day_val == 0 or d in EXCEPTION_HOLIDAYS) and prev_val > 0:
-            # Neutral value = (prev_val + buy_amt) - sell_amt
             day_val = prev_val + buy_amt - sell_amt
             
         daily_values.append(day_val)
 
-        # Base for return calculation is previous value + today's buys
         base = prev_val + buy_amt
         if base > 0:
-            # (Ending Value + Cash from Sells) / (Starting Value + Cash for Buys) - 1
             day_return = (day_val + sell_amt - base) / base
             daily_returns.append(day_return)
         else:
@@ -417,7 +538,7 @@ def main():
     last_date = all_dates[-1]
     final_value = daily_values[-1]
     
-    # Consolidate and Print Cash Flows for debugging
+    # Consolidate and Print Cash Flows
     temp_cf = list(cash_flows)
     temp_cf.append((datetime.strptime(last_date, '%Y-%m-%d'), final_value))
     consolidated_cf = defaultdict(float)
@@ -433,10 +554,10 @@ def main():
     portfolio_nav = [100.0]
     for r in daily_returns: portfolio_nav.append(portfolio_nav[-1] * (1 + r))
 
-    # NAV and Plotting Alignment
-    first_tx_date = tx_df['date'].min().strftime('%Y-%m-%d')
+    # NAV and Plotting Alignment starting from starting_date (or first transaction date)
+    plot_start_date = starting_date.strftime('%Y-%m-%d') if starting_date is not None else (tx_df['date'].min().strftime('%Y-%m-%d') if not tx_df.empty else all_dates[0])
     start_idx = 0
-    try: start_idx = all_dates.index(first_tx_date)
+    try: start_idx = all_dates.index(plot_start_date)
     except: start_idx = 0
     
     trimmed_dates = all_dates[start_idx:]
@@ -486,14 +607,15 @@ def main():
             if "ebbetf" in n or "bond" in n: return "Debt (Other)"
         return cat
 
-    historical_holdings = defaultdict(float)
+    historical_holdings = defaultdict(float, {k: v for k, v in starting_holdings.items()})
     allocation_timeline = []
     
     for i, d in enumerate(all_dates):
-        todays_tx = tx_df[tx_df['date_str'] == d]
-        for _, tx in todays_tx.iterrows():
-            if tx['type'] == 'buy': historical_holdings[tx['id']] += tx['qty']
-            else: historical_holdings[tx['id']] -= tx['qty']
+        if not tx_df.empty:
+            todays_tx = tx_df[tx_df['date_str'] == d]
+            for _, tx in todays_tx.iterrows():
+                if tx['type'] == 'buy': historical_holdings[tx['id']] += tx['qty']
+                else: historical_holdings[tx['id']] -= tx['qty']
         
         if i < start_idx: continue
 
@@ -545,6 +667,7 @@ def main():
         return val
 
     dashboard_data = {
+        "portfolio_name": "Client Portfolio" if client_mode else "Demo Portfolio",
         "metrics": {
             "xirr": sanitize(round(portfolio_xirr * 100, 2)),
             "daily_volatility": sanitize(round(volatility, 4)),
