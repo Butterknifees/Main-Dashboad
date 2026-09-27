@@ -68,30 +68,13 @@ def load_transactions(client_mode=False):
             seen_tx.add(sig)
             all_tx.append(tx)
 
-    if client_mode:
-        # 1. Client-only CSV Tradebooks (uploaded via portal)
-        tradebook_files = sorted(glob.glob(os.path.join(BASE_PATH, 'appending', 'tradebook-uploaded-*.csv')))
-        for tradebook_path in tradebook_files:
-            if os.path.exists(tradebook_path):
-                with open(tradebook_path, mode='r') as f:
-                    reader = csv.DictReader(f)
-                    for row in reader:
-                        add_tx({
-                            'date': datetime.strptime(row['trade_date'], '%Y-%m-%d'),
-                            'id': row['isin'],
-                            'name': row['symbol'],
-                            'qty': float(row['quantity']),
-                            'price': float(row['price']),
-                            'type': row['trade_type'].lower(),
-                            'source': 'MF_DB'
-                        })
-    else:
-        # Demo Mode: load default demo statements only
-        # 1. Demo CSV Tradebooks
+    if True:
+        # Load all CSV Tradebooks and Excel sheets across data folders
+        # 1. CSV Tradebooks
         tradebook_files = sorted(list(set(
+            glob.glob(os.path.join(BASE_PATH, '**', 'tradebook-*.csv'), recursive=True) +
             glob.glob(os.path.join(BASE_PATH, 'tradebook-*.csv'))
         )))
-        # Exclude client uploaded tradebooks if they are in root data folder
         tradebook_files = [f for f in tradebook_files if 'tradebook-uploaded-' not in os.path.basename(f)]
         for tradebook_path in tradebook_files:
             if os.path.exists(tradebook_path):
@@ -107,8 +90,11 @@ def load_transactions(client_mode=False):
                             'type': row['trade_type'].lower(),
                             'source': 'MF_DB'
                         })
-        # 2. MF Excels
-        mf_files = sorted(glob.glob(os.path.join(BASE_PATH, 'Mutual_Funds_Order_History_*.xlsx')))
+        # 2. MF Excels (recursive across data folders)
+        mf_files = sorted(list(set(
+            glob.glob(os.path.join(BASE_PATH, '**', '*Mutual_Funds*Order_History*.xlsx'), recursive=True) +
+            glob.glob(os.path.join(BASE_PATH, '*Mutual_Funds*Order_History*.xlsx'))
+        )))
         for full_path in mf_files:
             if not os.path.exists(full_path): continue
             
@@ -126,20 +112,24 @@ def load_transactions(client_mode=False):
                 
             df_mf = pd.read_excel(full_path, header=header_idx).dropna(how='all')
             for _, row in df_mf.iterrows():
-                if pd.isna(row['Scheme Name']): continue
+                if pd.isna(row.get('Scheme Name')): continue
                 name = str(row['Scheme Name']).strip()
                 amt_str = str(row['Amount']).replace(',', '')
+                units = float(row['Units']) if float(row['Units']) != 0 else 1.0
                 add_tx({
                     'date': pd.to_datetime(row['Date']),
                     'id': name,
                     'name': name,
                     'qty': float(row['Units']),
-                    'price': float(amt_str) / float(row['Units']),
+                    'price': float(amt_str) / units,
                     'type': 'buy' if str(row['Transaction Type']).upper() in ['PURCHASE', 'SIP'] else 'sell',
                     'source': 'MF_DB'
                 })
-        # 3. Stocks/ETFs Excels
-        stk_files = sorted(glob.glob(os.path.join(BASE_PATH, 'Stocks_Order_History_*.xlsx')))
+        # 3. Stocks/ETFs Excels (recursive across data folders)
+        stk_files = sorted(list(set(
+            glob.glob(os.path.join(BASE_PATH, '**', '*Stocks*Order_History*.xlsx'), recursive=True) +
+            glob.glob(os.path.join(BASE_PATH, '*Stocks*Order_History*.xlsx'))
+        )))
         for full_path in stk_files:
             if not os.path.exists(full_path): continue
             
@@ -157,14 +147,15 @@ def load_transactions(client_mode=False):
                 
             df_stk = pd.read_excel(full_path, header=header_idx)
             for _, row in df_stk.iterrows():
-                if pd.isna(row['Stock name']) or row['Order status'] != 'Executed': continue
+                if pd.isna(row.get('Stock name')) or row.get('Order status') != 'Executed': continue
                 isin = str(row['ISIN']).strip()
+                qty = float(row['Quantity']) if float(row['Quantity']) != 0 else 1.0
                 add_tx({
                     'date': pd.to_datetime(row['Execution date and time'], dayfirst=True),
                     'id': isin,
                     'name': row['Stock name'],
                     'qty': float(row['Quantity']),
-                    'price': float(row['Value']) / float(row['Quantity']),
+                    'price': float(row['Value']) / qty,
                     'type': row['Type'].lower(),
                     'source': 'YF'
                 })
@@ -269,7 +260,10 @@ def get_prices(assets, start_date, end_date):
         "PNGJL": "INE953R01016",
         "ATHERENERG": "INE0LEZ01016",
         "AEQUS": "INE947N01017",
-        "GROWW": "INE0HOQ01053"
+        "GROWW": "INE0HOQ01053",
+        "DIACABS": "INE989C01038",
+        "RENTOMOJO": "INE08T701025",
+        "NSE": "INE721I01024"
     }
     
     mf_name_map = {
@@ -357,6 +351,15 @@ def get_prices(assets, start_date, end_date):
     if latest_prices:
         for k, v in latest_prices.items():
             price_map[last_date][k] = v
+
+    # Seed transaction execution prices for any asset (e.g. unlisted)
+    for a in assets:
+        aid = a['id']
+        if a.get('price', 0) > 0 and a.get('date'):
+            d_str = a['date'].strftime('%Y-%m-%d')
+            if d_str in price_map:
+                if aid not in price_map[d_str] or price_map[d_str][aid] <= 0:
+                    price_map[d_str][aid] = float(a['price'])
 
     asset_ids = list(set([a['id'] for a in assets] + list(latest_prices.keys())))
     sorted_all_dates = sorted(price_map.keys())

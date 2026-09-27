@@ -1,22 +1,23 @@
 {
+    "portfolio_name": "Client Portfolio",
     "metrics": {
-        "xirr": 17.74,
-        "daily_volatility": 0.7995,
-        "annualized_volatility": 12.69,
-        "final_value": 432428.3,
-        "period": "2025-08-04 to 2026-07-23",
+        "xirr": 3.66,
+        "daily_volatility": 0.769,
+        "annualized_volatility": 12.21,
+        "final_value": 711708.9,
+        "period": "2025-08-04 to 2026-09-27",
         "comparison": {
             "portfolio": {
-                "return": 17.74,
-                "volatility": 12.69,
+                "return": 3.66,
+                "volatility": 12.21,
                 "max_drawdown": -8.01,
-                "avg_return": 15.49
+                "avg_return": 11.5
             },
             "model": {
                 "return": 18.4,
-                "volatility": 9.35,
+                "volatility": 8.85,
                 "max_drawdown": -11.34,
-                "avg_return": 7.09
+                "avg_return": 6.03
             }
         }
     },
@@ -375,7 +376,73 @@
             "2026-07-20",
             "2026-07-21",
             "2026-07-22",
-            "2026-07-23"
+            "2026-07-23",
+            "2026-07-24",
+            "2026-07-25",
+            "2026-07-26",
+            "2026-07-27",
+            "2026-07-28",
+            "2026-07-29",
+            "2026-07-30",
+            "2026-07-31",
+            "2026-08-01",
+            "2026-08-02",
+            "2026-08-03",
+            "2026-08-04",
+            "2026-08-05",
+            "2026-08-06",
+            "2026-08-07",
+            "2026-08-08",
+            "2026-08-09",
+            "2026-08-10",
+            "2026-08-11",
+            "2026-08-12",
+            "2026-08-13",
+            "2026-08-14",
+            "2026-08-15",
+            "2026-08-16",
+            "2026-08-17",
+            "2026-08-18",
+            "2026-08-19",
+            "2026-08-20",
+            "2026-08-21",
+            "2026-08-22",
+            "2026-08-23",
+            "2026-08-24",
+            "2026-08-25",
+            "2026-08-26",
+            "2026-08-27",
+            "2026-08-28",
+            "2026-08-29",
+            "2026-08-30",
+            "2026-08-31",
+            "2026-09-01",
+            "2026-09-02",
+            "2026-09-03",
+            "2026-09-04",
+            "2026-09-05",
+            "2026-09-06",
+            "2026-09-07",
+            "2026-09-08",
+            "2026-09-09",
+            "2026-09-10",
+            "2026-09-11",
+            "2026-09-12",
+            "2026-09-13",
+            "2026-09-14",
+            "2026-09-15",
+            "2026-09-16",
+            "2026-09-17",
+            "2026-09-18",
+            "2026-09-19",
+            "2026-09-20",
+            "2026-09-21",
+            "2026-09-22",
+            "2026-09-23",
+            "2026-09-24",
+            "2026-09-25",
+            "2026-09-26",
+            "2026-09-27"
         ],
         "nav": [
             100.0,
@@ -668,7 +735,7 @@
             119.18,
             119.27,
             119.45,
-            119.64,
+            119.67,
             119.44,
             119.44,
             119.44,
@@ -679,59 +746,125 @@
             119.33,
             119.33,
             119.33,
-            118.75,
-            118.91,
-            119.36,
-            119.38,
-            119.74,
-            119.74,
-            119.74,
-            119.27,
-            120.02,
-            119.6,
-            119.19,
-            120.03,
-            120.03,
-            120.03,
-            120.51,
-            120.42,
-            121.1,
-            121.21,
-            121.46,
-            121.46,
-            121.46,
-            121.95,
-            121.86,
-            121.6,
-            121.35,
-            121.35,
-            121.35,
-            121.35,
-            121.7,
-            122.17,
-            122.35,
-            122.69,
-            122.95,
-            122.95,
-            122.95,
-            123.05,
+            118.7,
+            118.86,
+            119.31,
+            119.32,
+            119.69,
+            119.69,
+            119.69,
+            119.22,
+            119.97,
+            119.54,
+            119.13,
+            119.97,
+            119.97,
+            119.97,
+            120.43,
+            120.3,
+            120.94,
+            121.08,
+            121.31,
+            121.31,
+            121.31,
+            121.76,
+            121.57,
+            121.42,
+            121.17,
+            121.17,
+            121.17,
+            121.17,
+            121.51,
+            121.94,
+            122.16,
+            122.52,
             122.79,
-            122.11,
-            122.62,
-            123.28,
-            123.28,
-            123.28,
-            122.95,
-            122.85,
+            122.79,
+            122.79,
+            122.83,
+            122.52,
+            121.79,
+            122.44,
+            123.17,
+            123.17,
+            123.17,
+            122.9,
+            122.71,
+            123.41,
+            122.99,
+            123.06,
+            123.06,
+            123.06,
+            123.58,
+            123.79,
+            123.34,
+            122.76,
+            122.59,
+            122.59,
+            122.59,
+            123.22,
+            122.77,
+            123.38,
             123.35,
-            123.12,
-            123.11,
-            123.11,
-            123.11,
-            123.75,
-            123.92,
-            123.61,
-            123.3
+            123.87,
+            123.87,
+            123.87,
+            124.38,
+            124.92,
+            125.21,
+            125.38,
+            125.83,
+            125.83,
+            125.83,
+            125.58,
+            125.73,
+            126.15,
+            126.31,
+            126.13,
+            126.13,
+            126.13,
+            125.99,
+            125.8,
+            125.37,
+            125.72,
+            125.78,
+            125.78,
+            125.78,
+            125.59,
+            125.8,
+            125.77,
+            125.64,
+            126.19,
+            126.19,
+            126.19,
+            126.21,
+            126.24,
+            125.75,
+            125.68,
+            125.42,
+            125.42,
+            125.42,
+            125.47,
+            125.7,
+            125.24,
+            125.51,
+            125.26,
+            125.26,
+            125.26,
+            125.26,
+            123.53,
+            123.48,
+            123.84,
+            125.09,
+            125.09,
+            125.09,
+            124.67,
+            124.3,
+            120.8,
+            119.98,
+            120.06,
+            120.06,
+            120.06
         ],
         "model_nav": [
             100.0,
@@ -1024,7 +1157,7 @@
             109.33,
             109.55,
             109.78,
-            109.83,
+            109.91,
             110.03,
             110.03,
             110.03,
@@ -1045,7 +1178,7 @@
             107.6,
             108.31,
             107.23,
-            106.8,
+            106.75,
             108.48,
             108.48,
             108.48,
@@ -1087,7 +1220,73 @@
             109.83,
             110.13,
             109.84,
-            109.77
+            109.31,
+            109.16,
+            109.16,
+            109.16,
+            109.87,
+            109.5,
+            109.97,
+            109.98,
+            110.22,
+            110.22,
+            110.22,
+            110.98,
+            110.87,
+            111.41,
+            111.66,
+            111.84,
+            111.84,
+            111.84,
+            112.17,
+            112.21,
+            112.24,
+            112.09,
+            111.98,
+            111.98,
+            111.98,
+            112.08,
+            111.81,
+            111.38,
+            112.22,
+            112.71,
+            112.71,
+            112.71,
+            112.75,
+            112.82,
+            112.9,
+            112.45,
+            112.7,
+            112.7,
+            112.7,
+            112.07,
+            111.44,
+            110.85,
+            111.44,
+            111.69,
+            111.69,
+            111.69,
+            111.21,
+            111.18,
+            110.93,
+            110.82,
+            110.42,
+            110.42,
+            110.42,
+            110.42,
+            109.36,
+            109.57,
+            109.82,
+            110.69,
+            110.69,
+            110.69,
+            110.64,
+            110.34,
+            110.76,
+            109.66,
+            109.82,
+            109.82,
+            109.82
         ],
         "total_value": [
             19999.02,
@@ -1380,7 +1579,7 @@
             367687.11,
             367952.05,
             368490.78,
-            369087.71,
+            369196.76,
             368489.58,
             368489.58,
             368489.58,
@@ -1391,59 +1590,125 @@
             381880.1,
             381880.1,
             381880.1,
-            405957.29,
-            406499.32,
-            417081.15,
-            417122.38,
-            419938.91,
-            419938.91,
-            419938.91,
-            418292.99,
-            420901.24,
-            419420.98,
-            417986.04,
-            420945.08,
-            420945.08,
-            420945.08,
-            422620.45,
-            422330.76,
-            424686.35,
-            425088.51,
-            425962.3,
-            425962.3,
-            425962.3,
-            427687.42,
-            427348.78,
-            426451.96,
-            425562.53,
-            425562.53,
-            425562.53,
-            425562.53,
-            426787.42,
-            428454.4,
-            429083.25,
-            430280.31,
-            431172.51,
-            431172.51,
-            431172.51,
-            431546.22,
-            430631.31,
-            428250.7,
-            430037.34,
-            432353.3,
-            432353.3,
-            432353.3,
-            431175.31,
-            430826.4,
-            432605.56,
-            431768.19,
-            431763.23,
-            431763.23,
-            431763.23,
-            434007.45,
-            434591.07,
-            433510.98,
-            432428.3
+            405777.26,
+            406318.93,
+            416899.78,
+            416941.53,
+            419760.11,
+            419760.11,
+            419760.11,
+            418112.69,
+            420722.37,
+            419244.47,
+            417808.79,
+            423714.72,
+            423714.72,
+            423714.72,
+            452358.77,
+            451884.69,
+            462320.51,
+            462875.13,
+            463739.32,
+            463739.32,
+            463739.32,
+            470488.92,
+            469731.09,
+            469147.51,
+            468208.18,
+            468208.18,
+            468208.18,
+            468208.18,
+            469511.11,
+            471162.22,
+            496006.85,
+            497473.16,
+            515569.48,
+            515569.48,
+            515569.48,
+            515753.16,
+            514441.23,
+            511388.33,
+            514116.52,
+            517189.16,
+            517189.16,
+            517189.16,
+            525964.3,
+            525132.43,
+            528132.89,
+            526347.2,
+            526620.9,
+            526620.9,
+            526620.9,
+            528877.38,
+            529758.69,
+            537812.53,
+            535280.65,
+            534538.21,
+            534538.21,
+            534538.21,
+            537258.17,
+            535323.33,
+            537980.56,
+            537825.54,
+            540106.71,
+            540106.71,
+            540106.71,
+            619484.42,
+            637226.24,
+            638712.95,
+            639560.0,
+            641868.15,
+            641868.15,
+            641868.15,
+            640607.23,
+            641328.44,
+            643513.86,
+            650312.7,
+            655384.55,
+            655384.55,
+            655384.55,
+            654672.61,
+            653677.19,
+            651438.88,
+            653266.37,
+            653545.95,
+            653545.95,
+            653545.95,
+            652547.02,
+            653659.59,
+            653505.59,
+            652831.45,
+            655710.63,
+            655710.63,
+            655710.63,
+            655782.19,
+            688797.34,
+            703068.18,
+            707726.67,
+            706300.66,
+            706300.66,
+            706300.66,
+            706580.04,
+            707849.82,
+            705254.56,
+            706787.79,
+            705370.69,
+            705370.69,
+            705370.69,
+            705370.69,
+            702494.15,
+            702183.09,
+            704234.01,
+            716477.33,
+            716477.33,
+            716477.33,
+            714045.51,
+            711946.78,
+            716054.5,
+            711232.11,
+            711708.9,
+            711708.9,
+            711708.9
         ],
         "allocation": [
             {
@@ -3131,10 +3396,10 @@
                 "Mid Cap": 5.73
             },
             {
-                "Gold": 2.25,
+                "Gold": 2.26,
                 "Large Cap": 2.83,
-                "Sectoral/Thematic": 35.96,
-                "Arbitrage": 53.23,
+                "Sectoral/Thematic": 35.95,
+                "Arbitrage": 53.24,
                 "Mid Cap": 5.72
             },
             {
@@ -3211,428 +3476,956 @@
                 "Other": 0.29
             },
             {
-                "Gold": 2.0,
-                "Large Cap": 6.11,
-                "Sectoral/Thematic": 32.11,
-                "Arbitrage": 50.43,
+                "Gold": 2.01,
+                "Large Cap": 6.07,
+                "Sectoral/Thematic": 32.12,
+                "Arbitrage": 50.45,
                 "Mid Cap": 5.17,
-                "Other": 4.18
+                "Other": 4.19
             },
             {
                 "Gold": 2.03,
-                "Large Cap": 6.12,
-                "Sectoral/Thematic": 32.13,
-                "Arbitrage": 50.29,
+                "Large Cap": 6.08,
+                "Sectoral/Thematic": 32.14,
+                "Arbitrage": 50.31,
                 "Mid Cap": 5.18,
                 "Other": 4.25
             },
             {
                 "Gold": 1.95,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 31.48,
-                "Arbitrage": 51.2,
+                "Large Cap": 5.94,
+                "Sectoral/Thematic": 31.5,
+                "Arbitrage": 51.22,
                 "Mid Cap": 5.03,
                 "Other": 4.36
             },
             {
-                "Gold": 1.96,
-                "Large Cap": 5.97,
-                "Sectoral/Thematic": 31.55,
-                "Arbitrage": 51.23,
+                "Gold": 1.97,
+                "Large Cap": 5.93,
+                "Sectoral/Thematic": 31.56,
+                "Arbitrage": 51.25,
                 "Mid Cap": 5.05,
                 "Other": 4.24
             },
             {
                 "Gold": 1.94,
-                "Large Cap": 5.89,
-                "Sectoral/Thematic": 31.46,
-                "Arbitrage": 50.93,
+                "Large Cap": 5.85,
+                "Sectoral/Thematic": 31.47,
+                "Arbitrage": 50.95,
                 "Mid Cap": 5.02,
-                "Other": 4.76
+                "Other": 4.77
             },
             {
                 "Gold": 1.94,
-                "Large Cap": 5.89,
-                "Sectoral/Thematic": 31.46,
-                "Arbitrage": 50.93,
+                "Large Cap": 5.85,
+                "Sectoral/Thematic": 31.47,
+                "Arbitrage": 50.95,
                 "Mid Cap": 5.02,
-                "Other": 4.76
+                "Other": 4.77
             },
             {
                 "Gold": 1.94,
-                "Large Cap": 5.89,
-                "Sectoral/Thematic": 31.46,
-                "Arbitrage": 50.93,
+                "Large Cap": 5.85,
+                "Sectoral/Thematic": 31.47,
+                "Arbitrage": 50.95,
                 "Mid Cap": 5.02,
-                "Other": 4.76
+                "Other": 4.77
             },
             {
                 "Gold": 1.9,
-                "Large Cap": 5.91,
-                "Sectoral/Thematic": 31.32,
-                "Arbitrage": 51.24,
+                "Large Cap": 5.87,
+                "Sectoral/Thematic": 31.33,
+                "Arbitrage": 51.27,
                 "Mid Cap": 4.98,
                 "Other": 4.65
             },
             {
                 "Gold": 1.9,
-                "Large Cap": 5.86,
-                "Sectoral/Thematic": 31.67,
-                "Arbitrage": 50.87,
-                "Mid Cap": 5.0,
+                "Large Cap": 5.82,
+                "Sectoral/Thematic": 31.68,
+                "Arbitrage": 50.89,
+                "Mid Cap": 5.01,
                 "Other": 4.7
             },
             {
-                "Gold": 1.84,
-                "Large Cap": 5.83,
-                "Sectoral/Thematic": 31.48,
-                "Arbitrage": 51.15,
+                "Gold": 1.85,
+                "Large Cap": 5.79,
+                "Sectoral/Thematic": 31.49,
+                "Arbitrage": 51.17,
                 "Mid Cap": 4.97,
                 "Other": 4.73
             },
             {
                 "Gold": 1.82,
-                "Large Cap": 5.86,
-                "Sectoral/Thematic": 31.37,
-                "Arbitrage": 51.31,
+                "Large Cap": 5.82,
+                "Sectoral/Thematic": 31.38,
+                "Arbitrage": 51.33,
                 "Mid Cap": 4.95,
-                "Other": 4.69
-            },
-            {
-                "Gold": 1.85,
-                "Large Cap": 5.95,
-                "Sectoral/Thematic": 31.59,
-                "Arbitrage": 50.92,
-                "Mid Cap": 5.0,
-                "Other": 4.69
-            },
-            {
-                "Gold": 1.85,
-                "Large Cap": 5.95,
-                "Sectoral/Thematic": 31.59,
-                "Arbitrage": 50.92,
-                "Mid Cap": 5.0,
-                "Other": 4.69
-            },
-            {
-                "Gold": 1.85,
-                "Large Cap": 5.95,
-                "Sectoral/Thematic": 31.59,
-                "Arbitrage": 50.92,
-                "Mid Cap": 5.0,
-                "Other": 4.69
-            },
-            {
-                "Gold": 1.87,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 31.61,
-                "Arbitrage": 50.76,
-                "Mid Cap": 5.05,
-                "Other": 4.72
-            },
-            {
-                "Gold": 1.88,
-                "Large Cap": 6.02,
-                "Sectoral/Thematic": 31.6,
-                "Arbitrage": 50.83,
-                "Mid Cap": 5.07,
-                "Other": 4.61
-            },
-            {
-                "Gold": 1.86,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.94,
-                "Arbitrage": 50.54,
-                "Mid Cap": 5.06,
-                "Other": 4.56
+                "Other": 4.7
             },
             {
                 "Gold": 1.83,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 32.06,
-                "Arbitrage": 50.49,
-                "Mid Cap": 5.08,
-                "Other": 4.49
+                "Large Cap": 6.29,
+                "Sectoral/Thematic": 31.39,
+                "Arbitrage": 50.59,
+                "Mid Cap": 5.24,
+                "Other": 4.66
             },
             {
-                "Gold": 1.79,
-                "Large Cap": 6.09,
-                "Sectoral/Thematic": 32.11,
-                "Arbitrage": 50.42,
-                "Mid Cap": 5.09,
-                "Other": 4.5
+                "Gold": 1.83,
+                "Large Cap": 6.29,
+                "Sectoral/Thematic": 31.39,
+                "Arbitrage": 50.59,
+                "Mid Cap": 5.24,
+                "Other": 4.66
             },
             {
-                "Gold": 1.79,
-                "Large Cap": 6.09,
-                "Sectoral/Thematic": 32.11,
-                "Arbitrage": 50.42,
-                "Mid Cap": 5.09,
-                "Other": 4.5
-            },
-            {
-                "Gold": 1.79,
-                "Large Cap": 6.09,
-                "Sectoral/Thematic": 32.11,
-                "Arbitrage": 50.42,
-                "Mid Cap": 5.09,
-                "Other": 4.5
-            },
-            {
-                "Gold": 1.8,
-                "Large Cap": 6.08,
-                "Sectoral/Thematic": 32.31,
-                "Arbitrage": 50.26,
-                "Mid Cap": 5.09,
-                "Other": 4.45
-            },
-            {
-                "Gold": 1.78,
-                "Large Cap": 6.03,
-                "Sectoral/Thematic": 32.22,
-                "Arbitrage": 50.33,
-                "Mid Cap": 5.06,
-                "Other": 4.59
-            },
-            {
-                "Gold": 1.76,
-                "Large Cap": 6.02,
-                "Sectoral/Thematic": 32.18,
-                "Arbitrage": 50.41,
-                "Mid Cap": 5.1,
-                "Other": 4.54
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 32.09,
-                "Arbitrage": 50.55,
-                "Mid Cap": 5.09,
-                "Other": 4.56
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 32.09,
-                "Arbitrage": 50.55,
-                "Mid Cap": 5.09,
-                "Other": 4.56
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 32.09,
-                "Arbitrage": 50.55,
-                "Mid Cap": 5.09,
-                "Other": 4.56
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 32.09,
-                "Arbitrage": 50.55,
-                "Mid Cap": 5.09,
-                "Other": 4.56
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 5.94,
-                "Sectoral/Thematic": 32.04,
-                "Arbitrage": 50.4,
-                "Mid Cap": 5.04,
-                "Other": 4.84
-            },
-            {
-                "Gold": 1.73,
-                "Large Cap": 5.93,
-                "Sectoral/Thematic": 32.08,
-                "Arbitrage": 50.21,
-                "Mid Cap": 5.05,
-                "Other": 5.01
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 5.97,
-                "Sectoral/Thematic": 32.07,
-                "Arbitrage": 50.21,
-                "Mid Cap": 5.06,
-                "Other": 4.98
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 5.98,
-                "Sectoral/Thematic": 32.07,
-                "Arbitrage": 50.09,
-                "Mid Cap": 5.09,
-                "Other": 5.04
-            },
-            {
-                "Gold": 1.78,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 32.1,
-                "Arbitrage": 50.0,
-                "Mid Cap": 5.08,
-                "Other": 5.0
-            },
-            {
-                "Gold": 1.78,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 32.1,
-                "Arbitrage": 50.0,
-                "Mid Cap": 5.08,
-                "Other": 5.0
-            },
-            {
-                "Gold": 1.78,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 32.1,
-                "Arbitrage": 50.0,
-                "Mid Cap": 5.08,
-                "Other": 5.0
-            },
-            {
-                "Gold": 1.77,
-                "Large Cap": 6.08,
-                "Sectoral/Thematic": 32.1,
-                "Arbitrage": 49.98,
-                "Mid Cap": 5.09,
-                "Other": 4.99
-            },
-            {
-                "Gold": 1.76,
-                "Large Cap": 6.09,
-                "Sectoral/Thematic": 31.9,
-                "Arbitrage": 50.11,
-                "Mid Cap": 5.11,
-                "Other": 5.04
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 6.0,
-                "Sectoral/Thematic": 31.56,
-                "Arbitrage": 50.38,
-                "Mid Cap": 5.04,
-                "Other": 5.28
-            },
-            {
-                "Gold": 1.76,
-                "Large Cap": 6.06,
-                "Sectoral/Thematic": 31.61,
-                "Arbitrage": 50.16,
-                "Mid Cap": 5.07,
-                "Other": 5.34
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.87,
-                "Arbitrage": 49.9,
-                "Mid Cap": 5.11,
-                "Other": 5.34
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.87,
-                "Arbitrage": 49.9,
-                "Mid Cap": 5.11,
-                "Other": 5.34
-            },
-            {
-                "Gold": 1.74,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.87,
-                "Arbitrage": 49.9,
-                "Mid Cap": 5.11,
-                "Other": 5.34
-            },
-            {
-                "Gold": 1.73,
-                "Large Cap": 6.02,
-                "Sectoral/Thematic": 31.86,
-                "Arbitrage": 50.03,
-                "Mid Cap": 5.12,
-                "Other": 5.24
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 6.07,
-                "Sectoral/Thematic": 31.72,
-                "Arbitrage": 50.12,
-                "Mid Cap": 5.09,
-                "Other": 5.28
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 6.02,
-                "Sectoral/Thematic": 31.7,
-                "Arbitrage": 49.9,
-                "Mid Cap": 5.09,
-                "Other": 5.58
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 6.03,
-                "Sectoral/Thematic": 31.69,
-                "Arbitrage": 49.99,
-                "Mid Cap": 5.08,
-                "Other": 5.48
-            },
-            {
-                "Gold": 1.71,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.62,
-                "Arbitrage": 50.04,
-                "Mid Cap": 5.07,
-                "Other": 5.52
-            },
-            {
-                "Gold": 1.71,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.62,
-                "Arbitrage": 50.04,
-                "Mid Cap": 5.07,
-                "Other": 5.52
-            },
-            {
-                "Gold": 1.71,
-                "Large Cap": 6.04,
-                "Sectoral/Thematic": 31.62,
-                "Arbitrage": 50.04,
-                "Mid Cap": 5.07,
-                "Other": 5.52
-            },
-            {
-                "Gold": 1.72,
-                "Large Cap": 6.05,
-                "Sectoral/Thematic": 31.87,
-                "Arbitrage": 49.76,
-                "Mid Cap": 5.05,
-                "Other": 5.54
-            },
-            {
-                "Gold": 1.73,
-                "Large Cap": 6.06,
-                "Sectoral/Thematic": 31.88,
-                "Arbitrage": 49.74,
-                "Mid Cap": 5.07,
-                "Other": 5.53
+                "Gold": 1.83,
+                "Large Cap": 6.29,
+                "Sectoral/Thematic": 31.39,
+                "Arbitrage": 50.59,
+                "Mid Cap": 5.24,
+                "Other": 4.66
             },
             {
                 "Gold": 1.75,
-                "Large Cap": 6.05,
-                "Sectoral/Thematic": 31.68,
-                "Arbitrage": 49.88,
-                "Mid Cap": 5.04,
-                "Other": 5.6
+                "Large Cap": 5.95,
+                "Sectoral/Thematic": 29.53,
+                "Arbitrage": 48.53,
+                "Other": 9.26,
+                "Mid Cap": 4.98
             },
             {
-                "Gold": 1.76,
+                "Gold": 1.75,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 29.53,
+                "Arbitrage": 48.61,
+                "Other": 9.12,
+                "Mid Cap": 4.99
+            },
+            {
+                "Gold": 1.71,
+                "Large Cap": 5.91,
+                "Sectoral/Thematic": 29.34,
+                "Arbitrage": 47.51,
+                "Other": 8.9,
+                "Mid Cap": 6.63
+            },
+            {
+                "Gold": 1.68,
+                "Large Cap": 5.91,
+                "Sectoral/Thematic": 29.44,
+                "Arbitrage": 47.45,
+                "Other": 8.85,
+                "Mid Cap": 6.66
+            },
+            {
+                "Gold": 1.65,
+                "Large Cap": 5.96,
+                "Sectoral/Thematic": 29.5,
+                "Arbitrage": 47.39,
+                "Other": 8.83,
+                "Mid Cap": 6.67
+            },
+            {
+                "Gold": 1.65,
+                "Large Cap": 5.96,
+                "Sectoral/Thematic": 29.5,
+                "Arbitrage": 47.39,
+                "Other": 8.83,
+                "Mid Cap": 6.67
+            },
+            {
+                "Gold": 1.65,
+                "Large Cap": 5.96,
+                "Sectoral/Thematic": 29.5,
+                "Arbitrage": 47.39,
+                "Other": 8.83,
+                "Mid Cap": 6.67
+            },
+            {
+                "Gold": 1.64,
+                "Large Cap": 5.89,
+                "Sectoral/Thematic": 29.37,
+                "Arbitrage": 46.75,
+                "Other": 9.74,
+                "Mid Cap": 6.61
+            },
+            {
+                "Gold": 1.62,
+                "Large Cap": 5.85,
+                "Sectoral/Thematic": 29.31,
+                "Arbitrage": 46.85,
+                "Other": 9.8,
+                "Mid Cap": 6.58
+            },
+            {
+                "Gold": 1.6,
+                "Large Cap": 5.83,
+                "Sectoral/Thematic": 29.25,
+                "Arbitrage": 46.89,
+                "Other": 9.82,
+                "Mid Cap": 6.62
+            },
+            {
+                "Gold": 1.56,
+                "Large Cap": 5.79,
+                "Sectoral/Thematic": 29.17,
+                "Arbitrage": 47.02,
+                "Other": 9.86,
+                "Mid Cap": 6.6
+            },
+            {
+                "Gold": 1.56,
+                "Large Cap": 5.79,
+                "Sectoral/Thematic": 29.17,
+                "Arbitrage": 47.02,
+                "Other": 9.86,
+                "Mid Cap": 6.6
+            },
+            {
+                "Gold": 1.56,
+                "Large Cap": 5.79,
+                "Sectoral/Thematic": 29.17,
+                "Arbitrage": 47.02,
+                "Other": 9.86,
+                "Mid Cap": 6.6
+            },
+            {
+                "Gold": 1.56,
+                "Large Cap": 5.79,
+                "Sectoral/Thematic": 29.17,
+                "Arbitrage": 47.02,
+                "Other": 9.86,
+                "Mid Cap": 6.6
+            },
+            {
+                "Gold": 1.58,
+                "Large Cap": 5.75,
+                "Sectoral/Thematic": 29.12,
+                "Arbitrage": 46.89,
+                "Other": 10.12,
+                "Mid Cap": 6.55
+            },
+            {
+                "Gold": 1.57,
+                "Large Cap": 5.74,
+                "Sectoral/Thematic": 29.17,
+                "Arbitrage": 46.72,
+                "Other": 10.24,
+                "Mid Cap": 6.56
+            },
+            {
+                "Gold": 1.48,
+                "Large Cap": 5.87,
+                "Sectoral/Thematic": 28.58,
+                "Arbitrage": 46.26,
+                "Other": 10.95,
+                "Mid Cap": 6.85
+            },
+            {
+                "Gold": 1.51,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 28.58,
+                "Arbitrage": 46.14,
+                "Other": 11.0,
+                "Mid Cap": 6.89
+            },
+            {
+                "Gold": 1.49,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.67,
+                "Arbitrage": 44.53,
+                "Other": 12.75,
+                "Mid Cap": 7.45
+            },
+            {
+                "Gold": 1.49,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.67,
+                "Arbitrage": 44.53,
+                "Other": 12.75,
+                "Mid Cap": 7.45
+            },
+            {
+                "Gold": 1.49,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.67,
+                "Arbitrage": 44.53,
+                "Other": 12.75,
+                "Mid Cap": 7.45
+            },
+            {
+                "Gold": 1.48,
+                "Large Cap": 6.16,
+                "Sectoral/Thematic": 27.68,
+                "Arbitrage": 44.54,
+                "Other": 12.67,
+                "Mid Cap": 7.47
+            },
+            {
+                "Gold": 1.47,
+                "Large Cap": 6.17,
+                "Sectoral/Thematic": 27.52,
+                "Arbitrage": 44.67,
+                "Other": 12.67,
+                "Mid Cap": 7.5
+            },
+            {
+                "Gold": 1.46,
+                "Large Cap": 6.08,
+                "Sectoral/Thematic": 27.24,
+                "Arbitrage": 44.94,
+                "Other": 12.88,
+                "Mid Cap": 7.4
+            },
+            {
+                "Gold": 1.47,
+                "Large Cap": 6.15,
+                "Sectoral/Thematic": 27.25,
+                "Arbitrage": 44.68,
+                "Other": 13.0,
+                "Mid Cap": 7.45
+            },
+            {
+                "Gold": 1.46,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.45,
+                "Arbitrage": 44.43,
+                "Other": 13.05,
+                "Mid Cap": 7.5
+            },
+            {
+                "Gold": 1.46,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.45,
+                "Arbitrage": 44.43,
+                "Other": 13.05,
+                "Mid Cap": 7.5
+            },
+            {
+                "Gold": 1.46,
+                "Large Cap": 6.11,
+                "Sectoral/Thematic": 27.45,
+                "Arbitrage": 44.43,
+                "Other": 13.05,
+                "Mid Cap": 7.5
+            },
+            {
+                "Gold": 1.42,
+                "Large Cap": 5.97,
+                "Sectoral/Thematic": 27.81,
+                "Arbitrage": 43.69,
+                "Other": 13.74,
+                "Mid Cap": 7.38
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 6.04,
+                "Sectoral/Thematic": 27.71,
+                "Arbitrage": 43.79,
+                "Other": 13.71,
+                "Mid Cap": 7.34
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.97,
+                "Sectoral/Thematic": 27.65,
+                "Arbitrage": 43.53,
+                "Other": 14.12,
+                "Mid Cap": 7.32
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 27.69,
+                "Arbitrage": 43.68,
+                "Other": 13.91,
+                "Mid Cap": 7.31
+            },
+            {
+                "Gold": 1.4,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 27.61,
+                "Arbitrage": 43.7,
+                "Other": 14.01,
+                "Mid Cap": 7.3
+            },
+            {
+                "Gold": 1.4,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 27.61,
+                "Arbitrage": 43.7,
+                "Other": 14.01,
+                "Mid Cap": 7.3
+            },
+            {
+                "Gold": 1.4,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 27.61,
+                "Arbitrage": 43.7,
+                "Other": 14.01,
+                "Mid Cap": 7.3
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 6.02,
+                "Sectoral/Thematic": 27.84,
+                "Arbitrage": 43.5,
+                "Other": 13.96,
+                "Mid Cap": 7.28
+            },
+            {
+                "Gold": 1.42,
+                "Large Cap": 6.02,
+                "Sectoral/Thematic": 27.85,
+                "Arbitrage": 43.46,
+                "Other": 13.95,
+                "Mid Cap": 7.3
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.92,
+                "Sectoral/Thematic": 27.54,
+                "Arbitrage": 43.38,
+                "Other": 14.03,
+                "Mid Cap": 7.73
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.9,
+                "Sectoral/Thematic": 27.49,
+                "Arbitrage": 43.59,
+                "Other": 13.91,
+                "Mid Cap": 7.7
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 27.51,
+                "Arbitrage": 43.64,
+                "Other": 13.85,
+                "Mid Cap": 7.72
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 27.51,
+                "Arbitrage": 43.64,
+                "Other": 13.85,
+                "Mid Cap": 7.72
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 27.51,
+                "Arbitrage": 43.64,
+                "Other": 13.85,
+                "Mid Cap": 7.72
+            },
+            {
+                "Gold": 1.41,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 27.64,
+                "Arbitrage": 43.42,
+                "Other": 13.89,
+                "Mid Cap": 7.76
+            },
+            {
+                "Gold": 1.39,
+                "Large Cap": 5.9,
+                "Sectoral/Thematic": 27.48,
+                "Arbitrage": 43.6,
+                "Other": 13.82,
+                "Mid Cap": 7.81
+            },
+            {
+                "Gold": 1.39,
+                "Large Cap": 5.99,
+                "Sectoral/Thematic": 27.5,
+                "Arbitrage": 43.4,
+                "Other": 13.9,
+                "Mid Cap": 7.83
+            },
+            {
+                "Gold": 1.39,
+                "Large Cap": 6.01,
+                "Sectoral/Thematic": 27.47,
+                "Arbitrage": 43.44,
+                "Other": 13.87,
+                "Mid Cap": 7.82
+            },
+            {
+                "Gold": 1.38,
+                "Large Cap": 6.02,
+                "Sectoral/Thematic": 27.59,
+                "Arbitrage": 43.26,
+                "Other": 13.93,
+                "Mid Cap": 7.82
+            },
+            {
+                "Gold": 1.38,
+                "Large Cap": 6.02,
+                "Sectoral/Thematic": 27.59,
+                "Arbitrage": 43.26,
+                "Other": 13.93,
+                "Mid Cap": 7.82
+            },
+            {
+                "Gold": 1.38,
+                "Large Cap": 6.02,
+                "Sectoral/Thematic": 27.59,
+                "Arbitrage": 43.26,
+                "Other": 13.93,
+                "Mid Cap": 7.82
+            },
+            {
+                "Gold": 1.21,
+                "Large Cap": 6.23,
+                "Sectoral/Thematic": 26.29,
+                "Arbitrage": 41.78,
+                "Other": 14.95,
+                "Mid Cap": 9.55
+            },
+            {
+                "Gold": 1.17,
+                "Large Cap": 6.04,
+                "Sectoral/Thematic": 25.57,
+                "Arbitrage": 41.95,
+                "Other": 15.06,
+                "Mid Cap": 10.21
+            },
+            {
+                "Gold": 1.19,
                 "Large Cap": 6.05,
-                "Sectoral/Thematic": 31.61,
-                "Arbitrage": 50.01,
-                "Mid Cap": 5.04,
-                "Other": 5.54
+                "Sectoral/Thematic": 25.57,
+                "Arbitrage": 41.8,
+                "Other": 15.18,
+                "Mid Cap": 10.21
+            },
+            {
+                "Gold": 1.22,
+                "Large Cap": 5.98,
+                "Sectoral/Thematic": 25.93,
+                "Arbitrage": 41.68,
+                "Other": 15.01,
+                "Mid Cap": 10.18
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 5.98,
+                "Sectoral/Thematic": 25.94,
+                "Arbitrage": 41.57,
+                "Other": 15.12,
+                "Mid Cap": 10.16
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 5.98,
+                "Sectoral/Thematic": 25.94,
+                "Arbitrage": 41.57,
+                "Other": 15.12,
+                "Mid Cap": 10.16
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 5.98,
+                "Sectoral/Thematic": 25.94,
+                "Arbitrage": 41.57,
+                "Other": 15.12,
+                "Mid Cap": 10.16
+            },
+            {
+                "Gold": 1.24,
+                "Large Cap": 5.95,
+                "Sectoral/Thematic": 25.8,
+                "Arbitrage": 41.69,
+                "Other": 15.12,
+                "Mid Cap": 10.2
+            },
+            {
+                "Gold": 1.25,
+                "Large Cap": 5.88,
+                "Sectoral/Thematic": 25.78,
+                "Arbitrage": 41.65,
+                "Other": 15.24,
+                "Mid Cap": 10.21
+            },
+            {
+                "Gold": 1.25,
+                "Large Cap": 5.92,
+                "Sectoral/Thematic": 25.81,
+                "Arbitrage": 41.53,
+                "Other": 15.33,
+                "Mid Cap": 10.16
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 5.84,
+                "Sectoral/Thematic": 25.7,
+                "Arbitrage": 41.09,
+                "Other": 16.07,
+                "Mid Cap": 10.07
+            },
+            {
+                "Gold": 1.22,
+                "Large Cap": 6.82,
+                "Sectoral/Thematic": 25.43,
+                "Arbitrage": 40.74,
+                "Other": 15.82,
+                "Mid Cap": 9.97
+            },
+            {
+                "Gold": 1.22,
+                "Large Cap": 6.82,
+                "Sectoral/Thematic": 25.43,
+                "Arbitrage": 40.74,
+                "Other": 15.82,
+                "Mid Cap": 9.97
+            },
+            {
+                "Gold": 1.22,
+                "Large Cap": 6.82,
+                "Sectoral/Thematic": 25.43,
+                "Arbitrage": 40.74,
+                "Other": 15.82,
+                "Mid Cap": 9.97
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 6.76,
+                "Sectoral/Thematic": 25.48,
+                "Arbitrage": 40.75,
+                "Other": 15.77,
+                "Mid Cap": 10.0
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 6.67,
+                "Sectoral/Thematic": 25.57,
+                "Arbitrage": 40.87,
+                "Other": 15.68,
+                "Mid Cap": 9.97
+            },
+            {
+                "Gold": 1.23,
+                "Large Cap": 6.66,
+                "Sectoral/Thematic": 25.44,
+                "Arbitrage": 41.07,
+                "Other": 15.62,
+                "Mid Cap": 9.98
+            },
+            {
+                "Gold": 1.26,
+                "Large Cap": 6.7,
+                "Sectoral/Thematic": 25.38,
+                "Arbitrage": 40.92,
+                "Other": 15.74,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.28,
+                "Large Cap": 6.71,
+                "Sectoral/Thematic": 25.35,
+                "Arbitrage": 40.96,
+                "Other": 15.71,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.28,
+                "Large Cap": 6.71,
+                "Sectoral/Thematic": 25.35,
+                "Arbitrage": 40.96,
+                "Other": 15.71,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.28,
+                "Large Cap": 6.71,
+                "Sectoral/Thematic": 25.35,
+                "Arbitrage": 40.96,
+                "Other": 15.71,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.3,
+                "Large Cap": 6.69,
+                "Sectoral/Thematic": 25.27,
+                "Arbitrage": 41.05,
+                "Other": 15.69,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.29,
+                "Large Cap": 6.72,
+                "Sectoral/Thematic": 25.31,
+                "Arbitrage": 40.95,
+                "Other": 15.7,
+                "Mid Cap": 10.02
+            },
+            {
+                "Gold": 1.29,
+                "Large Cap": 6.59,
+                "Sectoral/Thematic": 25.47,
+                "Arbitrage": 40.86,
+                "Other": 15.76,
+                "Mid Cap": 10.03
+            },
+            {
+                "Gold": 1.27,
+                "Large Cap": 6.53,
+                "Sectoral/Thematic": 25.46,
+                "Arbitrage": 40.97,
+                "Other": 15.74,
+                "Mid Cap": 10.02
+            },
+            {
+                "Gold": 1.27,
+                "Large Cap": 6.52,
+                "Sectoral/Thematic": 25.38,
+                "Arbitrage": 40.83,
+                "Other": 16.02,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.27,
+                "Large Cap": 6.52,
+                "Sectoral/Thematic": 25.38,
+                "Arbitrage": 40.83,
+                "Other": 16.02,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.27,
+                "Large Cap": 6.52,
+                "Sectoral/Thematic": 25.38,
+                "Arbitrage": 40.83,
+                "Other": 16.02,
+                "Mid Cap": 9.99
+            },
+            {
+                "Gold": 1.24,
+                "Large Cap": 6.33,
+                "Sectoral/Thematic": 25.26,
+                "Arbitrage": 40.87,
+                "Other": 16.33,
+                "Mid Cap": 9.98
+            },
+            {
+                "Gold": 1.16,
+                "Large Cap": 6.73,
+                "Sectoral/Thematic": 25.34,
+                "Arbitrage": 40.87,
+                "Other": 16.45,
+                "Mid Cap": 9.45
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.55,
+                "Sectoral/Thematic": 24.77,
+                "Arbitrage": 41.27,
+                "Other": 15.97,
+                "Mid Cap": 10.33
+            },
+            {
+                "Gold": 1.14,
+                "Large Cap": 6.52,
+                "Sectoral/Thematic": 24.9,
+                "Arbitrage": 40.98,
+                "Other": 16.16,
+                "Mid Cap": 10.3
+            },
+            {
+                "Gold": 1.15,
+                "Large Cap": 6.45,
+                "Sectoral/Thematic": 25.03,
+                "Arbitrage": 41.01,
+                "Other": 16.06,
+                "Mid Cap": 10.3
+            },
+            {
+                "Gold": 1.15,
+                "Large Cap": 6.45,
+                "Sectoral/Thematic": 25.03,
+                "Arbitrage": 41.01,
+                "Other": 16.06,
+                "Mid Cap": 10.3
+            },
+            {
+                "Gold": 1.15,
+                "Large Cap": 6.45,
+                "Sectoral/Thematic": 25.03,
+                "Arbitrage": 41.01,
+                "Other": 16.06,
+                "Mid Cap": 10.3
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.48,
+                "Sectoral/Thematic": 24.99,
+                "Arbitrage": 41.08,
+                "Other": 16.07,
+                "Mid Cap": 10.24
+            },
+            {
+                "Gold": 1.14,
+                "Large Cap": 6.43,
+                "Sectoral/Thematic": 25.25,
+                "Arbitrage": 41.0,
+                "Other": 15.96,
+                "Mid Cap": 10.23
+            },
+            {
+                "Gold": 1.14,
+                "Large Cap": 6.37,
+                "Sectoral/Thematic": 25.18,
+                "Arbitrage": 41.15,
+                "Other": 15.95,
+                "Mid Cap": 10.22
+            },
+            {
+                "Gold": 1.14,
+                "Large Cap": 6.42,
+                "Sectoral/Thematic": 24.92,
+                "Arbitrage": 41.14,
+                "Other": 16.22,
+                "Mid Cap": 10.16
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.41,
+                "Sectoral/Thematic": 24.89,
+                "Arbitrage": 41.13,
+                "Other": 16.29,
+                "Mid Cap": 10.15
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.41,
+                "Sectoral/Thematic": 24.89,
+                "Arbitrage": 41.13,
+                "Other": 16.29,
+                "Mid Cap": 10.15
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.41,
+                "Sectoral/Thematic": 24.89,
+                "Arbitrage": 41.13,
+                "Other": 16.29,
+                "Mid Cap": 10.15
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.41,
+                "Sectoral/Thematic": 24.89,
+                "Arbitrage": 41.13,
+                "Other": 16.29,
+                "Mid Cap": 10.15
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.41,
+                "Sectoral/Thematic": 24.23,
+                "Arbitrage": 41.34,
+                "Other": 16.89,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.43,
+                "Sectoral/Thematic": 24.27,
+                "Arbitrage": 41.34,
+                "Other": 16.78,
+                "Mid Cap": 10.04
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.42,
+                "Sectoral/Thematic": 24.47,
+                "Arbitrage": 41.22,
+                "Other": 16.67,
+                "Mid Cap": 10.09
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.47,
+                "Sectoral/Thematic": 24.26,
+                "Arbitrage": 40.6,
+                "Other": 17.53,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.47,
+                "Sectoral/Thematic": 24.26,
+                "Arbitrage": 40.6,
+                "Other": 17.53,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.13,
+                "Large Cap": 6.47,
+                "Sectoral/Thematic": 24.26,
+                "Arbitrage": 40.6,
+                "Other": 17.53,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.33,
+                "Sectoral/Thematic": 24.43,
+                "Arbitrage": 40.7,
+                "Other": 17.41,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.31,
+                "Sectoral/Thematic": 24.48,
+                "Arbitrage": 40.82,
+                "Other": 17.26,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.11,
+                "Large Cap": 6.32,
+                "Sectoral/Thematic": 24.67,
+                "Arbitrage": 40.65,
+                "Other": 17.24,
+                "Mid Cap": 10.01
+            },
+            {
+                "Gold": 1.11,
+                "Large Cap": 6.24,
+                "Sectoral/Thematic": 24.66,
+                "Arbitrage": 40.9,
+                "Other": 17.19,
+                "Mid Cap": 9.9
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.21,
+                "Sectoral/Thematic": 24.68,
+                "Arbitrage": 40.89,
+                "Other": 17.22,
+                "Mid Cap": 9.88
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.21,
+                "Sectoral/Thematic": 24.68,
+                "Arbitrage": 40.89,
+                "Other": 17.22,
+                "Mid Cap": 9.88
+            },
+            {
+                "Gold": 1.12,
+                "Large Cap": 6.21,
+                "Sectoral/Thematic": 24.68,
+                "Arbitrage": 40.89,
+                "Other": 17.22,
+                "Mid Cap": 9.88
             }
         ]
     },
@@ -3641,85 +4434,109 @@
             "id": "INF179K01VX0",
             "name": "HDFC GOLD ETF FUND OF FUND - DIRECT PLAN",
             "category": "Gold",
-            "value": 7595.65
+            "value": 7938.08
         },
         {
             "id": "INF109K012M7",
             "name": "ICICI PRUDENTIAL NIFTY 50 INDEX FUND - DIRECT PLAN GROWTH",
             "category": "Large Cap",
-            "value": 10643.4
+            "value": 10283.32
         },
         {
             "id": "INF247L01DJ0",
             "name": "MOTILALAMC - MODEFENCE",
             "category": "Sectoral/Thematic",
-            "value": 44655.29
+            "value": 67517.4
         },
         {
             "id": "INF204KC1089",
             "name": "NIPPONAMC - NETFPHARMA",
             "category": "Sectoral/Thematic",
-            "value": 49481.25
+            "value": 66636.6
         },
         {
             "id": "INF109KC10S8",
             "name": "ICICIPRAMC - PSUBANKICI",
             "category": "Sectoral/Thematic",
-            "value": 33045.55
+            "value": 32617.65
         },
         {
             "id": "Kotak Arbitrage Fund Direct Growth",
             "name": "Kotak Arbitrage Fund Direct Growth",
             "category": "Arbitrage",
-            "value": 216246.24
+            "value": 291012.72
+        },
+        {
+            "id": "INF204KB14I2",
+            "name": "NIP IND ETF NIFTY BEES",
+            "category": "Other",
+            "value": 39619.5
         },
         {
             "id": "INF109KC11W8",
             "name": "ICICIPRAMC - ICICIM150",
             "category": "Mid Cap",
-            "value": 6390.9
+            "value": 23846.13
         },
         {
             "id": "HDFC Mid Cap Fund Direct Growth",
             "name": "HDFC Mid Cap Fund Direct Growth",
             "category": "Mid Cap",
-            "value": 15410.4
+            "value": 46444.12
         },
         {
             "id": "INF109KC19V3",
             "name": "ICICIPRAMC - ICICIFMCG",
             "category": "Sectoral/Thematic",
-            "value": 9505.8
+            "value": 8906.4
         },
         {
             "id": "INE397D01024",
             "name": "BHARTI AIRTEL LIMITED",
             "category": "Large Cap",
-            "value": 15516.8
+            "value": 33922.6
         },
         {
             "id": "INE953R01016",
             "name": "P N GADGIL JEWELLERS LTD",
             "category": "Other",
-            "value": 4599.35
+            "value": 9082.5
         },
         {
             "id": "INE0LEZ01016",
             "name": "ATHER ENERGY LIMITED",
             "category": "Other",
-            "value": 17603.6
+            "value": 43413.0
         },
         {
             "id": "INE947N01017",
             "name": "AEQUS LIMITED",
             "category": "Other",
-            "value": 918.28
+            "value": 8365.7
         },
         {
             "id": "INE0HOQ01053",
             "name": "BILLIONBRAINS GARAGE VN L",
             "category": "Other",
-            "value": 815.8
+            "value": 19267.18
+        },
+        {
+            "id": "INE989C01038",
+            "name": "DIAMOND POWER INFRA LTD",
+            "category": "Other",
+            "value": 2836.0
+        },
+        {
+            "id": "INE08T701025",
+            "name": "RENTOMOJO LIMITED",
+            "category": "Other",
+            "value": 0.0
+        },
+        {
+            "id": "INE721I01024",
+            "name": "National Stock Exchange of Ind",
+            "category": "Other",
+            "value": 0.0
         }
     ]
 }

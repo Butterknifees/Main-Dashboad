@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisaab Upload Portal | Powered by Play Theory</title>
+    <link rel="stylesheet" href="hisaab_styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        .upload-container {
+            max-width: 1200px;
+            margin: 0 auto 4rem auto;
+            padding-top: 1rem;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .upload-card {
+            border-radius: 24px;
+            padding: 2.2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .upload-card:hover {
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 210, 255, 0.05);
+        }
+
+        .upload-card h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .upload-card h2 svg {
+            color: var(--accent-blue);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-bottom: 0.6rem;
+        }
+
+        .date-picker {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 12px;
+            outline: none;
+            width: 100%;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .date-picker:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+        }
+
+        .drop-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--accent-blue);
+            background: rgba(0, 210, 255, 0.05);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+        }
+
+        .drop-zone p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .drop-zone .file-name {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .drop-zone svg {
+            color: rgba(255, 255, 255, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .drop-zone:hover svg {
+            transform: translateY(-4px);
+            color: var(--accent-blue);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 1rem;
+        }
+
+        .status-badge.configured {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
+            color: #F59E0B;
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+
+        /* --- PREVIEW TABLE --- */
+        .preview-wrapper {
+            margin-top: 1.5rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.3);
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            text-align: left;
+        }
+
+        .preview-table th {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.6rem 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .preview-table td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+        }
+
+        /* --- MAPPER DIALOG --- */
+        .mapper-wrapper {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .mapper-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        .mapper-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .mapper-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .mapper-field select {
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.8rem;
+        }
+
+        /* --- CONSOLE PANEL --- */
+        .console-card {
+            background: #050811;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.2rem;
+            backdrop-filter: blur(20px);
+            margin-bottom: 2rem;
+            display: none;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .console-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .console-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .console-terminal {
+            background: transparent;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #10B981; /* Neon green standard terminal */
+            line-height: 1.5;
+            height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            padding: 0.5rem;
+        }
+
+        /* --- SYSTEM WARNING CARD --- */
+        .system-warning-card {
+            border-radius: 20px;
+            padding: 1.5rem;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .system-warning-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #EF4444;
+        }
+
+        .system-warning-card pre {
+            background: rgba(0,0,0,0.4);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            margin-top: 0.6rem;
+            color: #FEE2E2;
+            overflow-x: auto;
+        }
+
+        /* --- SUBMIT PANEL --- */
+        .submit-panel {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-large {
+            padding: 1rem 2.2rem;
+            font-size: 1rem;
+            border-radius: 16px;
+        }
+
+        .clear-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #F87171;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-blue);
+        }
+
+        /* --- MULTIPLE FILE CHIPS STYLE --- */
+        .file-list {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .file-chip {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .file-chip:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .file-chip.active {
+            background: rgba(0, 210, 255, 0.05);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
+        }
+
+        .file-chip-info {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-primary);
+        }
+
+        .file-chip-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #F59E0B; /* Pending/warning */
+        }
+
+        .file-chip-status.success {
+            background: #10B981;
+        }
+
+        .file-chip-remove {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 0.2rem;
+            transition: color 0.2s ease;
+            outline: none;
+            line-height: 1;
+        }
+
+        .file-chip-remove:hover {
+            color: #EF4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-container">
+        <div class="glow-orb" id="orb-1"></div>
+        <div class="glow-orb" id="orb-2"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">HISAAB<span class="dot">.</span></div>
+            <div class="powered-by" style="display:flex;align-items:center;gap:1.5rem">
+                <a href="demo.html" class="nav-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Dashboard
+                </a>
+                <span>Data Upload Portal</span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="upload-container">
+        <h1 class="fade-in">Data <span class="highlight">Ingestion</span></h1>
+        <p class="subtitle fade-in">Seed your portfolio value at a specific starting date and upload subsequent transactions to run institutional-grade metrics.</p>
+
+        <!-- Server Warning Banner -->
+        <div id="server-warning" class="system-warning-card">
+            <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                Backend Server Offline
+            </h3>
+            <p>You have loaded this page directly from the filesystem. Because modern web browsers restrict reading and writing local files for security reasons, the upload portal requires a local server to function.</p>
+            <p>Please run the following command in your terminal inside the project folder, then navigate to <strong>http://localhost:5001/upload.html</strong>:</p>
+            <pre>python server.py</pre>
+        </div>
+
+        <div class="upload-grid">
+            <!-- 1. Holdings Snapshot Card -->
+            <div class="upload-card">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    1. Seed Portfolio Holdings
+                </h2>
+                
+                <div class="input-group">
+                    <label class="input-label" for="holdings-date">Snapshot Date (Date X)</label>
+                    <input type="date" id="holdings-date" class="date-picker">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Holdings Statement Files (Up to 5)</label>
+                    <div id="holdings-drop" class="drop-zone">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <p>Drag & drop your holdings statement CSV/Excel files here or <strong>browse</strong></p>
+                        <input type="file" id="holdings-input" accept=".csv,.xlsx,.xls" multiple style="display:none;">
+                    </div>
+                    <div id="holdings-files-list" class="file-list" style="display:none;"></div>
+                </div>
+
+                <div id="holdings-status" class="status-badge pending">
+                    No holdings loaded
+                </div>
+                <button id="clear-holdings-btn" class="clear-btn" style="display:none; margin-left: 0.5rem; margin-top: 1rem;">Clear</button>
+
+                <!-- Mapping section -->
+                <div id="holdings-mapper" class="mapper-wrapper">
+                    <div class="mapper-title">Map Holdings Columns</div>
+                    <div class="mapper-grid">
+                        <div class="mapper-field">
+                            <label class="input-label">Asset ID (ISIN/Code)</label>
+                            <select id="h-map-id"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Asset Name</label>
+                            <select id="h-map-name"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Quantity (Units)</label>
+                            <select id="h-map-qty"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Cost/Avg Price</label>
+                            <select id="h-map-price"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Total Cost (Buy Value)</label>
+                            <select id="h-map-value"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Grid -->
+                <div id="holdings-preview" class="preview-wrapper">
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;">Avg Price</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2. Transactions Card -->
+            <div class="upload-card">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M20 21a9 9 0 1 1-16 0"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    2. Upload Transactions (After Date X)
+                </h2>
+
+                <div class="input-group" style="margin-top: 4.8rem;"> <!-- push down to align with drag zone -->
+                    <label class="input-label">Transactions Statement Files (Up to 5)</label>
+                    <div id="tx-drop" class="drop-zone" style="padding: 2.8rem 1.5rem;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <p>Drag & drop your transactions history CSV/Excel files here or <strong>browse</strong></p>
+                        <input type="file" id="tx-input" accept=".csv,.xlsx,.xls" multiple style="display:none;">
+                    </div>
+                    <div id="tx-files-list" class="file-list" style="display:none;"></div>
+                </div>
+
+                <div id="tx-status" class="status-badge pending">
+                    No transactions loaded
+                </div>
+
+                <!-- Mapping section -->
+                <div id="tx-mapper" class="mapper-wrapper">
+                    <div class="mapper-title">Map Transactions Columns</div>
+                    <div class="mapper-grid">
+                        <div class="mapper-field">
+                            <label class="input-label">Execution Date</label>
+                            <select id="t-map-date"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Asset ID (ISIN)</label>
+                            <select id="t-map-id"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Asset Name</label>
+                            <select id="t-map-name"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Quantity</label>
+                            <select id="t-map-qty"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Execution Price</label>
+                            <select id="t-map-price"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Total Value (Amount)</label>
+                            <select id="t-map-value"></select>
+                        </div>
+                        <div class="mapper-field">
+                            <label class="input-label">Type (Buy/Sell)</label>
+                            <select id="t-map-type"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Grid -->
+                <div id="tx-preview" class="preview-wrapper">
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>ID</th>
+                                <th style="text-align: right;">Qty</th>
+                                <th style="text-align: right;">Price</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Console Card -->
+        <div id="console-panel" class="console-card">
+            <div class="console-header">
+                <div class="console-title">
+                    <span class="pulse-dot"></span>
+                    Execution Stream Console
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary); font-family: monospace;">pipeline_v2.log</div>
+            </div>
+            <pre id="console-out" class="console-terminal">Initialising console...</pre>
+        </div>
+
+        <!-- Submit & Actions Panel -->
+        <div class="submit-panel fade-in-delay-2">
+            <button id="run-pipeline-btn" class="btn btn-primary btn-large">Save & Run Analytics</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hisaab by Play Theory. Precision Financial Analytics.</p>
+        <p style="font-size: 0.72rem; color: rgba(255, 255, 255, 0.35); margin-top: 0.6rem; letter-spacing: 0.02em;">Data pipeline requires monthly token refresh &bull; Next update due: Oct 14th</p>
+    </footer>
+
+    <script>
+        // Check environment
+        const isLocalFile = window.location.protocol === 'file:';
+        const serverWarning = document.getElementById('server-warning');
+        const runBtn = document.getElementById('run-pipeline-btn');
+        
+        if (isLocalFile) {
+            serverWarning.style.display = 'block';
+            runBtn.disabled = true;
+            runBtn.style.opacity = '0.5';
+            runBtn.style.cursor = 'not-allowed';
+        }
+
+        // Parallax glowing orbs
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            document.getElementById('orb-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+            document.getElementById('orb-2').style.transform = `translate(${x * -50}px, ${y * -50}px)`;
+        });
+
+        // Backend configurations check on load
+        let startingHoldingsConfigured = false;
+        async function checkBackendStatus() {
+            if (isLocalFile) return;
+            try {
+                const res = await fetch('/api/status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.exists) {
+                        startingHoldingsConfigured = true;
+                        const dateInput = document.getElementById('holdings-date');
+                        dateInput.value = data.date;
+                        dateInput.disabled = true;
+                        
+                        const hStatus = document.getElementById('holdings-status');
+                        hStatus.className = 'status-badge configured';
+                        hStatus.textContent = `Active Seed: ${data.count} assets as of ${data.date} (Value: ₹${data.total_value.toLocaleString('en-IN', {maximumFractionDigits:0})})`;
+                        
+                        document.getElementById('clear-holdings-btn').style.display = 'inline-block';
+                        document.getElementById('holdings-drop').style.opacity = '0.5';
+                        document.getElementById('holdings-drop').style.pointerEvents = 'none';
+                    }
+                }
+            } catch (e) {
+                console.error("Error calling status api:", e);
+            }
+        }
+        checkBackendStatus();
+
+        // Clear Holdings Button handler
+        document.getElementById('clear-holdings-btn').onclick = async () => {
+            if (confirm("Are you sure you want to clear the seeded starting holdings? This will revert the pipeline to calculate from the earliest transaction.")) {
+                try {
+                    const res = await fetch('/api/clear_holdings', { method: 'POST' });
+                    if (res.ok) {
+                        alert("Starting holdings cleared. Recalculating portfolio...");
+                        startingHoldingsConfigured = false;
+                        
+                        const dateInput = document.getElementById('holdings-date');
+                        dateInput.value = '';
+                        dateInput.disabled = false;
+                        
+                        const hStatus = document.getElementById('holdings-status');
+                        hStatus.className = 'status-badge pending';
+                        hStatus.textContent = 'No holdings loaded';
+                        
+                        document.getElementById('clear-holdings-btn').style.display = 'none';
+                        document.getElementById('holdings-drop').style.opacity = '1';
+                        document.getElementById('holdings-drop').style.pointerEvents = 'auto';
+                        document.getElementById('holdings-filename').textContent = '';
+                        document.getElementById('holdings-filename').style.display = 'none';
+                        document.getElementById('holdings-preview').style.display = 'none';
+                        document.getElementById('holdings-mapper').style.display = 'none';
+                        holdingsData = null;
+                        
+                        // Automatically run pipeline to clear metrics
+                        triggerPipelineRun();
+                    }
+                } catch (e) {
+                    alert("Error clearing starting holdings: " + e.message);
+                }
+            }
+        };
+
+        // State for multiple files (up to 5 per type)
+        let holdingsFiles = {}; // { filename: { headers, rows, mapping, normalized } }
+        let txFiles = {};       // { filename: { headers, rows, mapping, normalized } }
+        let activeHoldingsFile = null;
+        let activeTxFile = null;
+
+        // Combined data to submit
+        let holdingsData = [];
+        let txData = [];
+
+        // File drag and drop setups
+        function setupDragDrop(dropId, inputId, type) {
+            const dropZone = document.getElementById(dropId);
+            const input = document.getElementById(inputId);
+            
+            dropZone.onclick = () => input.click();
+            
+            dropZone.ondragover = (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            };
+            
+            dropZone.ondragleave = () => {
+                dropZone.classList.remove('dragover');
+            };
+            
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length) {
+                    processMultipleFiles(e.dataTransfer.files, type);
+                }
+            };
+            
+            input.onchange = () => {
+                if (input.files.length) {
+                    processMultipleFiles(input.files, type);
+                }
+            };
+        }
+
+        function processMultipleFiles(fileList, type) {
+            Array.from(fileList).forEach(file => {
+                parseSingleFile(file, type);
+            });
+        }
+
+        function parseSingleFile(file, type) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (ext === 'xlsx' || ext === 'xls') {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        if (workbook.SheetNames.length === 0) {
+                            alert(`Excel file ${file.name} contains no sheets.`);
+                            return;
+                        }
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+                        const filteredRows = rows.filter(r => r && r.some(c => c !== null && c !== ''));
+                        
+                        addParsedFile(type, file.name, filteredRows);
+                    } catch (err) {
+                        alert(`Failed to parse Excel file ${file.name}: ${err.message}`);
+                    }
+                };
+                reader.onerror = (err) => {
+                    alert(`Failed to read file ${file.name}: ${err.message}`);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                Papa.parse(file, {
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        addParsedFile(type, file.name, results.data);
+                    },
+                    error: (err) => {
+                        alert(`Failed to parse CSV ${file.name}: ${err.message}`);
+                    }
+                });
+            }
+        }
+
+        // Robust row-matching algorithm using match score
+        function findHeaderRow(rows, type) {
+            let bestIdx = 0;
+            let maxScore = -1;
+            
+            for (let i = 0; i < Math.min(rows.length, 50); i++) {
+                if (!rows[i]) continue;
+                const rowStr = rows[i].map(s => String(s || '').toLowerCase().trim());
+                let score = 0;
+                
+                if (type === 'holdings') {
+                    rowStr.forEach(cell => {
+                        if (cell === 'isin') score += 3;
+                        else if (cell.includes('isin')) score += 1.5;
+                        
+                        if (cell === 'symbol') score += 2;
+                        else if (cell.includes('symbol')) score += 1;
+                        
+                        if (cell === 'scheme name' || cell === 'stock name') score += 3;
+                        else if (cell.includes('scheme') || cell.includes('stock') || cell.includes('name')) score += 1;
+                        
+                        if (cell === 'quantity' || cell === 'qty' || cell === 'units') score += 3;
+                        else if (cell.includes('quantity') || cell.includes('qty') || cell.includes('units') || cell.includes('shares')) score += 1;
+                        
+                        if (cell === 'avg price' || cell === 'average price' || cell === 'average buy price' || cell === 'avg buy price') score += 3;
+                        else if (cell.includes('price') || cell.includes('avg') || cell.includes('average') || cell.includes('cost') || cell.includes('nav')) score += 1;
+                        
+                        if (cell === 'closing price' || cell === 'closing value') score += 2;
+                    });
+                } else {
+                    rowStr.forEach(cell => {
+                        if (cell === 'isin') score += 3;
+                        else if (cell.includes('isin')) score += 1.5;
+                        
+                        if (cell === 'symbol') score += 2;
+                        else if (cell.includes('symbol')) score += 1;
+                        
+                        if (cell === 'scheme name' || cell === 'stock name') score += 3;
+                        else if (cell.includes('scheme') || cell.includes('stock') || cell.includes('name')) score += 1;
+                        
+                        if (cell === 'quantity' || cell === 'qty' || cell === 'units') score += 3;
+                        else if (cell.includes('quantity') || cell.includes('qty') || cell.includes('units')) score += 1;
+                        
+                        if (cell === 'price' || cell === 'rate' || cell === 'nav') score += 3;
+                        else if (cell.includes('price') || cell.includes('rate') || cell.includes('nav') || cell.includes('value') || cell.includes('amount')) score += 1;
+                        
+                        if (cell === 'date' || cell === 'execution date' || cell === 'trade date' || cell === 'execution date and time') score += 3;
+                        else if (cell.includes('date') || cell.includes('time')) score += 1;
+                        
+                        if (cell === 'type' || cell === 'transaction type' || cell === 'buy/sell' || cell === 'action') score += 2;
+                        else if (cell.includes('type') || cell.includes('action') || cell.includes('side') || cell.includes('buy') || cell.includes('sell')) score += 1;
+                    });
+                }
+                
+                if (score > maxScore) {
+                    maxScore = score;
+                    bestIdx = i;
+                }
+            }
+            return maxScore >= 3 ? bestIdx : 0;
+        }
+
+        function autoDetectMapping(type, headers) {
+            if (type === 'holdings') {
+                let idCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s === 'isin' || s === 'scheme code';
+                });
+                if (idCol === -1) {
+                    idCol = headers.findIndex(h => {
+                        const s = h.toLowerCase();
+                        return s.includes('isin') || s.includes('scheme code');
+                    });
+                }
+                if (idCol === -1) {
+                    idCol = headers.findIndex(h => {
+                        const s = h.toLowerCase();
+                        return s.includes('instrument') || s.includes('symbol') || s.includes('code');
+                    });
+                }
+                
+                const nameCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('name') || s.includes('scheme name') || s.includes('stock name') || s.includes('description') || s === 'symbol';
+                });
+                const qtyCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('qty') || s.includes('quantity') || s.includes('units') || s.includes('shares');
+                });
+                const priceCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s === 'average buy price' || s === 'avg buy price' || s === 'avg price' || (s.includes('price') && !s.includes('closing') && !s.includes('buy value')) || s.includes('avg') || s.includes('average') || s.includes('cost') || s.includes('nav');
+                });
+                const valueCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('buy value') || s.includes('closing value') || s.includes('invested value') || s === 'value' || s.includes('value') || s === 'amount' || s.includes('amount') || s.includes('total');
+                });
+                return { id: idCol, name: nameCol, qty: qtyCol, price: priceCol, value: valueCol };
+            } else {
+                const dateCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('date') || s.includes('time');
+                });
+                
+                let idCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s === 'isin' || s === 'scheme code';
+                });
+                if (idCol === -1) {
+                    idCol = headers.findIndex(h => {
+                        const s = h.toLowerCase();
+                        return s.includes('isin') || s.includes('scheme code');
+                    });
+                }
+                if (idCol === -1) {
+                    idCol = headers.findIndex(h => {
+                        const s = h.toLowerCase();
+                        return s.includes('instrument') || s.includes('symbol') || s.includes('code');
+                    });
+                }
+                
+                const nameCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('name') || s.includes('scheme name') || s.includes('stock name') || s.includes('description') || s === 'symbol';
+                });
+                const qtyCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('qty') || s.includes('quantity') || s.includes('units');
+                });
+                const priceCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return (s.includes('price') && !s.includes('total') && !s.includes('value')) || s.includes('rate') || s.includes('nav');
+                });
+                const typeCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s.includes('type') || s.includes('action') || s.includes('buy/sell') || s.includes('side') || s === 'trade_type';
+                });
+                const valueCol = headers.findIndex(h => {
+                    const s = h.toLowerCase();
+                    return s === 'value' || s.includes('value') || s === 'amount' || s.includes('amount') || s.includes('total');
+                });
+                return { date: dateCol, id: idCol, name: nameCol, qty: qtyCol, price: priceCol, type: typeCol, value: valueCol };
+            }
+        }
+
+        function normalizeFileRows(type, headers, rows, mapping) {
+            let normalized = [];
+            rows.forEach(r => {
+                if (type === 'holdings') {
+                    let id = mapping.id !== -1 ? String(r[mapping.id] || '').trim() : '';
+                    const name = mapping.name !== -1 ? String(r[mapping.name] || '').trim() : '';
+                    const qtyStr = mapping.qty !== -1 ? String(r[mapping.qty] || '').replace(/,/g, '') : '';
+                    const priceStr = mapping.price !== -1 ? String(r[mapping.price] || '').replace(/,/g, '') : '';
+                    const valueStr = mapping.value !== -1 ? String(r[mapping.value] || '').replace(/,/g, '') : '';
+                    
+                    const qty = parseFloat(qtyStr);
+                    let price = parseFloat(priceStr);
+                    
+                    if (isNaN(price) && !isNaN(qty) && qty > 0 && valueStr) {
+                        const totalVal = parseFloat(valueStr);
+                        if (!isNaN(totalVal)) {
+                            price = totalVal / qty;
+                        }
+                    }
+                    
+                    if (!id && name) {
+                        id = name;
+                    }
+                    
+                    if (id && !isNaN(qty) && qty > 0 && !isNaN(price)) {
+                        if (id.toLowerCase() === 'isin' || id.toLowerCase().includes('scheme name') || id.toLowerCase().includes('stock name')) return;
+                        normalized.push({ id, name, qty, price });
+                    }
+                } else {
+                    const rawDate = mapping.date !== -1 ? String(r[mapping.date] || '').trim() : '';
+                    let id = mapping.id !== -1 ? String(r[mapping.id] || '').trim() : '';
+                    const name = mapping.name !== -1 ? String(r[mapping.name] || '').trim() : '';
+                    const qtyStr = mapping.qty !== -1 ? String(r[mapping.qty] || '').replace(/,/g, '') : '';
+                    const priceStr = mapping.price !== -1 ? String(r[mapping.price] || '').replace(/,/g, '') : '';
+                    const valueStr = mapping.value !== -1 ? String(r[mapping.value] || '').replace(/,/g, '') : '';
+                    const rawType = mapping.type !== -1 ? String(r[mapping.type] || '').trim().toLowerCase() : 'buy';
+                    
+                    const qty = parseFloat(qtyStr);
+                    let price = parseFloat(priceStr);
+                    
+                    if (isNaN(price) && !isNaN(qty) && qty > 0 && valueStr) {
+                        const totalVal = parseFloat(valueStr);
+                        if (!isNaN(totalVal)) {
+                            price = totalVal / qty;
+                        }
+                    }
+                    
+                    if (!id && name) {
+                        id = name;
+                    }
+                    
+                    if (id && rawDate && !isNaN(qty) && qty > 0 && !isNaN(price)) {
+                        if (id.toLowerCase() === 'isin' || id.toLowerCase().includes('scheme name') || id.toLowerCase().includes('stock name')) return;
+                        
+                        let dateStr = '';
+                        let parts;
+                        if (rawDate.includes('-')) parts = rawDate.split(' ')[0].split('-');
+                        else if (rawDate.includes('/')) parts = rawDate.split(' ')[0].split('/');
+                        
+                        if (parts && parts.length === 3) {
+                            if (parts[0].length === 4) {
+                                dateStr = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+                            } else {
+                                dateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                            }
+                        } else {
+                            try {
+                                const d = new Date(rawDate);
+                                if (!isNaN(d.getTime())) {
+                                    dateStr = d.toISOString().split('T')[0];
+                                }
+                            } catch(e) {}
+                        }
+                        
+                        let txType = 'buy';
+                        if (rawType.includes('sell') || rawType.includes('redemption') || rawType.includes('payout') || rawType.includes('redeem')) {
+                            txType = 'sell';
+                        }
+                        
+                        if (dateStr) {
+                            normalized.push({ date: dateStr, id, name, qty, price, type: txType });
+                        }
+                    }
+                }
+            });
+            return normalized;
+        }
+
+        function addParsedFile(type, filename, rawRows) {
+            const files = type === 'holdings' ? holdingsFiles : txFiles;
+            
+            if (Object.keys(files).length >= 5 && !files[filename]) {
+                alert("Maximum limit of 5 files reached. Please remove an existing file first.");
+                return;
+            }
+            
+            const headerRowIdx = findHeaderRow(rawRows, type);
+            const headers = rawRows[headerRowIdx].map(h => String(h || '').trim());
+            const dataRows = rawRows.slice(headerRowIdx + 1);
+            const mapping = autoDetectMapping(type, headers);
+            
+            const normalized = normalizeFileRows(type, headers, dataRows, mapping);
+            
+            files[filename] = {
+                headers: headers,
+                rows: dataRows,
+                mapping: mapping,
+                normalized: normalized
+            };
+            
+            if (type === 'holdings') {
+                activeHoldingsFile = filename;
+            } else {
+                activeTxFile = filename;
+            }
+            
+            updateFilesUI(type);
+            setupMapperUI(type, filename);
+            recalculateCombinedData(type);
+        }
+
+        function updateFilesUI(type) {
+            const listContainer = document.getElementById(type === 'holdings' ? 'holdings-files-list' : 'tx-files-list');
+            const files = type === 'holdings' ? holdingsFiles : txFiles;
+            const activeFile = type === 'holdings' ? activeHoldingsFile : activeTxFile;
+            
+            listContainer.innerHTML = '';
+            
+            const fileNames = Object.keys(files);
+            if (fileNames.length === 0) {
+                listContainer.style.display = 'none';
+                return;
+            }
+            listContainer.style.display = 'flex';
+            
+            fileNames.forEach(fname => {
+                const chip = document.createElement('div');
+                chip.className = `file-chip ${fname === activeFile ? 'active' : ''}`;
+                
+                const fileData = files[fname];
+                const hasValidRows = fileData.normalized.length > 0;
+                
+                chip.innerHTML = `
+                    <div class="file-chip-info">
+                        <span class="file-chip-status ${hasValidRows ? 'success' : ''}"></span>
+                        <span style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${fname}</span>
+                        <span style="font-size: 0.7rem; color: var(--text-secondary);">(${fileData.normalized.length} rows)</span>
+                    </div>
+                    <button class="file-chip-remove" title="Remove file">&times;</button>
+                `;
+                
+                chip.onclick = (e) => {
+                    if (e.target.className === 'file-chip-remove') return;
+                    if (type === 'holdings') {
+                        activeHoldingsFile = fname;
+                    } else {
+                        activeTxFile = fname;
+                    }
+                    updateFilesUI(type);
+                    setupMapperUI(type, fname);
+                };
+                
+                chip.querySelector('.file-chip-remove').onclick = () => {
+                    delete files[fname];
+                    if (type === 'holdings') {
+                        if (activeHoldingsFile === fname) {
+                            activeHoldingsFile = Object.keys(holdingsFiles)[0] || null;
+                        }
+                    } else {
+                        if (activeTxFile === fname) {
+                            activeTxFile = Object.keys(txFiles)[0] || null;
+                        }
+                    }
+                    updateFilesUI(type);
+                    recalculateCombinedData(type);
+                    
+                    const activeF = type === 'holdings' ? activeHoldingsFile : activeTxFile;
+                    if (activeF) {
+                        setupMapperUI(type, activeF);
+                    } else {
+                        document.getElementById(type === 'holdings' ? 'holdings-mapper' : 'tx-mapper').style.display = 'none';
+                        document.getElementById(type === 'holdings' ? 'holdings-preview' : 'tx-preview').style.display = 'none';
+                        document.getElementById(type === 'holdings' ? 'holdings-status' : 'tx-status').className = 'status-badge pending';
+                        document.getElementById(type === 'holdings' ? 'holdings-status' : 'tx-status').textContent = `No ${type} loaded`;
+                    }
+                };
+                
+                listContainer.appendChild(chip);
+            });
+        }
+
+        function setupMapperUI(type, filename) {
+            const files = type === 'holdings' ? holdingsFiles : txFiles;
+            const fileData = files[filename];
+            if (!fileData) return;
+            
+            const mapperWrapper = document.getElementById(type === 'holdings' ? 'holdings-mapper' : 'tx-mapper');
+            mapperWrapper.style.display = 'block';
+            
+            const title = mapperWrapper.querySelector('.mapper-title');
+            title.textContent = `Map Columns: ${filename}`;
+            
+            const dropdowns = type === 'holdings' 
+                ? { id: 'h-map-id', name: 'h-map-name', qty: 'h-map-qty', price: 'h-map-price', value: 'h-map-value' }
+                : { date: 't-map-date', id: 't-map-id', name: 't-map-name', qty: 't-map-qty', price: 't-map-price', value: 't-map-value', type: 't-map-type' };
+                
+            Object.keys(dropdowns).forEach(key => {
+                const select = document.getElementById(dropdowns[key]);
+                select.innerHTML = '';
+                
+                // Add "None" option
+                const noneOpt = document.createElement('option');
+                noneOpt.value = -1;
+                noneOpt.textContent = '-- Not Mapped / None --';
+                select.appendChild(noneOpt);
+                
+                fileData.headers.forEach((h, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = idx;
+                    opt.textContent = h;
+                    select.appendChild(opt);
+                });
+                
+                select.value = fileData.mapping[key] !== undefined ? fileData.mapping[key] : -1;
+                
+                select.onchange = () => {
+                    fileData.mapping[key] = parseInt(select.value);
+                    fileData.normalized = normalizeFileRows(type, fileData.headers, fileData.rows, fileData.mapping);
+                    updateFilesUI(type);
+                    recalculateCombinedData(type);
+                };
+            });
+        }
+
+        function recalculateCombinedData(type) {
+            const files = type === 'holdings' ? holdingsFiles : txFiles;
+            const combined = [];
+            
+            Object.values(files).forEach(f => {
+                combined.push(...f.normalized);
+            });
+            
+            const statusBadge = document.getElementById(type === 'holdings' ? 'holdings-status' : 'tx-status');
+            const previewWrapper = document.getElementById(type === 'holdings' ? 'holdings-preview' : 'tx-preview');
+            const tbody = previewWrapper.querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            if (type === 'holdings') {
+                holdingsData = combined;
+                
+                if (holdingsData.length === 0) {
+                    statusBadge.className = 'status-badge pending';
+                    statusBadge.textContent = 'No holdings loaded';
+                    previewWrapper.style.display = 'none';
+                    return;
+                }
+                
+                previewWrapper.style.display = 'block';
+                holdingsData.slice(0, 8).forEach(h => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${h.id}</td>
+                        <td>${h.name}</td>
+                        <td style="text-align: right;">${h.qty.toFixed(3)}</td>
+                        <td style="text-align: right;">₹${h.price.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                
+                if (holdingsData.length > 8) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td colspan="4" style="text-align:center;color:var(--text-secondary)">+ ${holdingsData.length - 8} more positions</td>`;
+                    tbody.appendChild(tr);
+                }
+                
+                const totalVal = holdingsData.reduce((acc, h) => acc + (h.qty * h.price), 0);
+                statusBadge.className = 'status-badge configured';
+                statusBadge.textContent = `${holdingsData.length} combined holdings loaded (Total: ₹${totalVal.toLocaleString('en-IN', {maximumFractionDigits:0})})`;
+            } else {
+                txData = combined;
+                
+                if (txData.length === 0) {
+                    statusBadge.className = 'status-badge pending';
+                    statusBadge.textContent = 'No transactions loaded';
+                    previewWrapper.style.display = 'none';
+                    return;
+                }
+                
+                previewWrapper.style.display = 'block';
+                txData.slice(0, 8).forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${t.date}</td>
+                        <td>${t.id}</td>
+                        <td style="text-align: right;">${t.qty.toFixed(3)}</td>
+                        <td style="text-align: right;">₹${t.price.toFixed(2)}</td>
+                        <td><span style="color:${t.type==='buy'?'#10B981':'#EF4444'}">${t.type.toUpperCase()}</span></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                
+                if (txData.length > 8) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td colspan="5" style="text-align:center;color:var(--text-secondary)">+ ${txData.length - 8} more transactions</td>`;
+                    tbody.appendChild(tr);
+                }
+                
+                statusBadge.className = 'status-badge configured';
+                statusBadge.textContent = `${txData.length} combined transactions loaded`;
+            }
+        }
+
+        // Init drag & drops
+        setupDragDrop('holdings-drop', 'holdings-input', 'holdings');
+        setupDragDrop('tx-drop', 'tx-input', 'transactions');
+
+        // Submit files and execute pipeline
+        runBtn.onclick = async () => {
+            const dateVal = document.getElementById('holdings-date').value;
+            
+            // Validation
+            if (!startingHoldingsConfigured && (!holdingsData || holdingsData.length === 0)) {
+                if (!txData || txData.length === 0) {
+                    alert("Please select at least one holdings or transaction file to upload.");
+                    return;
+                }
+            }
+            
+            if (holdingsData && holdingsData.length > 0 && !dateVal) {
+                alert("Please select the Snapshot Date (Date X) representing when these holdings were recorded.");
+                return;
+            }
+
+            // Save Holdings first if configured
+            if (holdingsData && holdingsData.length > 0) {
+                try {
+                    const res = await fetch('/api/upload_holdings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            date: dateVal,
+                            holdings: holdingsData
+                        })
+                    });
+                    if (!res.ok) {
+                        const err = await res.json();
+                        alert(`Failed to save starting holdings: ${err.error}`);
+                        return;
+                    }
+                } catch (e) {
+                    alert(`Upload Error: ${e.message}`);
+                    return;
+                }
+            }
+
+            // Save Transactions if loaded
+            if (txData && txData.length > 0) {
+                try {
+                    const res = await fetch('/api/upload_transactions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            transactions: txData
+                        })
+                    });
+                    if (!res.ok) {
+                        const err = await res.json();
+                        alert(`Failed to save transactions: ${err.error}`);
+                        return;
+                    }
+                } catch (e) {
+                    alert(`Upload Error: ${e.message}`);
+                    return;
+                }
+            }
+
+            triggerPipelineRun();
+        };
+
+        // Run Python pipeline and stream log output
+        async function triggerPipelineRun() {
+            // Show terminal console card
+            const consoleCard = document.getElementById('console-panel');
+            const consoleOut = document.getElementById('console-out');
+            consoleCard.style.display = 'block';
+            consoleOut.textContent = 'Launching backend pipeline script...\n';
+            runBtn.disabled = true;
+            runBtn.style.opacity = '0.5';
+
+            try {
+                const response = await fetch('/api/run_pipeline');
+                if (!response.body) {
+                    consoleOut.textContent += "[ERROR] Streaming unsupported. Could not retrieve execution logs.";
+                    runBtn.disabled = false;
+                    runBtn.style.opacity = '1';
+                    return;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    consoleOut.textContent += chunk;
+                    consoleOut.scrollTop = consoleOut.scrollHeight; // Auto scroll
+                }
+                
+                if (consoleOut.textContent.includes('[SUCCESS]')) {
+                    consoleOut.textContent += "\nRedirecting to interactive dashboard in 3 seconds...";
+                    setTimeout(() => {
+                        window.location.href = 'demo.html';
+                    }, 3000);
+                } else {
+                    consoleOut.textContent += "\n[WARNING] Pipeline execution ended with errors. Please check the log stream above.";
+                    runBtn.disabled = false;
+                    runBtn.style.opacity = '1';
+                }
+
+            } catch (err) {
+                consoleOut.textContent += `\n[FATAL ERROR] Failed to connect to local server: ${err.message}`;
+                runBtn.disabled = false;
+                runBtn.style.opacity = '1';
+            }
+        }
+    </script>
+</body>
+</html>

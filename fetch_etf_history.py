@@ -10,7 +10,7 @@ etf_tickers = [
     "EBBETF0433.NS", "NIFTYBEES.NS", "MIDCAPIETF.NS",
     "GOLDIETF.NS", "FMCGIETF.NS", "SETFNN50.NS", "BANKBEES.NS",
     "SMLCSE.NS", "BHARTIARTL.NS", "PNGJL.NS", "ATHERENERG.NS",
-    "AEQUS.NS", "GROWW.NS"
+    "AEQUS.NS", "GROWW.NS", "DIACABS.NS"
 ]
 
 def fetch_etf_historical():
